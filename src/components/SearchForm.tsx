@@ -121,7 +121,12 @@ export const SearchForm = () => {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" size="lg" className="w-full h-14 text-lg gap-2">
+          <Button 
+            type="button" 
+            size="lg" 
+            className="w-full h-14 text-lg gap-2"
+            onClick={() => window.location.href = '/buscar'}
+          >
             <Search className="h-5 w-5" />
             Buscar Residencias
           </Button>

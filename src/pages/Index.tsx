@@ -24,11 +24,21 @@ const Index = () => {
                 Ayudamos a las familias a encontrar la residencia perfecta con la mejor atención y cuidados personalizados
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Button size="lg" variant="secondary" className="gap-2 text-base h-14 px-8">
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  className="gap-2 text-base h-14 px-8"
+                  onClick={() => window.location.href = '/buscar'}
+                >
                   Buscar Ahora
                   <ArrowRight className="h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2 text-base h-14 px-8 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="gap-2 text-base h-14 px-8 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
+                  onClick={() => window.location.href = '/contacto'}
+                >
                   Asesoramiento Gratuito
                 </Button>
               </div>
@@ -105,7 +115,11 @@ const Index = () => {
                 Nuestro equipo de expertos está disponible para ofrecerte asesoramiento gratuito y personalizado
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                <Button size="lg" className="gap-2 text-base h-14 px-8">
+                <Button 
+                  size="lg" 
+                  className="gap-2 text-base h-14 px-8"
+                  onClick={() => window.location.href = '/contacto'}
+                >
                   Contactar Ahora
                   <ArrowRight className="h-5 w-5" />
                 </Button>
