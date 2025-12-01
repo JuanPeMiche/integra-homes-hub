@@ -89,16 +89,17 @@ const SearchResults = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Provincia</Label>
+                      <Label>Departamento</Label>
                       <Select>
                         <SelectTrigger>
-                          <SelectValue placeholder="Todas" />
+                          <SelectValue placeholder="Todos" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="todas">Todas</SelectItem>
-                          <SelectItem value="madrid">Madrid</SelectItem>
-                          <SelectItem value="barcelona">Barcelona</SelectItem>
-                          <SelectItem value="valencia">Valencia</SelectItem>
+                          <SelectItem value="todos">Todos</SelectItem>
+                          <SelectItem value="montevideo">Montevideo</SelectItem>
+                          <SelectItem value="canelones">Canelones</SelectItem>
+                          <SelectItem value="maldonado">Maldonado</SelectItem>
+                          <SelectItem value="colonia">Colonia</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -107,21 +108,21 @@ const SearchResults = () => {
                       <Label>Tipo</Label>
                       <div className="space-y-2">
                         <div className="flex items-center space-x-2">
-                          <Checkbox id="publica" />
-                          <label htmlFor="publica" className="text-sm cursor-pointer">
-                            Pública
+                          <Checkbox id="permanente" />
+                          <label htmlFor="permanente" className="text-sm cursor-pointer">
+                            Permanente
                           </label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Checkbox id="privada" />
-                          <label htmlFor="privada" className="text-sm cursor-pointer">
-                            Privada
+                          <Checkbox id="temporal" />
+                          <label htmlFor="temporal" className="text-sm cursor-pointer">
+                            Temporal
                           </label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Checkbox id="concertada" />
-                          <label htmlFor="concertada" className="text-sm cursor-pointer">
-                            Concertada
+                          <Checkbox id="asistida" />
+                          <label htmlFor="asistida" className="text-sm cursor-pointer">
+                            Atención Asistida
                           </label>
                         </div>
                       </div>
@@ -129,7 +130,7 @@ const SearchResults = () => {
 
                     <div className="space-y-2">
                       <Label>Precio máximo</Label>
-                      <Input type="number" placeholder="€/mes" />
+                      <Input type="number" placeholder="$UY/mes" />
                     </div>
 
                     <Button className="w-full">Aplicar Filtros</Button>

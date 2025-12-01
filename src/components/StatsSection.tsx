@@ -4,23 +4,23 @@ export const StatsSection = () => {
   const stats = [
     {
       icon: Building2,
-      value: "+500",
-      label: "Residencias en Nuestra Red",
+      value: "+100",
+      label: "Residencias en Uruguay",
     },
     {
       icon: Users,
-      value: "+10,000",
+      value: "+1.000",
       label: "Familias Ayudadas",
     },
     {
       icon: Award,
-      value: "20 Años",
-      label: "de Experiencia",
+      value: "100%",
+      label: "Asesoramiento Gratuito",
     },
     {
       icon: HeartHandshake,
-      value: "100%",
-      label: "Asesoramiento Gratuito",
+      value: "Sin Fines",
+      label: "de Lucro",
     },
   ];
 

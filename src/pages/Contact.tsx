@@ -102,9 +102,7 @@ const Contact = () => {
                         <div>
                           <h3 className="font-semibold mb-1">Dirección</h3>
                           <p className="text-muted-foreground">
-                            C/ Principal 123
-                            <br />
-                            28001 Madrid, España
+                            Montevideo, Uruguay
                           </p>
                         </div>
                       </div>
@@ -117,10 +115,10 @@ const Contact = () => {
                           <h3 className="font-semibold mb-1">Teléfono</h3>
                           <p className="text-muted-foreground">
                             <a
-                              href="tel:900123456"
+                              href="tel:+59829080000"
                               className="hover:text-primary transition-colors"
                             >
-                              900 123 456
+                              2908 0000
                             </a>
                           </p>
                         </div>
@@ -134,10 +132,10 @@ const Contact = () => {
                           <h3 className="font-semibold mb-1">Email</h3>
                           <p className="text-muted-foreground">
                             <a
-                              href="mailto:info@integraresidenciales.com"
+                              href="mailto:hola@integraresidenciales.com.uy"
                               className="hover:text-primary transition-colors"
                             >
-                              info@integraresidenciales.com
+                              hola@integraresidenciales.com.uy
                             </a>
                           </p>
                         </div>

@@ -20,7 +20,7 @@ const Services = () => {
       icon: PhoneCall,
       title: "Asesoramiento Personalizado",
       description:
-        "Te escuchamos y te ayudamos a encontrar la residencia que mejor se adapte a las necesidades de tu familiar, considerando ubicación, presupuesto y requerimientos médicos. Nuestro equipo de expertos está disponible para orientarte en cada paso del proceso.",
+        "Te escuchamos y te ayudamos a encontrar la residencia que mejor se adapte a las necesidades de tu familiar, considerando ubicación, presupuesto y tipo de atención requerida. Nuestro equipo de expertos está disponible para orientarte en cada paso del proceso.",
     },
     {
       icon: HandHeart,
@@ -32,7 +32,7 @@ const Services = () => {
       icon: FileText,
       title: "Soporte Legal y Administrativo",
       description:
-        "Ayuda con trámites legales, gestión de plazas concertadas, comprensión de contratos de admisión y orientación sobre la Ley de Dependencia. Facilitamos toda la documentación necesaria para que el proceso sea lo más simple posible.",
+        "Ayuda con trámites administrativos, gestión de plazas, comprensión de contratos de admisión y orientación sobre regulaciones locales. Facilitamos toda la documentación necesaria para que el proceso sea lo más simple posible.",
     },
     {
       icon: Search,
@@ -66,8 +66,7 @@ const Services = () => {
               Nuestros Servicios
             </h1>
             <p className="text-xl text-white/95 max-w-2xl mx-auto">
-              Mucho más que un directorio: te acompañamos en todo el proceso de
-              encontrar el mejor hogar para tus seres queridos
+              Integra Residenciales es una asociación civil sin fines de lucro dedicada a mejorar la calidad del cuidado de personas mayores en Uruguay
             </p>
           </div>
         </section>
@@ -104,23 +103,20 @@ const Services = () => {
                 ¿Por Qué Elegir Integra Residenciales?
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Con más de 20 años de experiencia, hemos ayudado a más de 10,000
-                familias a encontrar el hogar perfecto para sus mayores. Nuestro
-                compromiso es ofrecer un servicio personalizado, transparente y
-                gratuito que ponga las necesidades de tu familia en primer lugar.
+                Integra Residenciales es una asociación civil sin fines de lucro con trayectoria en Uruguay, ayudando a familias a encontrar el hogar perfecto para sus mayores. Nuestro compromiso es ofrecer un servicio personalizado, transparente y gratuito que ponga las necesidades de tu familia en primer lugar.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-primary mb-2">
-                    +500
+                    +100
                   </div>
                   <div className="text-muted-foreground">
-                    Residencias Verificadas
+                    Residencias en Uruguay
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="text-4xl font-bold text-primary mb-2">
-                    +10,000
+                    +1,000
                   </div>
                   <div className="text-muted-foreground">Familias Ayudadas</div>
                 </div>

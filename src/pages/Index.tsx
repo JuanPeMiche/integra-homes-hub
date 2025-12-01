@@ -18,10 +18,10 @@ const Index = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center space-y-6 mb-12">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Encuentra el Mejor Hogar para Tus Mayores
+                Encontrá el Mejor Hogar para Tus Mayores en Uruguay
               </h1>
               <p className="text-lg md:text-xl text-white/95 leading-relaxed">
-                Ayudamos a las familias a encontrar la residencia perfecta con la mejor atención y cuidados personalizados
+                Integra Residenciales te ayuda a encontrar la residencia perfecta con la mejor atención, cuidados personalizados y trato digno
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button 
@@ -66,7 +66,7 @@ const Index = () => {
                 ¿Por Qué Elegir Integra Residenciales?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Nuestro compromiso es ayudarte a encontrar el mejor cuidado para tus seres queridos
+                Nuestro compromiso es ayudarte a encontrar el mejor cuidado para tus seres queridos en Uruguay
               </p>
             </div>
 
@@ -97,7 +97,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Cuidado Centrado en la Persona</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Priorizamos el bienestar, la dignidad y la felicidad de cada residente en todas nuestras recomendaciones.
+                  Priorizamos el bienestar, la dignidad y la felicidad de cada residente en todas nuestras recomendaciones, con un enfoque humano y cálido.
                 </p>
               </div>
             </div>

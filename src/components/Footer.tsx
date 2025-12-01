@@ -13,20 +13,20 @@ export const Footer = () => {
           <div>
             <img src={logo} alt="Integra Residenciales" className="h-10 w-auto mb-4 brightness-0 invert" />
             <p className="text-sm text-trust-foreground/90 mb-4">
-              Ayudamos a las familias a encontrar el mejor hogar para sus seres queridos desde hace más de 20 años.
+              Integra Residenciales es una asociación civil sin fines de lucro dedicada a mejorar la calidad del cuidado de personas mayores en Uruguay.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
-                <span>C/ Principal 123, 28001 Madrid</span>
+                <span>Montevideo, Uruguay</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                <span>900 123 456</span>
+                <span>2908 0000</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                <span>info@integraresidenciales.com</span>
+                <span>hola@integraresidenciales.com.uy</span>
               </div>
             </div>
           </div>
