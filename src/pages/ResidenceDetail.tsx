@@ -231,13 +231,12 @@ const ResidenceDetail = () => {
                 {/* Price Card */}
                 <Card>
                   <CardContent className="p-6 space-y-4">
-                    <div className="flex items-baseline gap-2">
-                      <Euro className="h-6 w-6 text-primary" />
-                      <span className="text-4xl font-bold text-primary">
-                        {residence.price}
-                      </span>
-                      <span className="text-muted-foreground">/mes</span>
-                    </div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-primary">
+                    ${residence.price.toLocaleString()}
+                  </span>
+                  <span className="text-muted-foreground">/mes</span>
+                </div>
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">Capacidad:</span>

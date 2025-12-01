@@ -8,7 +8,8 @@ import SearchResults from "./pages/SearchResults";
 import ResidenceDetail from "./pages/ResidenceDetail";
 import Compare from "./pages/Compare";
 import Services from "./pages/Services";
-import Blog from "./pages/Blog";
+import About from "./pages/About";
+import News from "./pages/News";
 import Contact from "./pages/Contact";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -27,8 +28,9 @@ const App = () => (
           <Route path="/residencia/:id" element={<ResidenceDetail />} />
           <Route path="/comparar" element={<Compare />} />
           <Route path="/servicios" element={<Services />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:id" element={<Blog />} />
+          <Route path="/sobre-integra" element={<About />} />
+          <Route path="/noticias" element={<News />} />
+          <Route path="/noticias/:id" element={<News />} />
           <Route path="/contacto" element={<Contact />} />
           <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

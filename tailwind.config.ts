@@ -58,10 +58,12 @@ export default {
       boxShadow: {
         soft: "var(--shadow-soft)",
         card: "var(--shadow-card)",
+        hover: "var(--shadow-hover)",
       },
       backgroundImage: {
         "gradient-hero": "var(--gradient-hero)",
         "gradient-subtle": "var(--gradient-subtle)",
+        "gradient-card": "var(--gradient-card)",
       },
       transitionProperty: {
         smooth: "var(--transition-smooth)",
