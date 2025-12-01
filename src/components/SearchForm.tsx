@@ -42,27 +42,29 @@ export const SearchForm = () => {
           {/* Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="provincia" className="text-base font-medium flex items-center gap-2">
+              <Label htmlFor="departamento" className="text-base font-medium flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-primary" />
-                Provincia
+                Departamento
               </Label>
               <Select>
-                <SelectTrigger id="provincia" className="h-12">
-                  <SelectValue placeholder="Selecciona provincia" />
+                <SelectTrigger id="departamento" className="h-12">
+                  <SelectValue placeholder="Selecciona departamento" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="madrid">Madrid</SelectItem>
-                  <SelectItem value="barcelona">Barcelona</SelectItem>
-                  <SelectItem value="valencia">Valencia</SelectItem>
-                  <SelectItem value="sevilla">Sevilla</SelectItem>
-                  <SelectItem value="malaga">Málaga</SelectItem>
+                  <SelectItem value="montevideo">Montevideo</SelectItem>
+                  <SelectItem value="canelones">Canelones</SelectItem>
+                  <SelectItem value="maldonado">Maldonado</SelectItem>
+                  <SelectItem value="colonia">Colonia</SelectItem>
+                  <SelectItem value="salto">Salto</SelectItem>
+                  <SelectItem value="paysandu">Paysandú</SelectItem>
+                  <SelectItem value="rivera">Rivera</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="ciudad" className="text-base font-medium">Ciudad</Label>
-              <Input id="ciudad" placeholder="Introduce ciudad" className="h-12" />
+              <Label htmlFor="barrio" className="text-base font-medium">Barrio / Localidad</Label>
+              <Input id="barrio" placeholder="Ej: Cordón, Prado, Punta Gorda" className="h-12" />
             </div>
           </div>
 
@@ -70,18 +72,18 @@ export const SearchForm = () => {
           <div className="space-y-2">
             <Label htmlFor="tipo" className="text-base font-medium flex items-center gap-2">
               <Home className="h-4 w-4 text-primary" />
-              Tipo de Residencia
+              Tipo de Atención
             </Label>
             <Select>
               <SelectTrigger id="tipo" className="h-12">
                 <SelectValue placeholder="Selecciona tipo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="publica">Pública</SelectItem>
+                <SelectItem value="permanente">Permanente (Larga estadía)</SelectItem>
+                <SelectItem value="temporal">Temporal (Estadía corta)</SelectItem>
+                <SelectItem value="asistida">Atención Asistida</SelectItem>
+                <SelectItem value="autovalidos">Autoválidos</SelectItem>
                 <SelectItem value="privada">Privada</SelectItem>
-                <SelectItem value="concertada">Concertada</SelectItem>
-                <SelectItem value="asistencia">Con Asistencia Médica</SelectItem>
-                <SelectItem value="centro-dia">Centro de Día</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -93,8 +95,8 @@ export const SearchForm = () => {
               Rango de Precio Mensual
             </Label>
             <div className="grid grid-cols-2 gap-4">
-              <Input type="number" placeholder="Mínimo €" className="h-12" />
-              <Input type="number" placeholder="Máximo €" className="h-12" />
+              <Input type="number" placeholder="Mínimo $UY" className="h-12" />
+              <Input type="number" placeholder="Máximo $UY" className="h-12" />
             </div>
           </div>
 
