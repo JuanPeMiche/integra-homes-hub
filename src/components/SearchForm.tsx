@@ -20,8 +20,10 @@ export const SearchForm = () => {
     "Enfermería 24h",
     "Fisioterapia",
     "Terapia Ocupacional",
-    "Médico Propio",
+    "Médico Geriatra",
     "Actividades Recreativas",
+    "Alimentación Especializada",
+    "Atención Alzheimer",
     "Centro de Día",
   ];
 
@@ -81,9 +83,9 @@ export const SearchForm = () => {
               <SelectContent>
                 <SelectItem value="permanente">Permanente (Larga estadía)</SelectItem>
                 <SelectItem value="temporal">Temporal (Estadía corta)</SelectItem>
+                <SelectItem value="centro-dia">Centro de Día</SelectItem>
                 <SelectItem value="asistida">Atención Asistida</SelectItem>
                 <SelectItem value="autovalidos">Autoválidos</SelectItem>
-                <SelectItem value="privada">Privada</SelectItem>
               </SelectContent>
             </Select>
           </div>

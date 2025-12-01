@@ -17,7 +17,7 @@ export const Header = () => {
           </NavLink>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-6">
             <NavLink 
               to="/" 
               className="text-base font-medium text-foreground/80 hover:text-primary transition-colors"
@@ -33,11 +33,11 @@ export const Header = () => {
               Buscar Residencias
             </NavLink>
             <NavLink 
-              to="/comparar" 
+              to="/sobre-integra" 
               className="text-base font-medium text-foreground/80 hover:text-primary transition-colors"
               activeClassName="text-primary font-semibold"
             >
-              Comparar
+              Sobre Integra
             </NavLink>
             <NavLink 
               to="/servicios" 
@@ -45,6 +45,13 @@ export const Header = () => {
               activeClassName="text-primary font-semibold"
             >
               Servicios
+            </NavLink>
+            <NavLink 
+              to="/noticias" 
+              className="text-base font-medium text-foreground/80 hover:text-primary transition-colors"
+              activeClassName="text-primary font-semibold"
+            >
+              Noticias
             </NavLink>
             <NavLink 
               to="/contacto" 
@@ -57,9 +64,11 @@ export const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" size="lg" className="gap-2">
-              <Phone className="h-4 w-4" />
-              900 123 456
+            <Button variant="outline" size="lg" className="gap-2" asChild>
+              <a href="tel:+59899923330">
+                <Phone className="h-4 w-4" />
+                (+598) 99 923 330
+              </a>
             </Button>
           </div>
 
@@ -91,11 +100,11 @@ export const Header = () => {
               Buscar Residencias
             </NavLink>
             <NavLink 
-              to="/comparar" 
+              to="/sobre-integra" 
               className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
-              Comparar
+              Sobre Integra
             </NavLink>
             <NavLink 
               to="/servicios" 
@@ -105,15 +114,24 @@ export const Header = () => {
               Servicios
             </NavLink>
             <NavLink 
+              to="/noticias" 
+              className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Noticias
+            </NavLink>
+            <NavLink 
               to="/contacto" 
               className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
               onClick={() => setIsMenuOpen(false)}
             >
               Contacto
             </NavLink>
-            <Button variant="outline" size="lg" className="w-full gap-2 mt-4">
-              <Phone className="h-4 w-4" />
-              900 123 456
+            <Button variant="outline" size="lg" className="w-full gap-2 mt-4" asChild>
+              <a href="tel:+59899923330">
+                <Phone className="h-4 w-4" />
+                (+598) 99 923 330
+              </a>
             </Button>
           </nav>
         )}

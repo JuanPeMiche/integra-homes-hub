@@ -1,4 +1,4 @@
-import { MapPin, Euro, Users, Star } from "lucide-react";
+import { MapPin, Euro, Users, Star, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,21 +21,25 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-soft transition-shadow">
+    <Card className="overflow-hidden hover:shadow-hover transition-all duration-300 group">
       <div className="relative h-48 overflow-hidden">
         <img
           src={residence.image}
           alt={residence.name}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
         <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground">
           {typeLabels[residence.type]}
         </Badge>
+        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-soft">
+          <CheckCircle className="h-4 w-4 text-secondary" />
+          <span className="text-xs font-semibold text-foreground">Red Integra</span>
+        </div>
       </div>
 
       <CardContent className="p-5 space-y-3">
         <div>
-          <h3 className="text-xl font-semibold text-foreground mb-1">{residence.name}</h3>
+          <h3 className="text-xl font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">{residence.name}</h3>
           <div className="flex items-center gap-1 text-muted-foreground text-sm">
             <MapPin className="h-4 w-4" />
             <span>{residence.city}, {residence.province}</span>
@@ -54,8 +58,7 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
         </div>
 
         <div className="flex items-baseline gap-1 pt-2">
-          <Euro className="h-4 w-4 text-primary" />
-          <span className="text-2xl font-bold text-primary">{residence.price}</span>
+          <span className="text-2xl font-bold text-primary">${residence.price.toLocaleString()}</span>
           <span className="text-sm text-muted-foreground">/mes</span>
         </div>
 

@@ -9,54 +9,57 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 210 15% 20%;
+    --foreground: 210 18% 22%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 15% 20%;
+    --card-foreground: 210 18% 22%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 15% 20%;
+    --popover-foreground: 210 18% 22%;
 
-    /* Calming healthcare blue */
-    --primary: 205 85% 45%;
+    /* Calming healthcare blue - softer and more welcoming */
+    --primary: 205 70% 48%;
     --primary-foreground: 0 0% 100%;
     
-    /* Wellness green */
-    --secondary: 145 60% 45%;
+    /* Wellness green - warmer and inviting */
+    --secondary: 145 55% 50%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 210 10% 45%;
+    --muted: 210 25% 97%;
+    --muted-foreground: 210 12% 48%;
 
-    --accent: 145 50% 92%;
-    --accent-foreground: 145 60% 25%;
+    --accent: 145 45% 94%;
+    --accent-foreground: 145 60% 28%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
-    --ring: 205 85% 45%;
+    --border: 210 18% 90%;
+    --input: 210 18% 90%;
+    --ring: 205 70% 48%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    /* Trust blue darker for headers */
-    --trust-blue: 210 50% 35%;
+    /* Trust blue - institutional and professional */
+    --trust-blue: 210 55% 38%;
     --trust-blue-foreground: 0 0% 100%;
     
-    /* Light wellness accent */
-    --wellness-light: 145 40% 95%;
+    /* Soft wellness accent */
+    --wellness-light: 145 38% 96%;
     
-    /* Gradient values */
-    --gradient-hero: linear-gradient(135deg, hsl(205 85% 45%) 0%, hsl(145 60% 45%) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    /* Warm gradient hero */
+    --gradient-hero: linear-gradient(135deg, hsl(205 70% 48%) 0%, hsl(145 55% 50%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 25% 98%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(145 38% 99%) 100%);
     
-    /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(210 20% 40% / 0.15);
-    --shadow-card: 0 2px 12px -2px hsl(210 20% 40% / 0.12);
+    /* Soft shadows for welcoming feel */
+    --shadow-soft: 0 4px 24px -4px hsl(210 22% 35% / 0.12);
+    --shadow-card: 0 2px 16px -2px hsl(210 22% 35% / 0.10);
+    --shadow-hover: 0 8px 32px -4px hsl(210 22% 35% / 0.16);
     
-    /* Transitions */
+    /* Smooth transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 
   .dark {

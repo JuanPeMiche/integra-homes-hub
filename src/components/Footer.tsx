@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,15 +18,19 @@ export const Footer = () => {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
-                <span>Montevideo, Uruguay</span>
+                <span>Rincón 454 of. 213, Montevideo</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4" />
-                <span>2908 0000</span>
+                <a href="tel:+59899923330" className="hover:text-secondary transition-colors">
+                  (+598) 99 923 330
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                <span>hola@integraresidenciales.com.uy</span>
+                <a href="mailto:hola@integraresidenciales.com.uy" className="hover:text-secondary transition-colors">
+                  hola@integraresidenciales.com.uy
+                </a>
               </div>
             </div>
           </div>
@@ -41,11 +45,14 @@ export const Footer = () => {
               <NavLink to="/buscar" className="hover:text-secondary transition-colors">
                 Buscar Residencias
               </NavLink>
-              <NavLink to="/comparar" className="hover:text-secondary transition-colors">
-                Comparador
+              <NavLink to="/sobre-integra" className="hover:text-secondary transition-colors">
+                Sobre Integra
               </NavLink>
               <NavLink to="/servicios" className="hover:text-secondary transition-colors">
                 Nuestros Servicios
+              </NavLink>
+              <NavLink to="/noticias" className="hover:text-secondary transition-colors">
+                Noticias
               </NavLink>
               <NavLink to="/contacto" className="hover:text-secondary transition-colors">
                 Contacto
@@ -57,7 +64,7 @@ export const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Información Legal</h3>
             <nav className="flex flex-col space-y-2 text-sm">
-              <NavLink to="/quienes-somos" className="hover:text-secondary transition-colors">
+              <NavLink to="/sobre-integra" className="hover:text-secondary transition-colors">
                 Quiénes Somos
               </NavLink>
               <NavLink to="/aviso-legal" className="hover:text-secondary transition-colors">
@@ -91,17 +98,23 @@ export const Footer = () => {
             
             {/* Social Media */}
             <div className="flex gap-3 mt-6">
-              <a href="#" className="hover:text-secondary transition-colors" aria-label="Facebook">
+              <a 
+                href="https://facebook.com/integraresidenciales" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-secondary transition-colors" 
+                aria-label="Facebook"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-secondary transition-colors" aria-label="Twitter">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-secondary transition-colors" aria-label="Instagram">
+              <a 
+                href="https://instagram.com/integraresidenciales" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-secondary transition-colors" 
+                aria-label="Instagram"
+              >
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-secondary transition-colors" aria-label="LinkedIn">
-                <Linkedin className="h-5 w-5" />
               </a>
             </div>
           </div>

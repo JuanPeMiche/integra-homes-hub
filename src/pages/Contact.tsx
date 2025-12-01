@@ -102,6 +102,8 @@ const Contact = () => {
                         <div>
                           <h3 className="font-semibold mb-1">Dirección</h3>
                           <p className="text-muted-foreground">
+                            Rincón 454 of. 213, Centro
+                            <br />
                             Montevideo, Uruguay
                           </p>
                         </div>
@@ -115,10 +117,10 @@ const Contact = () => {
                           <h3 className="font-semibold mb-1">Teléfono</h3>
                           <p className="text-muted-foreground">
                             <a
-                              href="tel:+59829080000"
+                              href="tel:+59899923330"
                               className="hover:text-primary transition-colors"
                             >
-                              2908 0000
+                              (+598) 99 923 330
                             </a>
                           </p>
                         </div>
