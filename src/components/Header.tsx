@@ -13,7 +13,7 @@ export const Header = () => {
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <NavLink to="/" className="flex items-center space-x-2">
-            <img src={logo} alt="Integra Residenciales" className="h-12 w-auto" />
+            <img src={logo} alt="Integra Residenciales" className="h-12 w-auto object-contain" />
           </NavLink>
 
           {/* Desktop Navigation */}

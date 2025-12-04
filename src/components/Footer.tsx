@@ -99,7 +99,7 @@ export const Footer = () => {
             {/* Social Media */}
             <div className="flex gap-3 mt-6">
               <a 
-                href="https://facebook.com/integraresidenciales" 
+                href="https://www.facebook.com/people/Integra-Residenciales-Uy/100063468792108/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-secondary transition-colors" 
@@ -108,7 +108,7 @@ export const Footer = () => {
                 <Facebook className="h-5 w-5" />
               </a>
               <a 
-                href="https://instagram.com/integraresidenciales" 
+                href="https://www.instagram.com/integra_residenciales/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-secondary transition-colors" 
