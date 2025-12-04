@@ -52,7 +52,7 @@ export const SearchForm = () => {
                 <SelectTrigger id="departamento" className="h-12">
                   <SelectValue placeholder="Selecciona departamento" />
                 </SelectTrigger>
-                <SelectContent>
+              <SelectContent>
                   <SelectItem value="montevideo">Montevideo</SelectItem>
                   <SelectItem value="canelones">Canelones</SelectItem>
                   <SelectItem value="maldonado">Maldonado</SelectItem>
