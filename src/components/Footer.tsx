@@ -2,8 +2,6 @@ import { Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import logo from "@/assets/logo.png";
-
 export const Footer = () => {
   return (
     <footer className="bg-trust text-trust-foreground">
@@ -11,7 +9,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
           <div>
-            <img src={logo} alt="Integra Residenciales" className="h-10 w-auto mb-4 brightness-0 invert" />
+            <h3 className="font-bold text-xl mb-4">Integra Residenciales</h3>
             <p className="text-sm text-trust-foreground/90 mb-4">
               Integra Residenciales es una asociación civil sin fines de lucro dedicada a mejorar la calidad del cuidado de personas mayores en Uruguay.
             </p>
