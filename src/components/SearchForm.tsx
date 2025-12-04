@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, MapPin, Home, Euro } from "lucide-react";
+import { Search, MapPin, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,11 +55,8 @@ export const SearchForm = () => {
               <SelectContent>
                   <SelectItem value="montevideo">Montevideo</SelectItem>
                   <SelectItem value="canelones">Canelones</SelectItem>
-                  <SelectItem value="maldonado">Maldonado</SelectItem>
                   <SelectItem value="colonia">Colonia</SelectItem>
-                  <SelectItem value="salto">Salto</SelectItem>
-                  <SelectItem value="paysandu">Paysandú</SelectItem>
-                  <SelectItem value="rivera">Rivera</SelectItem>
+                  <SelectItem value="maldonado">Maldonado</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -93,8 +90,7 @@ export const SearchForm = () => {
           {/* Price Range */}
           <div className="space-y-2">
             <Label className="text-base font-medium flex items-center gap-2">
-              <Euro className="h-4 w-4 text-primary" />
-              Rango de Precio Mensual
+              Rango de Precio Mensual (UY$)
             </Label>
             <div className="grid grid-cols-2 gap-4">
               <Input type="number" placeholder="Mínimo $UY" className="h-12" />

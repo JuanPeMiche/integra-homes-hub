@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ResidenceCard } from "@/components/ResidenceCard";
+import { ChatBot } from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent } from "@/components/ui/card";
 import { Search, RotateCcw, MapPin } from "lucide-react";
 import { mockResidences } from "@/data/residences";
 import { useNavigate } from "react-router-dom";
@@ -14,9 +13,11 @@ import { useNavigate } from "react-router-dom";
 const SearchResults = () => {
   const navigate = useNavigate();
   const [compareList, setCompareList] = useState<string[]>([]);
-  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
-  const [selectedBarrios, setSelectedBarrios] = useState<string[]>([]);
-  const [orderBy, setOrderBy] = useState("latest");
+  const [departamento, setDepartamento] = useState("");
+  const [barrio, setBarrio] = useState("");
+  const [tipoAtencion, setTipoAtencion] = useState("");
+  const [rangoPrecio, setRangoPrecio] = useState("");
+  const [servicio, setServicio] = useState("");
 
   const departamentos = [
     { id: "montevideo", name: "Montevideo" },
@@ -25,15 +26,31 @@ const SearchResults = () => {
     { id: "maldonado", name: "Maldonado" },
   ];
 
-  const barriosMontevideo = [
-    "Parque Batlle",
-    "Prado",
-    "Cordón",
-    "Punta Gorda",
-    "Tres Cruces",
-    "Carrasco",
-    "La Blanqueada",
-    "Reducto",
+  const tiposAtencion = [
+    { id: "permanente", name: "Permanente (Larga estadía)" },
+    { id: "temporal", name: "Temporal (Estadía corta)" },
+    { id: "centro-dia", name: "Centro de Día" },
+    { id: "asistida", name: "Atención Asistida" },
+    { id: "autovalidos", name: "Autoválidos" },
+  ];
+
+  const rangosPrecios = [
+    { id: "30000-50000", name: "$30.000 - $50.000" },
+    { id: "50000-80000", name: "$50.000 - $80.000" },
+    { id: "80000-120000", name: "$80.000 - $120.000" },
+    { id: "120000+", name: "$120.000 o más" },
+    { id: "consultar", name: "Consultar" },
+  ];
+
+  const servicios = [
+    { id: "enfermeria-24h", name: "Enfermería 24h" },
+    { id: "fisioterapia", name: "Fisioterapia" },
+    { id: "terapia-ocupacional", name: "Terapia Ocupacional" },
+    { id: "medico-geriatra", name: "Médico Geriatra" },
+    { id: "actividades-recreativas", name: "Actividades Recreativas" },
+    { id: "alimentacion-especializada", name: "Alimentación Especializada" },
+    { id: "atencion-alzheimer", name: "Atención Alzheimer" },
+    { id: "centro-dia", name: "Centro de Día" },
   ];
 
   const handleCompare = (id: string) => {
@@ -54,22 +71,12 @@ const SearchResults = () => {
     }
   };
 
-  const toggleDepartment = (id: string) => {
-    setSelectedDepartments(prev => 
-      prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id]
-    );
-  };
-
-  const toggleBarrio = (barrio: string) => {
-    setSelectedBarrios(prev => 
-      prev.includes(barrio) ? prev.filter(b => b !== barrio) : [...prev, barrio]
-    );
-  };
-
   const resetFilters = () => {
-    setSelectedDepartments([]);
-    setSelectedBarrios([]);
-    setOrderBy("latest");
+    setDepartamento("");
+    setBarrio("");
+    setTipoAtencion("");
+    setRangoPrecio("");
+    setServicio("");
   };
 
   return (
@@ -79,66 +86,93 @@ const SearchResults = () => {
       <main className="flex-1 bg-background">
         <div className="flex h-[calc(100vh-80px)]">
           {/* Left Sidebar - Filters */}
-          <aside className="w-72 border-r border-border overflow-y-auto p-6 flex-shrink-0">
-            <h2 className="text-lg font-semibold mb-6">¿Qué estas buscando?</h2>
+          <aside className="w-80 border-r border-border overflow-y-auto p-6 flex-shrink-0 bg-card">
+            <h2 className="text-lg font-semibold mb-6">Filtrar los resultados</h2>
             
-            {/* Order By */}
-            <div className="mb-6">
-              <Label className="text-sm text-muted-foreground mb-2 block">Ordenar por...</Label>
-              <Select value={orderBy} onValueChange={setOrderBy}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Los últimos" />
+            {/* Departamento */}
+            <div className="mb-5">
+              <Label className="text-sm font-medium mb-2 block">Departamento</Label>
+              <Select value={departamento} onValueChange={setDepartamento}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="latest">Los últimos</SelectItem>
-                  <SelectItem value="name">Nombre</SelectItem>
-                  <SelectItem value="price">Precio</SelectItem>
+                  {departamentos.map((dep) => (
+                    <SelectItem key={dep.id} value={dep.id}>
+                      {dep.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Departamento */}
-            <div className="mb-6">
-              <Label className="text-sm font-medium mb-3 block">Departamento</Label>
-              <div className="space-y-2">
-                {departamentos.map((dep) => (
-                  <div key={dep.id} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={dep.id} 
-                      checked={selectedDepartments.includes(dep.id)}
-                      onCheckedChange={() => toggleDepartment(dep.id)}
-                    />
-                    <label htmlFor={dep.id} className="text-sm cursor-pointer">
-                      {dep.name}
-                    </label>
-                  </div>
-                ))}
-              </div>
+            {/* Barrio / Localidad */}
+            <div className="mb-5">
+              <Label className="text-sm font-medium mb-2 block">Barrio / Localidad</Label>
+              <Input 
+                value={barrio}
+                onChange={(e) => setBarrio(e.target.value)}
+                placeholder="Ej: Cordón, Prado, Punta Gorda"
+                className="bg-background"
+              />
             </div>
 
-            {/* Barrio */}
+            {/* Tipo de Atención */}
+            <div className="mb-5">
+              <Label className="text-sm font-medium mb-2 block">Tipo de Atención</Label>
+              <Select value={tipoAtencion} onValueChange={setTipoAtencion}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
+                <SelectContent>
+                  {tiposAtencion.map((tipo) => (
+                    <SelectItem key={tipo.id} value={tipo.id}>
+                      {tipo.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Rango de Precio */}
+            <div className="mb-5">
+              <Label className="text-sm font-medium mb-2 block">Rango de Precio Mensual</Label>
+              <Select value={rangoPrecio} onValueChange={setRangoPrecio}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
+                <SelectContent>
+                  {rangosPrecios.map((rango) => (
+                    <SelectItem key={rango.id} value={rango.id}>
+                      {rango.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground mt-1">Precio medio en la zona: $65.000 UY/mes</p>
+            </div>
+
+            {/* Servicios Disponibles */}
             <div className="mb-6">
-              <Label className="text-sm font-medium mb-3 block">Barrio</Label>
-              <div className="space-y-2">
-                {barriosMontevideo.map((barrio) => (
-                  <div key={barrio} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={barrio} 
-                      checked={selectedBarrios.includes(barrio)}
-                      onCheckedChange={() => toggleBarrio(barrio)}
-                    />
-                    <label htmlFor={barrio} className="text-sm cursor-pointer">
-                      {barrio}
-                    </label>
-                  </div>
-                ))}
-              </div>
+              <Label className="text-sm font-medium mb-2 block">Servicios Disponibles</Label>
+              <Select value={servicio} onValueChange={setServicio}>
+                <SelectTrigger className="bg-background">
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
+                <SelectContent>
+                  {servicios.map((serv) => (
+                    <SelectItem key={serv.id} value={serv.id}>
+                      {serv.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Search Button */}
-            <Button className="w-full mb-3 gap-2">
+            <Button className="w-full mb-3 gap-2 h-12">
               <Search className="h-4 w-4" />
-              Search
+              Buscar
             </Button>
 
             {/* Reset Filters */}
@@ -147,7 +181,7 @@ const SearchResults = () => {
               className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <RotateCcw className="h-4 w-4" />
-              Reset Filters
+              Limpiar filtros
             </button>
           </aside>
 
@@ -248,6 +282,7 @@ const SearchResults = () => {
       </main>
 
       <Footer />
+      <ChatBot />
     </div>
   );
 };

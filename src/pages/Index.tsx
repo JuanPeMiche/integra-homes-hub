@@ -2,8 +2,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SearchForm } from "@/components/SearchForm";
 import { StatsSection } from "@/components/StatsSection";
+import { ChatBot } from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Users, Heart } from "lucide-react";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const Index = () => {
   return (
@@ -12,9 +14,14 @@ const Index = () => {
       
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative bg-gradient-hero text-white py-20 md:py-32 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAtMy4zMTQgMi42ODYtNiA2LTZzNiAyLjY4NiA2IDYtMi42ODYgNi02IDYtNi0yLjY4Ni02LTZ6TTEyIDM2YzAtMy4zMTQgMi42ODYtNiA2LTZzNiAyLjY4NiA2IDYtMi42ODYgNi02IDYtNi0yLjY4Ni02LTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
-          
+        <section 
+          className="relative text-white py-20 md:py-32 overflow-hidden"
+          style={{
+            backgroundImage: `linear-gradient(135deg, rgba(34, 139, 104, 0.9) 0%, rgba(59, 130, 163, 0.9) 100%), url(${heroBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center space-y-6 mb-12">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
@@ -26,8 +33,7 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button 
                   size="lg" 
-                  variant="secondary" 
-                  className="gap-2 text-base h-14 px-8"
+                  className="gap-2 text-base h-14 px-8 bg-secondary hover:bg-secondary/90 text-secondary-foreground"
                   onClick={() => window.location.href = '/buscar'}
                 >
                   Buscar Ahora
@@ -130,6 +136,7 @@ const Index = () => {
       </main>
 
       <Footer />
+      <ChatBot />
     </div>
   );
 };
