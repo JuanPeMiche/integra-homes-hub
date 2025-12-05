@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
+import { GoogleMapComponent } from "@/components/GoogleMap";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, RotateCcw, MapPin } from "lucide-react";
-import { mockResidences } from "@/data/residences";
+import { mockResidences, Residence } from "@/data/residences";
 import { useNavigate } from "react-router-dom";
 
 const SearchResults = () => {
@@ -237,19 +238,11 @@ const SearchResults = () => {
           </div>
 
           {/* Right - Map */}
-          <div className="flex-1 bg-muted relative">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center space-y-4">
-                <MapPin className="h-16 w-16 mx-auto text-muted-foreground" />
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">Mapa de Ubicaciones</h3>
-                  <p className="text-muted-foreground text-sm max-w-md">
-                    Para ver el mapa interactivo con las ubicaciones de las residencias, 
-                    se necesita integrar Google Maps API.
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="flex-1 relative">
+            <GoogleMapComponent 
+              residences={mockResidences}
+              onMarkerClick={(residence: Residence) => navigate(`/residencia/${residence.id}`)}
+            />
           </div>
         </div>
 
