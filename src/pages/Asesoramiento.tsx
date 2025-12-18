@@ -79,15 +79,12 @@ const Asesoramiento = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.aceptaContacto) {
       toast.error("Por favor, acepta ser contactado para continuar");
       return;
     }
 
-    // Here you would send the data to your backend
-    console.log("Form submitted:", formData);
-    
     toast.success("¡Solicitud enviada con éxito!", {
       description: "Nuestro equipo se pondrá en contacto contigo en menos de 24 horas.",
     });
@@ -383,34 +380,48 @@ const Asesoramiento = () => {
                         </div>
                         <div className="space-y-2">
                           <Label>Departamento preferido</Label>
-                          <Select 
-                            value={formData.departamentoPreferido} 
-                            onValueChange={(value) => setFormData(prev => ({ ...prev, departamentoPreferido: value }))}
+                          <Select
+                            value={formData.departamentoPreferido || "_none"}
+                            onValueChange={(value) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                departamentoPreferido: value === "_none" ? "" : value,
+                              }))
+                            }
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Sin preferencia" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">Sin preferencia</SelectItem>
+                              <SelectItem value="_none">Sin preferencia</SelectItem>
                               {departamentos.map((dep) => (
-                                <SelectItem key={dep} value={dep}>{dep}</SelectItem>
+                                <SelectItem key={dep} value={dep}>
+                                  {dep}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
                         </div>
                         <div className="space-y-2">
                           <Label>Barrio / Zona preferida</Label>
-                          <Select 
-                            value={formData.barrioPreferido} 
-                            onValueChange={(value) => setFormData(prev => ({ ...prev, barrioPreferido: value }))}
+                          <Select
+                            value={formData.barrioPreferido || "_none"}
+                            onValueChange={(value) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                barrioPreferido: value === "_none" ? "" : value,
+                              }))
+                            }
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Sin preferencia" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="">Sin preferencia</SelectItem>
+                              <SelectItem value="_none">Sin preferencia</SelectItem>
                               {barrios.map((b) => (
-                                <SelectItem key={b} value={b}>{b}</SelectItem>
+                                <SelectItem key={b} value={b}>
+                                  {b}
+                                </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
