@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Phone, User, LogOut, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut, loading } = useAuth();
   const isHomePage = location.pathname === "/";
 
   useEffect(() => {
@@ -19,6 +30,15 @@ export const Header = () => {
   }, []);
 
   const showSolidHeader = !isHomePage || isScrolled;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  const getInitials = (email: string) => {
+    return email.substring(0, 2).toUpperCase();
+  };
 
   return (
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${showSolidHeader ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"}`}>
@@ -36,6 +56,7 @@ export const Header = () => {
               { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar Residencias" },
               { to: "/sobre-integra", label: "Sobre Integra" },
+              { to: "/noticias", label: "Noticias" },
               { to: "/asesoramiento", label: "Buscamos por Ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
@@ -50,8 +71,45 @@ export const Header = () => {
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center">
-            <Button variant={showSolidHeader ? "outline" : "secondary"} size="lg" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`} asChild>
+          <div className="hidden lg:flex items-center gap-3">
+            {!loading && (
+              user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant={showSolidHeader ? "outline" : "secondary"} size="sm" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`}>
+                      <Avatar className="h-6 w-6">
+                        <AvatarFallback className="text-xs bg-primary text-primary-foreground">
+                          {getInitials(user.email || "")}
+                        </AvatarFallback>
+                      </Avatar>
+                      Mi Cuenta
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => navigate("/favoritos")} className="cursor-pointer">
+                      <Heart className="mr-2 h-4 w-4" />
+                      Mis Favoritos
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button 
+                  variant={showSolidHeader ? "default" : "secondary"} 
+                  size="sm" 
+                  className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`}
+                  onClick={() => navigate("/auth")}
+                >
+                  <User className="h-4 w-4" />
+                  Ingresar
+                </Button>
+              )
+            )}
+            <Button variant={showSolidHeader ? "outline" : "secondary"} size="sm" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`} asChild>
               <a href="tel:+59899923330">
                 <Phone className="h-4 w-4" />
                 (+598) 99 923 330
@@ -70,6 +128,7 @@ export const Header = () => {
               { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar Residencias" },
               { to: "/sobre-integra", label: "Sobre Integra" },
+              { to: "/noticias", label: "Noticias" },
               { to: "/asesoramiento", label: "Buscamos por Ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
@@ -77,6 +136,27 @@ export const Header = () => {
                 {link.label}
               </NavLink>
             ))}
+            
+            {!loading && (
+              user ? (
+                <>
+                  <NavLink to="/favoritos" className="block py-2 text-base font-medium text-foreground/80 hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                    <Heart className="inline mr-2 h-4 w-4" />
+                    Mis Favoritos
+                  </NavLink>
+                  <Button variant="outline" className="w-full justify-start text-destructive" onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Cerrar Sesión
+                  </Button>
+                </>
+              ) : (
+                <Button variant="default" className="w-full" onClick={() => { setIsMenuOpen(false); navigate("/auth"); }}>
+                  <User className="mr-2 h-4 w-4" />
+                  Ingresar / Registrarse
+                </Button>
+              )
+            )}
+            
             <Button variant="outline" size="lg" className="w-full gap-2 mt-4" asChild>
               <a href="tel:+59899923330">
                 <Phone className="h-4 w-4" />

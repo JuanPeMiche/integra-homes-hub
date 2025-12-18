@@ -2,8 +2,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, Heart, Users, Target, Lightbulb, Award } from "lucide-react";
-
+import { Shield, Heart, Users, Target, Lightbulb, Award, ExternalLink, Building2, Briefcase } from "lucide-react";
+import madrinaImage from "@/assets/madrina-lourdes-bermejo.png";
 const About = () => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -148,44 +148,83 @@ const About = () => {
         {/* Madrina Section */}
         <section className="py-16 bg-muted">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <Card>
-                <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold mb-4">Nuestra Madrina Institucional</h2>
-                    <h3 className="text-2xl text-primary font-semibold mb-2">Lourdes Bermejo</h3>
-                    <p className="text-muted-foreground">Experta Internacional en Gerontología</p>
-                  </div>
-
-                  <div className="space-y-6">
-                    <p className="text-lg text-muted-foreground leading-relaxed">
-                      Lourdes Bermejo es una reconocida experta internacional en gerontología con más de 
-                      25 años de experiencia en formación, acompañamiento y atención en el cuidado de 
-                      personas mayores. Española, consultora y formadora especializada en envejecimiento, 
-                      es autora de numerosas publicaciones y conferencista destacada en el ámbito gerontológico.
-                    </p>
-
-                    <div className="bg-gradient-hero text-white rounded-xl p-8 text-center">
-                      <p className="text-2xl font-semibold italic mb-4">
-                        "El amor es el regalo más grande que una generación le puede dejar a otra"
-                      </p>
-                      <p className="text-white/90">- Lourdes Bermejo</p>
+            <div className="max-w-5xl mx-auto">
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="grid md:grid-cols-2 gap-0">
+                    <div className="relative h-64 md:h-auto">
+                      <img 
+                        src={madrinaImage} 
+                        alt="Lourdes Bermejo - Madrina de Integra Residenciales" 
+                        className="w-full h-full object-cover"
+                      />
                     </div>
+                    <div className="p-8 flex flex-col justify-center">
+                      <span className="text-sm font-medium text-primary mb-2">Nuestra Madrina</span>
+                      <h2 className="text-3xl font-bold mb-2">Lourdes Bermejo</h2>
+                      <p className="text-muted-foreground mb-6">Experta Internacional en Gerontología</p>
+                      
+                      <p className="text-muted-foreground leading-relaxed mb-6">
+                        Cuenta con más de 25 años de experiencia en diversos ámbitos de formación, 
+                        acompañamientos y atención en el cuidado de las personas mayores. 
+                        Te invitamos a descubrir por qué trabajar con personas mayores es su vocación.
+                      </p>
 
-                    <p className="text-muted-foreground leading-relaxed">
-                      Su rol como madrina institucional de Integra Residenciales aporta una mirada 
-                      internacional de excelencia y refuerza nuestra filosofía intergeneracional y de 
-                      afecto en el cuidado de adultos mayores.
-                    </p>
+                      <div className="bg-gradient-hero text-white rounded-xl p-6 mb-6">
+                        <p className="text-lg font-semibold italic">
+                          "El amor es el regalo más grande que una generación le puede dejar a otra"
+                        </p>
+                      </div>
 
-                    <div className="flex justify-center pt-4">
-                      <Button variant="outline" size="lg" asChild>
-                        <a href="https://www.lourdesbermejo.com" target="_blank" rel="noopener noreferrer">
-                          Conocer más sobre Lourdes Bermejo
+                      <Button variant="outline" size="lg" className="w-fit gap-2" asChild>
+                        <a href="https://www.lourdesbermejo.es" target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-4 w-4" />
+                          Visitar su sitio web
                         </a>
                       </Button>
                     </div>
                   </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Trabaja con Nosotros & Asociar Residencial */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+              <Card className="border-2 border-primary/20 hover:border-primary/40 transition-colors">
+                <CardContent className="p-8">
+                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                    <Briefcase className="h-7 w-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4">¿Querés trabajar con nosotros?</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Si tenés vocación de servicio en el cuidado y atención a las personas mayores, 
+                    podés enviarnos tus datos de contacto y dejarnos tu currículum vitae.
+                  </p>
+                  <Button variant="outline" size="lg" className="gap-2" asChild>
+                    <a href="mailto:hola@integraresidenciales.com.uy">
+                      Enviar CV
+                    </a>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-secondary/20 hover:border-secondary/40 transition-colors">
+                <CardContent className="p-8">
+                  <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mb-6">
+                    <Building2 className="h-7 w-7 text-secondary" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4">¿Administrás un residencial?</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    Sumate a la Red Integra y accedé a beneficios exclusivos, formación continua, 
+                    y la plataforma de gestión IntegraSoft para optimizar tu residencial.
+                  </p>
+                  <Button size="lg" onClick={() => window.location.href = '/contacto'}>
+                    Asociar mi Residencial
+                  </Button>
                 </CardContent>
               </Card>
             </div>
