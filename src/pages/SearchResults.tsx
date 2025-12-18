@@ -126,12 +126,12 @@ const SearchResults = () => {
       {/* Departamento */}
       <div>
         <Label className="text-sm font-medium mb-2 block">Departamento</Label>
-        <Select value={departamento} onValueChange={setDepartamento}>
+        <Select value={departamento || "_all"} onValueChange={(val) => setDepartamento(val === "_all" ? "" : val)}>
           <SelectTrigger className="bg-background">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+          <SelectContent className="bg-background">
+            <SelectItem value="_all">Todos</SelectItem>
             {departamentos.map((dep) => (
               <SelectItem key={dep} value={dep}>
                 {dep}
@@ -144,12 +144,12 @@ const SearchResults = () => {
       {/* Barrio / Localidad */}
       <div>
         <Label className="text-sm font-medium mb-2 block">Barrio / Zona</Label>
-        <Select value={barrio} onValueChange={setBarrio}>
+        <Select value={barrio || "_all"} onValueChange={(val) => setBarrio(val === "_all" ? "" : val)}>
           <SelectTrigger className="bg-background">
             <SelectValue placeholder="Todos" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">Todos</SelectItem>
+          <SelectContent className="bg-background">
+            <SelectItem value="_all">Todos</SelectItem>
             {barrios.map((b) => (
               <SelectItem key={b} value={b}>
                 {b}
@@ -182,7 +182,7 @@ const SearchResults = () => {
           <SelectTrigger className="bg-background">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background">
             <SelectItem value="name-asc">Nombre (A → Z)</SelectItem>
             <SelectItem value="name-desc">Nombre (Z → A)</SelectItem>
             <SelectItem value="transparency-desc">Mayor transparencia</SelectItem>
