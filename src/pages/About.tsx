@@ -204,10 +204,8 @@ const About = () => {
                     Si tenés vocación de servicio en el cuidado y atención a las personas mayores, 
                     podés enviarnos tus datos de contacto y dejarnos tu currículum vitae.
                   </p>
-                  <Button variant="outline" size="lg" className="gap-2" asChild>
-                    <a href="mailto:hola@integraresidenciales.com.uy">
-                      Enviar CV
-                    </a>
+                  <Button variant="outline" size="lg" className="gap-2" onClick={() => window.location.href = '/trabaja-con-nosotros'}>
+                    Ver Oportunidades
                   </Button>
                 </CardContent>
               </Card>
@@ -222,7 +220,7 @@ const About = () => {
                     Sumate a la Red Integra y accedé a beneficios exclusivos, formación continua, 
                     y la plataforma de gestión IntegraSoft para optimizar tu residencial.
                   </p>
-                  <Button size="lg" onClick={() => window.location.href = '/contacto'}>
+                  <Button size="lg" onClick={() => window.location.href = '/asociar-residencia'}>
                     Asociar mi Residencial
                   </Button>
                 </CardContent>

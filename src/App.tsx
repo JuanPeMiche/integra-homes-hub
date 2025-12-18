@@ -16,6 +16,8 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import Asesoramiento from "./pages/Asesoramiento";
 import Favorites from "./pages/Favorites";
+import TrabajaConNosotros from "./pages/TrabajaConNosotros";
+import AsociarResidencia from "./pages/AsociarResidencia";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ const App = () => {
             <Route path="/asesoramiento" element={<Asesoramiento />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/favoritos" element={<Favorites />} />
+            <Route path="/trabaja-con-nosotros" element={<TrabajaConNosotros />} />
+            <Route path="/asociar-residencia" element={<AsociarResidencia />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
