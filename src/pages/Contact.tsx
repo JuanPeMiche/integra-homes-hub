@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SendMethodDialog } from "@/components/SendMethodDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,34 +20,20 @@ const Contact = () => {
     genero: "",
     habitacion: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSendDialog, setShowSendDialog] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    const subject = encodeURIComponent("Nueva consulta desde el sitio web");
-    const body = encodeURIComponent(
-      `Nombre: ${formData.nombre}\n` +
-        `Email: ${formData.email}\n` +
-        `Teléfono: ${formData.telefono}\n` +
-        `El huésped es: ${formData.genero}\n` +
-        `Prefiere habitación: ${formData.habitacion}\n\n` +
-        `Consulta:\n${formData.consulta}`
-    );
-
-    window.location.href = `mailto:hola@integraresidenciales.com.uy?subject=${subject}&body=${body}`;
-
-    toast.success("Redirigiendo a tu cliente de correo", {
-      description: "Se abrirá tu aplicación de email para enviar el mensaje.",
-    });
-
-    setIsSubmitting(false);
+    if (!formData.nombre || !formData.email || !formData.telefono || !formData.consulta) {
+      toast.error("Por favor completá todos los campos requeridos");
+      return;
+    }
+    setShowSendDialog(true);
   };
 
   return (
@@ -79,7 +66,7 @@ const Contact = () => {
                       Envianos tu consulta
                     </CardTitle>
                     <CardDescription>
-                      Completá el formulario y te responderemos a la brevedad
+                      Completá el formulario y elegí cómo enviarlo
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -188,9 +175,9 @@ const Contact = () => {
                         </div>
                       </div>
 
-                      <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
+                      <Button type="submit" size="lg" className="w-full gap-2">
                         <Send className="h-5 w-5" />
-                        {isSubmitting ? "Enviando..." : "Enviar Consulta"}
+                        Enviar Consulta
                       </Button>
                     </form>
                   </CardContent>
@@ -333,6 +320,13 @@ const Contact = () => {
       </main>
 
       <Footer />
+
+      <SendMethodDialog
+        open={showSendDialog}
+        onOpenChange={setShowSendDialog}
+        formData={formData}
+        subject="Nueva consulta desde Contacto"
+      />
     </div>
   );
 };
