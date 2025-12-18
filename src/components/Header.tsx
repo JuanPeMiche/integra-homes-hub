@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
-import logo from "@/assets/logo-integra.png";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,84 +18,40 @@ export const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const showSolidHeader = !isHomePage || isScrolled;
+
   return (
-    <header 
-      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled 
-          ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" 
-          : "bg-transparent"
-      }`}
-    >
+    <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${showSolidHeader ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"}`}>
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          {/* Logo */}
           <NavLink to="/" className="flex items-center space-x-2">
-            <img 
-              src={logo} 
-              alt="Integra Residenciales" 
-              className={`h-12 w-auto object-contain transition-all duration-300 ${
-                isScrolled ? "" : "brightness-0 invert"
-              }`}
-            />
+            <img src="/logo-integra.ico" alt="Integra" className="h-10 w-10 object-contain" />
+            <span className={`text-xl font-bold transition-colors ${showSolidHeader ? "text-primary" : "text-white"}`}>
+              <span className="font-light">integra</span>Residenciales
+            </span>
           </NavLink>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <NavLink 
-              to="/" 
-              className={`text-base font-medium transition-colors ${
-                isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-              }`}
-              activeClassName={isScrolled ? "text-primary font-semibold" : "text-white font-semibold"}
-            >
-              Inicio
-            </NavLink>
-            <NavLink 
-              to="/buscar" 
-              className={`text-base font-medium transition-colors ${
-                isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-              }`}
-              activeClassName={isScrolled ? "text-primary font-semibold" : "text-white font-semibold"}
-            >
-              Buscar Residencias
-            </NavLink>
-            <NavLink 
-              to="/sobre-integra" 
-              className={`text-base font-medium transition-colors ${
-                isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-              }`}
-              activeClassName={isScrolled ? "text-primary font-semibold" : "text-white font-semibold"}
-            >
-              Sobre Integra
-            </NavLink>
-            <NavLink 
-              to="/comparar" 
-              className={`text-base font-medium transition-colors ${
-                isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-              }`}
-              activeClassName={isScrolled ? "text-primary font-semibold" : "text-white font-semibold"}
-            >
-              Comparador
-            </NavLink>
-            <NavLink 
-              to="/contacto" 
-              className={`text-base font-medium transition-colors ${
-                isScrolled ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"
-              }`}
-              activeClassName={isScrolled ? "text-primary font-semibold" : "text-white font-semibold"}
-            >
-              Contacto
-            </NavLink>
+          <nav className="hidden lg:flex items-center space-x-6">
+            {[
+              { to: "/", label: "Inicio" },
+              { to: "/buscar", label: "Buscar Residencias" },
+              { to: "/sobre-integra", label: "Sobre Integra" },
+              { to: "/asesoramiento", label: "Buscamos por Ti" },
+              { to: "/contacto", label: "Contacto" },
+            ].map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={`text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}
+                activeClassName={showSolidHeader ? "text-primary font-semibold" : "text-white font-semibold"}
+              >
+                {link.label}
+              </NavLink>
+            ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button 
-              variant={isScrolled ? "outline" : "secondary"} 
-              size="lg" 
-              className={`gap-2 ${!isScrolled ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`}
-              asChild
-            >
+          <div className="hidden lg:flex items-center">
+            <Button variant={showSolidHeader ? "outline" : "secondary"} size="lg" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`} asChild>
               <a href="tel:+59899923330">
                 <Phone className="h-4 w-4" />
                 (+598) 99 923 330
@@ -101,58 +59,24 @@ export const Header = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className={`md:hidden p-2 rounded-md ${isScrolled ? "hover:bg-accent" : "hover:bg-white/10"}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className={`h-6 w-6 ${isScrolled ? "" : "text-white"}`} />
-            ) : (
-              <Menu className={`h-6 w-6 ${isScrolled ? "" : "text-white"}`} />
-            )}
+          <button className={`lg:hidden p-2 rounded-md ${showSolidHeader ? "hover:bg-accent" : "hover:bg-white/10"}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X className={`h-6 w-6 ${showSolidHeader ? "" : "text-white"}`} /> : <Menu className={`h-6 w-6 ${showSolidHeader ? "" : "text-white"}`} />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="md:hidden py-4 space-y-3 border-t border-border bg-background rounded-b-lg">
-            <NavLink 
-              to="/" 
-              className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Inicio
-            </NavLink>
-            <NavLink 
-              to="/buscar" 
-              className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Buscar Residencias
-            </NavLink>
-            <NavLink 
-              to="/sobre-integra" 
-              className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Sobre Integra
-            </NavLink>
-            <NavLink 
-              to="/comparar" 
-              className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Comparador
-            </NavLink>
-            <NavLink 
-              to="/contacto" 
-              className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Contacto
-            </NavLink>
+          <nav className="lg:hidden py-4 space-y-3 border-t border-border bg-background rounded-b-lg">
+            {[
+              { to: "/", label: "Inicio" },
+              { to: "/buscar", label: "Buscar Residencias" },
+              { to: "/sobre-integra", label: "Sobre Integra" },
+              { to: "/asesoramiento", label: "Buscamos por Ti" },
+              { to: "/contacto", label: "Contacto" },
+            ].map((link) => (
+              <NavLink key={link.to} to={link.to} className="block py-2 text-base font-medium text-foreground/80 hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                {link.label}
+              </NavLink>
+            ))}
             <Button variant="outline" size="lg" className="w-full gap-2 mt-4" asChild>
               <a href="tel:+59899923330">
                 <Phone className="h-4 w-4" />

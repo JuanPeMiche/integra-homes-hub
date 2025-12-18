@@ -1,58 +1,83 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
 import { GoogleMapComponent } from "@/components/GoogleMap";
+import { ResidenceCard } from "@/components/ResidenceCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, RotateCcw, MapPin } from "lucide-react";
-import { mockResidences, Residence } from "@/data/residences";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Search, RotateCcw, MapPin, List, Map, SlidersHorizontal, X, CheckCircle } from "lucide-react";
+import { mockResidences, getAllBarrios, getAllProvinces, Residence } from "@/data/residences";
 import { useNavigate } from "react-router-dom";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const SearchResults = () => {
   const navigate = useNavigate();
   const [compareList, setCompareList] = useState<string[]>([]);
+  const [searchName, setSearchName] = useState("");
   const [departamento, setDepartamento] = useState("");
   const [barrio, setBarrio] = useState("");
-  const [tipoAtencion, setTipoAtencion] = useState("");
-  const [rangoPrecio, setRangoPrecio] = useState("");
-  const [servicio, setServicio] = useState("");
+  const [redIntegraOnly, setRedIntegraOnly] = useState(false);
+  const [sortBy, setSortBy] = useState("name-asc");
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
-  const departamentos = [
-    { id: "montevideo", name: "Montevideo" },
-    { id: "canelones", name: "Canelones" },
-    { id: "colonia", name: "Colonia" },
-    { id: "maldonado", name: "Maldonado" },
-  ];
+  const departamentos = getAllProvinces();
+  const barrios = getAllBarrios();
 
-  const tiposAtencion = [
-    { id: "permanente", name: "Permanente (Larga estadía)" },
-    { id: "temporal", name: "Temporal (Estadía corta)" },
-    { id: "centro-dia", name: "Centro de Día" },
-    { id: "asistida", name: "Atención Asistida" },
-    { id: "autovalidos", name: "Autoválidos" },
-  ];
+  // Filter and sort residences
+  const filteredResidences = useMemo(() => {
+    let results = [...mockResidences];
 
-  const rangosPrecios = [
-    { id: "30000-50000", name: "$30.000 - $50.000" },
-    { id: "50000-80000", name: "$50.000 - $80.000" },
-    { id: "80000-120000", name: "$80.000 - $120.000" },
-    { id: "120000+", name: "$120.000 o más" },
-    { id: "consultar", name: "Consultar" },
-  ];
+    // Filter by name (autocomplete-like)
+    if (searchName) {
+      const searchLower = searchName.toLowerCase();
+      results = results.filter(r => 
+        r.name.toLowerCase().includes(searchLower) ||
+        r.city.toLowerCase().includes(searchLower) ||
+        r.description.toLowerCase().includes(searchLower)
+      );
+    }
 
-  const servicios = [
-    { id: "enfermeria-24h", name: "Enfermería 24h" },
-    { id: "fisioterapia", name: "Fisioterapia" },
-    { id: "terapia-ocupacional", name: "Terapia Ocupacional" },
-    { id: "medico-geriatra", name: "Médico Geriatra" },
-    { id: "actividades-recreativas", name: "Actividades Recreativas" },
-    { id: "alimentacion-especializada", name: "Alimentación Especializada" },
-    { id: "atencion-alzheimer", name: "Atención Alzheimer" },
-    { id: "centro-dia", name: "Centro de Día" },
-  ];
+    // Filter by departamento
+    if (departamento) {
+      results = results.filter(r => r.province.toLowerCase() === departamento.toLowerCase());
+    }
+
+    // Filter by barrio
+    if (barrio) {
+      results = results.filter(r => r.city.toLowerCase().includes(barrio.toLowerCase()));
+    }
+
+    // Filter by Red Integra
+    if (redIntegraOnly) {
+      results = results.filter(r => r.redIntegra);
+    }
+
+    // Sort
+    switch (sortBy) {
+      case "name-asc":
+        results.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "name-desc":
+        results.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "transparency-desc":
+        results.sort((a, b) => b.transparency - a.transparency);
+        break;
+      case "transparency-asc":
+        results.sort((a, b) => a.transparency - b.transparency);
+        break;
+      case "rating-desc":
+        results.sort((a, b) => b.rating - a.rating);
+        break;
+    }
+
+    return results;
+  }, [searchName, departamento, barrio, redIntegraOnly, sortBy]);
 
   const handleCompare = (id: string) => {
     setCompareList((prev) => {
@@ -73,182 +98,224 @@ const SearchResults = () => {
   };
 
   const resetFilters = () => {
+    setSearchName("");
     setDepartamento("");
     setBarrio("");
-    setTipoAtencion("");
-    setRangoPrecio("");
-    setServicio("");
+    setRedIntegraOnly(false);
+    setSortBy("name-asc");
   };
+
+  const activeFiltersCount = [searchName, departamento, barrio, redIntegraOnly].filter(Boolean).length;
+
+  const FilterPanel = () => (
+    <div className="space-y-6">
+      {/* Search by Name */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">Buscar por nombre</Label>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+            placeholder="Ej: Moiru, Dolce..."
+            className="pl-10 bg-background"
+          />
+        </div>
+      </div>
+
+      {/* Departamento */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">Departamento</Label>
+        <Select value={departamento} onValueChange={setDepartamento}>
+          <SelectTrigger className="bg-background">
+            <SelectValue placeholder="Todos" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Todos</SelectItem>
+            {departamentos.map((dep) => (
+              <SelectItem key={dep} value={dep}>
+                {dep}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Barrio / Localidad */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">Barrio / Zona</Label>
+        <Select value={barrio} onValueChange={setBarrio}>
+          <SelectTrigger className="bg-background">
+            <SelectValue placeholder="Todos" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Todos</SelectItem>
+            {barrios.map((b) => (
+              <SelectItem key={b} value={b}>
+                {b}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Red Integra Filter */}
+      <div className="flex items-center space-x-3 p-3 bg-secondary/10 rounded-lg border border-secondary/20">
+        <Checkbox
+          id="redIntegra"
+          checked={redIntegraOnly}
+          onCheckedChange={(checked) => setRedIntegraOnly(checked as boolean)}
+        />
+        <label
+          htmlFor="redIntegra"
+          className="text-sm font-medium leading-none cursor-pointer flex items-center gap-2"
+        >
+          <CheckCircle className="h-4 w-4 text-secondary" />
+          Solo Red Integra
+        </label>
+      </div>
+
+      {/* Sort By */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">Ordenar por</Label>
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="bg-background">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="name-asc">Nombre (A → Z)</SelectItem>
+            <SelectItem value="name-desc">Nombre (Z → A)</SelectItem>
+            <SelectItem value="transparency-desc">Mayor transparencia</SelectItem>
+            <SelectItem value="transparency-asc">Menor transparencia</SelectItem>
+            <SelectItem value="rating-desc">Mejor valoración</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Reset Filters */}
+      <button 
+        onClick={resetFilters}
+        className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+      >
+        <RotateCcw className="h-4 w-4" />
+        Limpiar filtros
+      </button>
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1 bg-background">
-        <div className="flex h-[calc(100vh-80px)]">
-          {/* Left Sidebar - Filters */}
-          <aside className="w-80 border-r border-border overflow-y-auto p-6 flex-shrink-0 bg-card">
-            <h2 className="text-lg font-semibold mb-6">Filtrar los resultados</h2>
-            
-            {/* Departamento */}
-            <div className="mb-5">
-              <Label className="text-sm font-medium mb-2 block">Departamento</Label>
-              <Select value={departamento} onValueChange={setDepartamento}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  {departamentos.map((dep) => (
-                    <SelectItem key={dep.id} value={dep.id}>
-                      {dep.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Barrio / Localidad */}
-            <div className="mb-5">
-              <Label className="text-sm font-medium mb-2 block">Barrio / Localidad</Label>
-              <Input 
-                value={barrio}
-                onChange={(e) => setBarrio(e.target.value)}
-                placeholder="Ej: Cordón, Prado, Punta Gorda"
-                className="bg-background"
-              />
-            </div>
-
-            {/* Tipo de Atención */}
-            <div className="mb-5">
-              <Label className="text-sm font-medium mb-2 block">Tipo de Atención</Label>
-              <Select value={tipoAtencion} onValueChange={setTipoAtencion}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  {tiposAtencion.map((tipo) => (
-                    <SelectItem key={tipo.id} value={tipo.id}>
-                      {tipo.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Rango de Precio */}
-            <div className="mb-5">
-              <Label className="text-sm font-medium mb-2 block">Rango de Precio Mensual</Label>
-              <Select value={rangoPrecio} onValueChange={setRangoPrecio}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  {rangosPrecios.map((rango) => (
-                    <SelectItem key={rango.id} value={rango.id}>
-                      {rango.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground mt-1">Precio medio en la zona: $65.000 UY/mes</p>
-            </div>
-
-            {/* Servicios Disponibles */}
-            <div className="mb-6">
-              <Label className="text-sm font-medium mb-2 block">Servicios Disponibles</Label>
-              <Select value={servicio} onValueChange={setServicio}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Seleccionar" />
-                </SelectTrigger>
-                <SelectContent>
-                  {servicios.map((serv) => (
-                    <SelectItem key={serv.id} value={serv.id}>
-                      {serv.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Search Button */}
-            <Button className="w-full mb-3 gap-2 h-12">
-              <Search className="h-4 w-4" />
-              Buscar
-            </Button>
-
-            {/* Reset Filters */}
-            <button 
-              onClick={resetFilters}
-              className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <RotateCcw className="h-4 w-4" />
-              Limpiar filtros
-            </button>
-          </aside>
-
-          {/* Center - Residence Cards */}
-          <div className="w-[400px] overflow-y-auto flex-shrink-0 border-r border-border">
-            <div className="space-y-0">
-              {mockResidences.map((residence) => (
-                <div 
-                  key={residence.id} 
-                  className="relative cursor-pointer group"
-                  onClick={() => navigate(`/residencia/${residence.id}`)}
-                >
-                  <div className="relative h-52 overflow-hidden">
-                    <img 
-                      src={residence.image} 
-                      alt={residence.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {/* Badge overlay */}
-                    <div className="absolute top-3 left-3 flex items-center gap-2">
-                      <div className="bg-primary text-primary-foreground p-1.5 rounded">
-                        <MapPin className="h-4 w-4" />
-                      </div>
-                      <span className="bg-foreground/80 text-background px-3 py-1 rounded text-sm font-medium">
-                        {residence.city}
-                      </span>
-                    </div>
-                    {/* Name overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                      <h3 className="text-white font-semibold text-lg flex items-center gap-2">
-                        {residence.name}
-                        <svg className="h-5 w-5 text-primary" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                      </h3>
-                      {residence.description && (
-                        <p className="text-white/80 text-sm mt-1 line-clamp-1">
-                          {residence.description}
-                        </p>
-                      )}
-                    </div>
-                  </div>
+      <main className="flex-1 bg-background pt-20">
+        {/* Top Bar */}
+        <div className="border-b border-border bg-card">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">Residencias en Uruguay</h1>
+                <p className="text-muted-foreground text-sm">
+                  {filteredResidences.length} residencias encontradas
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                {/* View Toggle */}
+                <div className="flex items-center bg-muted rounded-lg p-1">
+                  <Button
+                    variant={viewMode === "list" ? "secondary" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                    className="gap-2"
+                  >
+                    <List className="h-4 w-4" />
+                    Lista
+                  </Button>
+                  <Button
+                    variant={viewMode === "map" ? "secondary" : "ghost"}
+                    size="sm"
+                    onClick={() => setViewMode("map")}
+                    className="gap-2"
+                  >
+                    <Map className="h-4 w-4" />
+                    Mapa
+                  </Button>
                 </div>
-              ))}
-            </div>
 
-            {/* Pagination */}
-            <div className="flex items-center justify-center gap-2 p-4 border-t border-border">
-              <Button variant="outline" size="sm" className="w-8 h-8 p-0">1</Button>
-              <Button variant="ghost" size="sm" className="w-8 h-8 p-0">2</Button>
-              <Button variant="ghost" size="sm" className="w-8 h-8 p-0">→</Button>
+                {/* Mobile Filter Button */}
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" size="sm" className="lg:hidden gap-2">
+                      <SlidersHorizontal className="h-4 w-4" />
+                      Filtros
+                      {activeFiltersCount > 0 && (
+                        <Badge variant="secondary" className="ml-1">
+                          {activeFiltersCount}
+                        </Badge>
+                      )}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="left" className="w-80">
+                    <SheetHeader>
+                      <SheetTitle>Filtrar resultados</SheetTitle>
+                    </SheetHeader>
+                    <div className="mt-6">
+                      <FilterPanel />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Right - Map */}
-          <div className="flex-1 relative">
-            <GoogleMapComponent 
-              residences={mockResidences}
-              onMarkerClick={(residence: Residence) => navigate(`/residencia/${residence.id}`)}
-            />
+        <div className="flex">
+          {/* Desktop Sidebar - Filters */}
+          <aside className="hidden lg:block w-80 border-r border-border min-h-[calc(100vh-180px)] p-6 flex-shrink-0 bg-card">
+            <h2 className="text-lg font-semibold mb-6">Filtrar resultados</h2>
+            <FilterPanel />
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {viewMode === "list" ? (
+              <div className="p-6">
+                {filteredResidences.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground text-lg mb-4">
+                      No se encontraron residencias con los filtros seleccionados
+                    </p>
+                    <Button onClick={resetFilters} variant="outline">
+                      Limpiar filtros
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {filteredResidences.map((residence) => (
+                      <ResidenceCard
+                        key={residence.id}
+                        residence={residence}
+                        onCompare={handleCompare}
+                        isComparing={compareList.includes(residence.id)}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="h-[calc(100vh-180px)]">
+                <GoogleMapComponent 
+                  residences={filteredResidences}
+                  onMarkerClick={(residence: Residence) => navigate(`/residencia/${residence.id}`)}
+                />
+              </div>
+            )}
           </div>
         </div>
 
         {/* Compare Bar */}
         {compareList.length > 0 && (
-          <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-soft p-4 z-40">
+          <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-lg p-4 z-40">
             <div className="container mx-auto flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <span className="font-medium">
