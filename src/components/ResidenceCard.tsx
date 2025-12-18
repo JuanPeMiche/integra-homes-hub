@@ -1,7 +1,8 @@
-import { MapPin, Euro, Users, Star, CheckCircle } from "lucide-react";
+import { MapPin, Users, Star, CheckCircle, Phone, MessageCircle, Globe, Facebook, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Residence } from "@/data/residences";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +11,32 @@ interface ResidenceCardProps {
   onCompare?: (id: string) => void;
   isComparing?: boolean;
 }
+
+const TransparencyStars = ({ rating }: { rating: number }) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex items-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-3.5 w-3.5 ${
+                  star <= rating
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "fill-muted text-muted"
+                }`}
+              />
+            ))}
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Índice de transparencia: {rating}/5</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
 
 export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCardProps) => {
   const navigate = useNavigate();
@@ -31,25 +58,29 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
         <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground">
           {typeLabels[residence.type]}
         </Badge>
-        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-soft">
-          <CheckCircle className="h-4 w-4 text-secondary" />
-          <span className="text-xs font-semibold text-foreground">Red Integra</span>
-        </div>
+        {residence.redIntegra && (
+          <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-soft">
+            <CheckCircle className="h-4 w-4 text-secondary" />
+            <span className="text-xs font-semibold text-foreground">Red Integra</span>
+          </div>
+        )}
       </div>
 
       <CardContent className="p-5 space-y-3">
         <div>
-          <h3 className="text-xl font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">{residence.name}</h3>
+          <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors line-clamp-1">
+            {residence.name}
+          </h3>
           <div className="flex items-center gap-1 text-muted-foreground text-sm">
-            <MapPin className="h-4 w-4" />
-            <span>{residence.city}, {residence.province}</span>
+            <MapPin className="h-4 w-4 flex-shrink-0" />
+            <span className="line-clamp-1">{residence.city}, {residence.province}</span>
           </div>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="font-medium">{residence.rating}</span>
+          <div className="flex items-center gap-2">
+            <TransparencyStars rating={residence.transparency} />
+            <span className="text-xs text-muted-foreground">Transparencia</span>
           </div>
           <div className="flex items-center gap-1 text-muted-foreground text-sm">
             <Users className="h-4 w-4" />
@@ -57,20 +88,117 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
           </div>
         </div>
 
-        <div className="flex items-baseline gap-1 pt-2">
-          <span className="text-2xl font-bold text-primary">${residence.price.toLocaleString()}</span>
-          <span className="text-sm text-muted-foreground">/mes</span>
+        {/* Contact Icons */}
+        <div className="flex items-center gap-2 pt-2 border-t border-border">
+          {residence.phone && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href={`tel:${residence.phone}`}
+                    className="p-2 rounded-full bg-muted hover:bg-primary/10 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Phone className="h-4 w-4 text-primary" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Llamar: {residence.phone}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {residence.whatsapp && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href={`https://wa.me/598${residence.whatsapp.replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-muted hover:bg-green-100 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <MessageCircle className="h-4 w-4 text-green-600" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>WhatsApp: {residence.whatsapp}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {residence.website && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href={residence.website.startsWith('http') ? residence.website : `https://${residence.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-muted hover:bg-primary/10 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Globe className="h-4 w-4 text-primary" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Sitio web</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {residence.facebook && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href={`https://facebook.com/${residence.facebook}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-muted hover:bg-blue-100 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Facebook className="h-4 w-4 text-blue-600" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Facebook</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+          {residence.instagram && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href={`https://instagram.com/${residence.instagram}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-muted hover:bg-pink-100 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Instagram className="h-4 w-4 text-pink-600" />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Instagram</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
 
-        <div className="flex flex-wrap gap-2 pt-2">
-          {residence.services.slice(0, 3).map((service, idx) => (
+        <div className="flex flex-wrap gap-1.5 pt-2">
+          {residence.services.slice(0, 2).map((service, idx) => (
             <Badge key={idx} variant="secondary" className="text-xs">
-              {service}
+              {service.length > 20 ? service.substring(0, 20) + '...' : service}
             </Badge>
           ))}
-          {residence.services.length > 3 && (
+          {residence.services.length > 2 && (
             <Badge variant="outline" className="text-xs">
-              +{residence.services.length - 3} más
+              +{residence.services.length - 2} más
             </Badge>
           )}
         </div>
@@ -81,14 +209,18 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
           className="flex-1"
           onClick={() => navigate(`/residencia/${residence.id}`)}
         >
-          Ver Detalles
+          Ver Ficha
         </Button>
         {onCompare && (
           <Button
             variant={isComparing ? "secondary" : "outline"}
-            onClick={() => onCompare(residence.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onCompare(residence.id);
+            }}
+            className="px-3"
           >
-            {isComparing ? "Comparando" : "Comparar"}
+            {isComparing ? "✓" : "+"}
           </Button>
         )}
       </CardFooter>

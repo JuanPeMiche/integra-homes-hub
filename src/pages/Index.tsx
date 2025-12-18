@@ -5,7 +5,7 @@ import { StatsSection } from "@/components/StatsSection";
 import { ChatBot } from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Users, Heart } from "lucide-react";
-import heroBg from "@/assets/hero-bg.jpg";
+import heroBg from "@/assets/hero-residence.jpg";
 
 const Index = () => {
   return (
