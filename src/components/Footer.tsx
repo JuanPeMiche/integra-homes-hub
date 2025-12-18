@@ -58,21 +58,21 @@ export const Footer = () => {
             </nav>
           </div>
 
-          {/* Legal */}
+          {/* For Professionals */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Información Legal</h3>
+            <h3 className="font-semibold text-lg mb-4">Para Profesionales</h3>
             <nav className="flex flex-col space-y-2 text-sm">
+              <NavLink to="/trabaja-con-nosotros" className="hover:text-secondary transition-colors">
+                Trabaja con Nosotros
+              </NavLink>
+              <NavLink to="/asociar-residencia" className="hover:text-secondary transition-colors">
+                Asociar tu Residencial
+              </NavLink>
+              <NavLink to="/asesoramiento" className="hover:text-secondary transition-colors">
+                Buscamos por Ti
+              </NavLink>
               <NavLink to="/sobre-integra" className="hover:text-secondary transition-colors">
                 Quiénes Somos
-              </NavLink>
-              <NavLink to="/aviso-legal" className="hover:text-secondary transition-colors">
-                Aviso Legal
-              </NavLink>
-              <NavLink to="/privacidad" className="hover:text-secondary transition-colors">
-                Política de Privacidad
-              </NavLink>
-              <NavLink to="/cookies" className="hover:text-secondary transition-colors">
-                Política de Cookies
               </NavLink>
             </nav>
           </div>

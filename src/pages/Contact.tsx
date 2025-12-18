@@ -244,14 +244,16 @@ const Contact = () => {
                   <CardContent>
                     <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                       Si tenés vocación de servicio en el cuidado de personas mayores y te gustaría
-                      formar parte de nuestro equipo, contactanos.
+                      formar parte de nuestro equipo, consultá las oportunidades disponibles.
                     </p>
-                    <a
-                      href="mailto:hola@integraresidenciales.com.uy?subject=Postulación laboral"
-                      className="text-secondary hover:underline font-medium text-sm"
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => (window.location.href = "/trabaja-con-nosotros")}
                     >
-                      Enviá tu CV →
-                    </a>
+                      Ver Oportunidades
+                    </Button>
                   </CardContent>
                 </Card>
 
