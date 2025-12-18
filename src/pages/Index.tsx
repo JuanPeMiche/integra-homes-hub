@@ -5,10 +5,9 @@ import { StatsSection } from "@/components/StatsSection";
 import { ChatBot } from "@/components/ChatBot";
 import { ResidenceCard } from "@/components/ResidenceCard";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Users, Heart, CheckCircle, Quote } from "lucide-react";
+import { ArrowRight, Shield, Users, Heart, CheckCircle } from "lucide-react";
 import { mockResidences } from "@/data/residences";
 import heroBg from "@/assets/hero-residence.jpg";
-import madrinaImg from "@/assets/madrina-lourdes-bermejo.png";
 
 const Index = () => {
   // Get Red Integra residences sorted alphabetically
@@ -109,54 +108,6 @@ const Index = () => {
                 Ver Todas las Residencias
                 <ArrowRight className="h-5 w-5" />
               </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Madrina Section */}
-        <section className="py-16 md:py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="relative">
-                <div className="relative w-64 h-64 md:w-80 md:h-80 mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-full blur-2xl opacity-20" />
-                  <img
-                    src={madrinaImg}
-                    alt="Lourdes Bermejo - Madrina de Integra Residenciales"
-                    className="relative w-full h-full object-cover rounded-full border-4 border-background shadow-xl"
-                  />
-                </div>
-              </div>
-              <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-4 py-2 rounded-full">
-                  <Heart className="h-5 w-5" />
-                  <span className="font-medium">Nuestra Madrina</span>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                  Lourdes Bermejo
-                </h2>
-                <div className="relative">
-                  <Quote className="absolute -top-2 -left-2 h-8 w-8 text-primary/20" />
-                  <p className="text-lg text-muted-foreground leading-relaxed pl-6">
-                    Referente internacional en gerontología y atención centrada en la persona.
-                    Con su guía, impulsamos un modelo de cuidado humanizado, digno y de calidad
-                    para los adultos mayores en Uruguay.
-                  </p>
-                </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  Lourdes Bermejo es psicóloga, doctora en Ciencias de la Educación y una de las
-                  voces más influyentes en el ámbito del envejecimiento activo y la atención
-                  integral a personas mayores en el mundo hispanohablante.
-                </p>
-                <Button
-                  variant="outline"
-                  className="gap-2"
-                  onClick={() => window.open('https://lourdesbermejo.es', '_blank')}
-                >
-                  Conocer más
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
             </div>
           </div>
         </section>
