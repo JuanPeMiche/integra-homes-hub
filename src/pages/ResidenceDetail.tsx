@@ -8,21 +8,59 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   MapPin,
   Phone,
   Mail,
   Clock,
-  Euro,
   Users,
   Star,
   Check,
   ArrowLeft,
   ChevronLeft,
   ChevronRight,
+  MessageCircle,
+  Globe,
+  Facebook,
+  Instagram,
+  Navigation,
+  CheckCircle,
+  User,
+  Building,
+  Shield,
 } from "lucide-react";
 import { mockResidences } from "@/data/residences";
 import { toast } from "sonner";
+
+const TransparencyStars = ({ rating }: { rating: number }) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={`h-5 w-5 ${
+                  star <= rating
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "fill-muted text-muted"
+                }`}
+              />
+            ))}
+            <span className="ml-2 text-sm text-muted-foreground">
+              Transparencia: {rating}/5
+            </span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Índice de transparencia basado en información verificada</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+};
 
 const ResidenceDetail = () => {
   const { id } = useParams();
@@ -34,7 +72,7 @@ const ResidenceDetail = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex-1 flex items-center justify-center">
+        <main className="flex-1 flex items-center justify-center pt-20">
           <div className="text-center space-y-4">
             <h1 className="text-3xl font-bold">Residencia no encontrada</h1>
             <Button onClick={() => navigate("/buscar")}>Volver a búsqueda</Button>
@@ -68,11 +106,20 @@ const ResidenceDetail = () => {
     concertada: "Concertada",
   };
 
+  const openGoogleMaps = () => {
+    const { lat, lng } = residence.coordinates;
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+  };
+
+  const whatsappLink = residence.whatsapp 
+    ? `https://wa.me/598${residence.whatsapp.replace(/\D/g, '')}`
+    : null;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 pt-20">
         <div className="bg-gradient-subtle py-6">
           <div className="container mx-auto px-4">
             <Button
@@ -85,35 +132,51 @@ const ResidenceDetail = () => {
             </Button>
 
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-4xl font-bold text-foreground">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-6">
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h1 className="text-3xl lg:text-4xl font-bold text-foreground">
                     {residence.name}
                   </h1>
                   <Badge className="bg-primary text-primary-foreground">
                     {typeLabels[residence.type]}
                   </Badge>
+                  {residence.redIntegra && (
+                    <Badge variant="outline" className="gap-1 border-secondary text-secondary">
+                      <CheckCircle className="h-3 w-3" />
+                      Red Integra
+                    </Badge>
+                  )}
                 </div>
-                <div className="flex items-center gap-4 text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
                     <span>{residence.address}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-medium">{residence.rating}</span>
-                  </div>
                 </div>
+                <TransparencyStars rating={residence.transparency} />
               </div>
 
-              <div className="flex gap-2">
-                <Button size="lg" className="gap-2">
-                  <Phone className="h-4 w-4" />
-                  Llamar Ahora
-                </Button>
-                <Button size="lg" variant="outline">
-                  Reservar Visita
+              <div className="flex flex-wrap gap-2">
+                {residence.phone && (
+                  <Button size="lg" className="gap-2" asChild>
+                    <a href={`tel:${residence.phone}`}>
+                      <Phone className="h-4 w-4" />
+                      Llamar
+                    </a>
+                  </Button>
+                )}
+                {whatsappLink && (
+                  <Button size="lg" variant="outline" className="gap-2 text-green-600 border-green-600 hover:bg-green-50" asChild>
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                      <MessageCircle className="h-4 w-4" />
+                      WhatsApp
+                    </a>
+                  </Button>
+                )}
+                <Button size="lg" variant="secondary" className="gap-2" onClick={openGoogleMaps}>
+                  <Navigation className="h-4 w-4" />
+                  Cómo Llegar
                 </Button>
               </div>
             </div>
@@ -126,7 +189,7 @@ const ResidenceDetail = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* Image Gallery */}
               <div className="relative">
-                <div className="relative h-96 rounded-xl overflow-hidden">
+                <div className="relative h-80 lg:h-[450px] rounded-xl overflow-hidden">
                   <img
                     src={residence.images[currentImageIndex]}
                     alt={`${residence.name} - Imagen ${currentImageIndex + 1}`}
@@ -137,7 +200,7 @@ const ResidenceDetail = () => {
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="absolute left-4 top-1/2 -translate-y-1/2"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white"
                         onClick={prevImage}
                       >
                         <ChevronLeft className="h-5 w-5" />
@@ -145,33 +208,46 @@ const ResidenceDetail = () => {
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="absolute right-4 top-1/2 -translate-y-1/2"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white"
                         onClick={nextImage}
                       >
                         <ChevronRight className="h-5 w-5" />
                       </Button>
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                        {residence.images.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setCurrentImageIndex(idx)}
+                            className={`w-2 h-2 rounded-full transition-colors ${
+                              idx === currentImageIndex ? "bg-white" : "bg-white/50"
+                            }`}
+                          />
+                        ))}
+                      </div>
                     </>
                   )}
                 </div>
-                <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                  {residence.images.map((img, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentImageIndex(idx)}
-                      className={`relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 border-2 ${
-                        idx === currentImageIndex
-                          ? "border-primary"
-                          : "border-transparent"
-                      }`}
-                    >
-                      <img
-                        src={img}
-                        alt={`Miniatura ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
+                {residence.images.length > 1 && (
+                  <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                    {residence.images.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 ${
+                          idx === currentImageIndex
+                            ? "border-primary"
+                            : "border-transparent"
+                        }`}
+                      >
+                        <img
+                          src={img}
+                          alt={`Miniatura ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Description */}
@@ -190,8 +266,8 @@ const ResidenceDetail = () => {
                   <h2 className="text-2xl font-bold mb-4">Servicios Disponibles</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {residence.services.map((service, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Check className="h-5 w-5 text-secondary" />
+                      <div key={idx} className="flex items-start gap-2">
+                        <Check className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
                         <span>{service}</span>
                       </div>
                     ))}
@@ -205,8 +281,8 @@ const ResidenceDetail = () => {
                   <h2 className="text-2xl font-bold mb-4">Instalaciones</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {residence.facilities.map((facility, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Check className="h-5 w-5 text-primary" />
+                      <div key={idx} className="flex items-start gap-2">
+                        <Building className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span>{facility}</span>
                       </div>
                     ))}
@@ -214,12 +290,65 @@ const ResidenceDetail = () => {
                 </CardContent>
               </Card>
 
-              {/* Map Placeholder */}
+              {/* Certifications */}
+              {residence.certifications && residence.certifications.length > 0 && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h2 className="text-2xl font-bold mb-4">Habilitaciones</h2>
+                    <div className="flex flex-wrap gap-3">
+                      {residence.certifications.map((cert, idx) => (
+                        <Badge key={idx} variant="outline" className="gap-2 py-2 px-4 text-base">
+                          <Shield className="h-4 w-4 text-secondary" />
+                          {cert}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Director / Team */}
+              {(residence.director || residence.directorTitle) && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h2 className="text-2xl font-bold mb-4">Equipo Directivo</h2>
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                        <User className="h-8 w-8 text-primary" />
+                      </div>
+                      <div>
+                        {residence.director && (
+                          <p className="font-semibold text-lg">{residence.director}</p>
+                        )}
+                        {residence.directorTitle && (
+                          <p className="text-muted-foreground">{residence.directorTitle}</p>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Map */}
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Ubicación</h2>
-                  <div className="h-64 bg-muted rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Mapa (Google Maps API)</p>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold">Ubicación</h2>
+                    <Button variant="outline" className="gap-2" onClick={openGoogleMaps}>
+                      <Navigation className="h-4 w-4" />
+                      Cómo Llegar
+                    </Button>
+                  </div>
+                  <div className="h-80 rounded-lg overflow-hidden">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(residence.address)}&zoom=15`}
+                      allowFullScreen
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -228,16 +357,14 @@ const ResidenceDetail = () => {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <div className="sticky top-24 space-y-6">
-                {/* Price Card */}
+                {/* Quick Info Card */}
                 <Card>
                   <CardContent className="p-6 space-y-4">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-primary">
-                    ${residence.price.toLocaleString()}
-                  </span>
-                  <span className="text-muted-foreground">/mes</span>
-                </div>
-                    <div className="space-y-2 text-sm">
+                    <div className="text-center pb-4 border-b border-border">
+                      <p className="text-2xl font-bold text-primary">{residence.priceRange}</p>
+                      <p className="text-sm text-muted-foreground">Precio mensual</p>
+                    </div>
+                    <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground">Capacidad:</span>
                         <span className="font-medium flex items-center gap-1">
@@ -245,13 +372,18 @@ const ResidenceDetail = () => {
                           {residence.capacity} plazas
                         </span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-muted-foreground">Valoración:</span>
-                        <span className="font-medium flex items-center gap-1">
-                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          {residence.rating}
-                        </span>
-                      </div>
+                      {residence.stayTypes && residence.stayTypes.length > 0 && (
+                        <div>
+                          <span className="text-muted-foreground text-sm">Tipos de estadía:</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {residence.stayTypes.map((type, idx) => (
+                              <Badge key={idx} variant="secondary" className="text-xs capitalize">
+                                {type}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -261,19 +393,66 @@ const ResidenceDetail = () => {
                   <CardContent className="p-6 space-y-4">
                     <h3 className="font-semibold text-lg">Información de Contacto</h3>
                     <div className="space-y-3 text-sm">
-                      <div className="flex items-center gap-3">
-                        <Phone className="h-4 w-4 text-primary" />
-                        <span>{residence.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Mail className="h-4 w-4 text-primary" />
-                        <span>{residence.email}</span>
-                      </div>
+                      {residence.phone && (
+                        <a href={`tel:${residence.phone}`} className="flex items-center gap-3 hover:text-primary transition-colors">
+                          <Phone className="h-4 w-4 text-primary" />
+                          <span>{residence.phone}</span>
+                        </a>
+                      )}
+                      {residence.whatsapp && (
+                        <a href={whatsappLink || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-green-600 transition-colors">
+                          <MessageCircle className="h-4 w-4 text-green-600" />
+                          <span>{residence.whatsapp}</span>
+                        </a>
+                      )}
+                      {residence.email && (
+                        <a href={`mailto:${residence.email}`} className="flex items-center gap-3 hover:text-primary transition-colors">
+                          <Mail className="h-4 w-4 text-primary" />
+                          <span className="truncate">{residence.email}</span>
+                        </a>
+                      )}
+                      {residence.website && (
+                        <a 
+                          href={residence.website.startsWith('http') ? residence.website : `https://${residence.website}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="flex items-center gap-3 hover:text-primary transition-colors"
+                        >
+                          <Globe className="h-4 w-4 text-primary" />
+                          <span className="truncate">{residence.website}</span>
+                        </a>
+                      )}
                       <div className="flex items-center gap-3">
                         <Clock className="h-4 w-4 text-primary" />
                         <span>{residence.schedule}</span>
                       </div>
                     </div>
+                    
+                    {/* Social Links */}
+                    {(residence.facebook || residence.instagram) && (
+                      <div className="flex gap-2 pt-3 border-t border-border">
+                        {residence.facebook && (
+                          <a
+                            href={`https://facebook.com/${residence.facebook}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-full bg-muted hover:bg-blue-100 transition-colors"
+                          >
+                            <Facebook className="h-5 w-5 text-blue-600" />
+                          </a>
+                        )}
+                        {residence.instagram && (
+                          <a
+                            href={`https://instagram.com/${residence.instagram}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-full bg-muted hover:bg-pink-100 transition-colors"
+                          >
+                            <Instagram className="h-5 w-5 text-pink-600" />
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
