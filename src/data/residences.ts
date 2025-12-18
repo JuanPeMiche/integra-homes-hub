@@ -59,9 +59,12 @@ export const mockResidences: Residence[] = [
     capacity: 20,
     rating: 4.8,
     transparency: 5,
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80"
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&q=80",
+      "https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=800&q=80",
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+      "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80"
     ],
     description: "Un hogar lleno de amor para el adulto mayor. Casa de época remodelada con encanto arquitectónico: entrada señorial con vitrales, claraboyas, hogar a leña y patio español con aljibe y parra.",
     services: [
@@ -113,7 +116,9 @@ export const mockResidences: Residence[] = [
     transparency: 4,
     image: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80"
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80",
+      "https://images.unsplash.com/photo-1576091160550-60ef4310dd9f?w=800&q=80",
+      "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80"
     ],
     description: "Ubicado en una gran casa en Carrasco, rodeada de verde, con amplias comodidades. Gestionado por un equipo sólido y atento, con el objetivo de brindar paz y un buen vivir. Estilo cálido y colorido que transmite calma y alegría.",
     services: [
@@ -160,7 +165,9 @@ export const mockResidences: Residence[] = [
     transparency: 4,
     image: "https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=800&q=80"
+      "https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=800&q=80",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&q=80",
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
     ],
     description: "Residencial con equipo dedicado, instalaciones cómodas, actividades recreativas y culturales, dieta equilibrada. Prioridad en salud y seguridad 24 horas. Misión: brindar un hogar con amor y atención, calidad de vida, seguridad y bienestar.",
     services: [
@@ -198,7 +205,10 @@ export const mockResidences: Residence[] = [
     transparency: 5,
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
+      "https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=800&q=80",
+      "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80"
     ],
     description: "Ubicado en el corazón de Parque Batlle, ideal para estadías permanentes, temporales y de rehabilitación. Más de 18 años de experiencia. El concepto de familia es lo que los caracteriza.",
     services: [
@@ -247,7 +257,10 @@ export const mockResidences: Residence[] = [
     transparency: 5,
     image: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80"
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80",
+      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80",
+      "https://images.unsplash.com/photo-1559209172-0ff8f6d49ff7?w=800&q=80",
+      "https://images.unsplash.com/photo-1576091160550-60ef4310dd9f?w=800&q=80"
     ],
     description: "Residencial de excelencia frente al mar, ofrece estancias permanentes y temporales. Equipo interdisciplinario altamente calificado y comprometido con brindar atención segura y de calidad.",
     services: [
@@ -289,9 +302,11 @@ export const mockResidences: Residence[] = [
     capacity: 20,
     rating: 4.8,
     transparency: 5,
-    image: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80",
     images: [
-      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&q=80"
+      "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800&q=80",
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80"
     ],
     description: "Si nos visitas, nos elegís. Enfoque holístico en el bienestar integral del adulto mayor. Casa en una sola planta sin escalones, con ambientes amplios y luminosos, hermoso jardín exterior.",
     services: [

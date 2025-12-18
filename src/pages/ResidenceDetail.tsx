@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ResidenceGallery } from "@/components/ResidenceGallery";
+import { SendMethodDialog } from "@/components/SendMethodDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,7 +31,6 @@ import {
   Shield,
 } from "lucide-react";
 import { mockResidences } from "@/data/residences";
-import { toast } from "sonner";
 
 const TransparencyStars = ({ rating }: { rating: number }) => {
   return (
@@ -64,6 +65,13 @@ const ResidenceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const residence = mockResidences.find((r) => r.id === id);
+  const [contactForm, setContactForm] = useState({
+    nombre: "",
+    email: "",
+    telefono: "",
+    mensaje: "",
+  });
+  const [showSendDialog, setShowSendDialog] = useState(false);
 
   if (!residence) {
     return (
@@ -82,9 +90,7 @@ const ResidenceDetail = () => {
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Solicitud enviada", {
-      description: "Nos pondremos en contacto contigo pronto.",
-    });
+    setShowSendDialog(true);
   };
 
   const typeLabels = {
@@ -390,19 +396,41 @@ const ResidenceDetail = () => {
                     <form onSubmit={handleContactSubmit} className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Nombre</Label>
-                        <Input id="name" required />
+                        <Input 
+                          id="name" 
+                          required 
+                          value={contactForm.nombre}
+                          onChange={(e) => setContactForm(prev => ({ ...prev, nombre: e.target.value }))}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" required />
+                        <Input 
+                          id="email" 
+                          type="email" 
+                          required 
+                          value={contactForm.email}
+                          onChange={(e) => setContactForm(prev => ({ ...prev, email: e.target.value }))}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone">Teléfono</Label>
-                        <Input id="phone" type="tel" />
+                        <Input 
+                          id="phone" 
+                          type="tel" 
+                          value={contactForm.telefono}
+                          onChange={(e) => setContactForm(prev => ({ ...prev, telefono: e.target.value }))}
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="message">Mensaje</Label>
-                        <Textarea id="message" rows={4} required />
+                        <Textarea 
+                          id="message" 
+                          rows={4} 
+                          required 
+                          value={contactForm.mensaje}
+                          onChange={(e) => setContactForm(prev => ({ ...prev, mensaje: e.target.value }))}
+                        />
                       </div>
                       <Button type="submit" className="w-full">
                         Enviar Solicitud
@@ -417,6 +445,14 @@ const ResidenceDetail = () => {
       </main>
 
       <Footer />
+
+      <SendMethodDialog
+        open={showSendDialog}
+        onOpenChange={setShowSendDialog}
+        formData={{ ...contactForm, residencia: residence.name }}
+        subject={`Consulta sobre ${residence.name}`}
+        recipientWhatsApp={residence.whatsapp ? `598${residence.whatsapp.replace(/\D/g, '')}` : "59899923330"}
+      />
     </div>
   );
 };

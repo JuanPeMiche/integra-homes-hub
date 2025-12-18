@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SendMethodDialog } from "@/components/SendMethodDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,7 @@ const Asesoramiento = () => {
     // Consentimiento
     aceptaContacto: false,
   });
+  const [showSendDialog, setShowSendDialog] = useState(false);
 
   const departamentos = getAllProvinces();
   const barrios = getAllBarrios();
@@ -85,11 +87,10 @@ const Asesoramiento = () => {
       return;
     }
 
-    toast.success("¡Solicitud enviada con éxito!", {
-      description: "Nuestro equipo se pondrá en contacto contigo en menos de 24 horas.",
-    });
+    setShowSendDialog(true);
+  };
 
-    // Reset form
+  const resetForm = () => {
     setFormData({
       nombre: "",
       email: "",
@@ -538,6 +539,21 @@ const Asesoramiento = () => {
       </main>
 
       <Footer />
+
+      <SendMethodDialog
+        open={showSendDialog}
+        onOpenChange={(open) => {
+          setShowSendDialog(open);
+          if (!open) {
+            toast.success("¡Solicitud enviada!", {
+              description: "Te contactaremos en menos de 24 horas.",
+            });
+            resetForm();
+          }
+        }}
+        formData={formData}
+        subject="Solicitud de Asesoramiento Gratuito"
+      />
     </div>
   );
 };
