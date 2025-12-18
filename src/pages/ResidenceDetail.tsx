@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ResidenceGallery } from "@/components/ResidenceGallery";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,8 +18,6 @@ import {
   Star,
   Check,
   ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
   MessageCircle,
   Globe,
   Facebook,
@@ -65,7 +63,6 @@ const TransparencyStars = ({ rating }: { rating: number }) => {
 const ResidenceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const residence = mockResidences.find((r) => r.id === id);
 
   if (!residence) {
@@ -82,16 +79,6 @@ const ResidenceDetail = () => {
       </div>
     );
   }
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % residence.images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? residence.images.length - 1 : prev - 1
-    );
-  };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -188,67 +175,7 @@ const ResidenceDetail = () => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Image Gallery */}
-              <div className="relative">
-                <div className="relative h-80 lg:h-[450px] rounded-xl overflow-hidden">
-                  <img
-                    src={residence.images[currentImageIndex]}
-                    alt={`${residence.name} - Imagen ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                  {residence.images.length > 1 && (
-                    <>
-                      <Button
-                        variant="secondary"
-                        size="icon"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white"
-                        onClick={prevImage}
-                      >
-                        <ChevronLeft className="h-5 w-5" />
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="icon"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white"
-                        onClick={nextImage}
-                      >
-                        <ChevronRight className="h-5 w-5" />
-                      </Button>
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                        {residence.images.map((_, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => setCurrentImageIndex(idx)}
-                            className={`w-2 h-2 rounded-full transition-colors ${
-                              idx === currentImageIndex ? "bg-white" : "bg-white/50"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-                {residence.images.length > 1 && (
-                  <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                    {residence.images.map((img, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentImageIndex(idx)}
-                        className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 ${
-                          idx === currentImageIndex
-                            ? "border-primary"
-                            : "border-transparent"
-                        }`}
-                      >
-                        <img
-                          src={img}
-                          alt={`Miniatura ${idx + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <ResidenceGallery residenceName={residence.name} images={residence.images} />
 
               {/* Description */}
               <Card>
