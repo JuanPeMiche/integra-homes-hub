@@ -3,11 +3,18 @@ import { Footer } from "@/components/Footer";
 import { SearchForm } from "@/components/SearchForm";
 import { StatsSection } from "@/components/StatsSection";
 import { ChatBot } from "@/components/ChatBot";
+import { ResidenceCard } from "@/components/ResidenceCard";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Users, Heart } from "lucide-react";
+import { ArrowRight, Shield, Users, Heart, CheckCircle } from "lucide-react";
+import { mockResidences } from "@/data/residences";
 import heroBg from "@/assets/hero-residence.jpg";
 
 const Index = () => {
+  // Get Red Integra residences sorted alphabetically
+  const featuredResidences = mockResidences
+    .filter(r => r.redIntegra)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 6);
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -63,6 +70,47 @@ const Index = () => {
 
         {/* Stats Section */}
         <StatsSection />
+
+        {/* Featured Residences - Red Integra */}
+        <section className="py-16 md:py-20 bg-muted/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-4 py-2 rounded-full mb-4">
+                <CheckCircle className="h-5 w-5" />
+                <span className="font-medium">Red Integra</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Residencias Destacadas
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Conocé las residencias que forman parte de nuestra red de confianza
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredResidences.map((residence) => (
+                <ResidenceCard
+                  key={residence.id}
+                  residence={residence}
+                  onCompare={() => {}}
+                  isComparing={false}
+                />
+              ))}
+            </div>
+
+            <div className="text-center mt-10">
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="gap-2"
+                onClick={() => window.location.href = '/buscar'}
+              >
+                Ver Todas las Residencias
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </section>
 
         {/* Benefits Section */}
         <section className="py-16 md:py-20">
