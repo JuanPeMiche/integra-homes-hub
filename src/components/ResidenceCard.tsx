@@ -13,6 +13,12 @@ interface ResidenceCardProps {
 }
 
 const TransparencyStars = ({ rating }: { rating: number }) => {
+  if (rating === 0) {
+    return (
+      <span className="text-xs text-muted-foreground italic">Sin datos</span>
+    );
+  }
+  
   return (
     <TooltipProvider>
       <Tooltip>
@@ -36,6 +42,16 @@ const TransparencyStars = ({ rating }: { rating: number }) => {
       </Tooltip>
     </TooltipProvider>
   );
+};
+
+// Generate initials from residence name
+const getInitials = (name: string): string => {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map(word => word[0])
+    .join("")
+    .toUpperCase();
 };
 
 export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCardProps) => {
@@ -64,6 +80,21 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
             <span className="text-xs font-semibold text-foreground">Red Integra</span>
           </div>
         )}
+        
+        {/* Logo placeholder - bottom left corner */}
+        <div className="absolute bottom-3 left-3">
+          {residence.logoUrl ? (
+            <img 
+              src={residence.logoUrl} 
+              alt={`Logo ${residence.name}`}
+              className="h-12 w-12 rounded-lg bg-white object-contain shadow-md p-1"
+            />
+          ) : (
+            <div className="h-12 w-12 rounded-lg bg-white/95 backdrop-blur-sm shadow-md flex items-center justify-center">
+              <span className="text-sm font-bold text-primary">{getInitials(residence.name)}</span>
+            </div>
+          )}
+        </div>
       </div>
 
       <CardContent className="p-5 space-y-3">
@@ -209,7 +240,7 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
           className="flex-1"
           onClick={() => navigate(`/residencia/${residence.id}`)}
         >
-          Ver Ficha
+          Ver ficha
         </Button>
         {onCompare && (
           <Button
