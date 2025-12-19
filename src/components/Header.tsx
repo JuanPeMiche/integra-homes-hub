@@ -44,12 +44,12 @@ export const Header = () => {
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${showSolidHeader ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"}`}>
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          <NavLink to="/" className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
             <img src="/logo-integra.ico" alt="Integra" className="h-10 w-10 object-contain" />
             <span className={`text-xl font-bold transition-colors ${showSolidHeader ? "text-primary" : "text-white"}`}>
               <span className="font-light">integra</span>Residenciales
             </span>
-          </NavLink>
+          </div>
 
           <nav className="hidden lg:flex items-center space-x-6">
             {[
