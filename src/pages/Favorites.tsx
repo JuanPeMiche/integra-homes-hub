@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { useAuth } from "@/hooks/useAuth";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useNavigate } from "react-router-dom";
-import { mockResidences } from "@/data/residences";
+import { useResidences } from "@/hooks/useResidences";
 import { ResidenceCard } from "@/components/ResidenceCard";
 import { Button } from "@/components/ui/button";
 import { Heart, Search } from "lucide-react";
@@ -12,6 +12,7 @@ import { Heart, Search } from "lucide-react";
 const Favorites = () => {
   const { user, loading: authLoading } = useAuth();
   const { favorites, loading: favLoading } = useFavorites();
+  const { data: residences = [] } = useResidences();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Favorites = () => {
     }
   }, [user, authLoading, navigate]);
 
-  const favoriteResidences = mockResidences.filter(r => favorites.includes(r.id));
+  const favoriteResidences = residences.filter(r => favorites.includes(r.id));
 
   if (authLoading || favLoading) {
     return (

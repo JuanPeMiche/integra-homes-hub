@@ -30,7 +30,7 @@ import {
   Building,
   Shield,
 } from "lucide-react";
-import { mockResidences, Director } from "@/data/residences";
+import { useResidence } from "@/hooks/useResidences";
 
 const TransparencyStars = ({ rating }: { rating: number }) => {
   if (rating === 0) {
@@ -82,7 +82,7 @@ const getInitials = (name: string): string => {
 const ResidenceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const residence = mockResidences.find((r) => r.id === id);
+  const { data: residence, isLoading, error } = useResidence(id || '');
   const [contactForm, setContactForm] = useState({
     nombre: "",
     email: "",
@@ -91,7 +91,19 @@ const ResidenceDetail = () => {
   });
   const [showSendDialog, setShowSendDialog] = useState(false);
 
-  if (!residence) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center pt-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!residence || error) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -130,22 +142,7 @@ const ResidenceDetail = () => {
     ? `https://wa.me/598${residence.whatsapp.replace(/\D/g, '')}`
     : null;
 
-  // Build directors list from legacy or new format
-  const getDirectors = (): Director[] => {
-    if (residence.directors && residence.directors.length > 0) {
-      return residence.directors;
-    }
-    if (residence.director) {
-      return [{
-        name: residence.director,
-        role: residence.directorTitle || "Director/a",
-        photoUrl: undefined
-      }];
-    }
-    return [];
-  };
-
-  const directors = getDirectors();
+  const directors = residence.directors || [];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -304,9 +301,9 @@ const ResidenceDetail = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {directors.map((director, idx) => (
                         <div key={idx} className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
-                          {director.photoUrl ? (
+                          {director.photo_url ? (
                             <img 
-                              src={director.photoUrl} 
+                              src={director.photo_url} 
                               alt={director.name}
                               className="w-16 h-16 rounded-full object-cover"
                             />
