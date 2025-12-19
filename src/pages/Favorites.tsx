@@ -1,49 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useAuth } from "@/hooks/useAuth";
+import { useFavorites } from "@/hooks/useFavorites";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { mockResidences } from "@/data/residences";
 import { ResidenceCard } from "@/components/ResidenceCard";
 import { Button } from "@/components/ui/button";
 import { Heart, Search } from "lucide-react";
 
 const Favorites = () => {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const { favorites, loading: favLoading } = useFavorites();
   const navigate = useNavigate();
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [loadingFavorites, setLoadingFavorites] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       navigate("/auth");
     }
-  }, [user, loading, navigate]);
-
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      if (!user) return;
-      
-      const { data, error } = await supabase
-        .from('favorites')
-        .select('residence_id')
-        .eq('user_id', user.id);
-      
-      if (!error && data) {
-        setFavorites(data.map(f => f.residence_id));
-      }
-      setLoadingFavorites(false);
-    };
-
-    if (user) {
-      fetchFavorites();
-    }
-  }, [user]);
+  }, [user, authLoading, navigate]);
 
   const favoriteResidences = mockResidences.filter(r => favorites.includes(r.id));
 
-  if (loading || loadingFavorites) {
+  if (authLoading || favLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -59,8 +38,8 @@ const Favorites = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-              <Heart className="h-10 w-10 text-primary fill-primary" />
-              Mis Favoritos
+              <Heart className="h-10 w-10 text-red-500 fill-red-500" />
+              Mis favoritos
             </h1>
             <p className="text-muted-foreground text-lg">
               Residencias que has guardado para consultar más tarde
@@ -76,7 +55,7 @@ const Favorites = () => {
               </p>
               <Button size="lg" onClick={() => navigate("/buscar")}>
                 <Search className="mr-2 h-5 w-5" />
-                Buscar Residencias
+                Buscar residencias
               </Button>
             </div>
           ) : (
