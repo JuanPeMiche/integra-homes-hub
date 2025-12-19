@@ -1,15 +1,18 @@
-import { MapPin, Users, Star, CheckCircle, Phone, MessageCircle, Globe, Facebook, Instagram } from "lucide-react";
+import { MapPin, Users, Star, CheckCircle, Phone, MessageCircle, Globe, Facebook, Instagram, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Residence } from "@/data/residences";
 import { useNavigate } from "react-router-dom";
+import { useFavorites } from "@/hooks/useFavorites";
+import { cn } from "@/lib/utils";
 
 interface ResidenceCardProps {
   residence: Residence;
   onCompare?: (id: string) => void;
   isComparing?: boolean;
+  showFavorite?: boolean;
 }
 
 const TransparencyStars = ({ rating }: { rating: number }) => {
@@ -54,13 +57,20 @@ const getInitials = (name: string): string => {
     .toUpperCase();
 };
 
-export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCardProps) => {
+export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite = true }: ResidenceCardProps) => {
   const navigate = useNavigate();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFav = isFavorite(residence.id);
 
   const typeLabels = {
     publica: "Pública",
     privada: "Privada",
     concertada: "Concertada",
+  };
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    await toggleFavorite(residence.id);
   };
 
   return (
@@ -95,6 +105,21 @@ export const ResidenceCard = ({ residence, onCompare, isComparing }: ResidenceCa
             </div>
           )}
         </div>
+
+        {/* Favorite button - bottom right corner */}
+        {showFavorite && (
+          <button
+            onClick={handleFavoriteClick}
+            className={cn(
+              "absolute bottom-3 right-3 p-2 rounded-full shadow-md transition-all",
+              isFav 
+                ? "bg-red-500 text-white" 
+                : "bg-white/95 backdrop-blur-sm text-muted-foreground hover:text-red-500 hover:bg-white"
+            )}
+          >
+            <Heart className={cn("h-5 w-5", isFav && "fill-current")} />
+          </button>
+        )}
       </div>
 
       <CardContent className="p-5 space-y-3">

@@ -110,7 +110,11 @@ export const mockResidences: Residence[] = [
     whatsapp: "099667218",
     website: "residencialabuelalala.com",
     stayTypes: ["permanente", "temporal", "diurna"],
-    certifications: ["MSP"]
+    certifications: ["MSP"],
+    directors: [
+      { name: "María Elena Fernández", role: "Directora General" },
+      { name: "Dr. Carlos Suárez", role: "Médico de Referencia" }
+    ]
   },
   {
     id: "2",
@@ -159,7 +163,11 @@ export const mockResidences: Residence[] = [
     whatsapp: "099689336",
     facebook: "aguasdereposo",
     stayTypes: ["permanente", "temporal"],
-    admissions: ["silla de ruedas"]
+    admissions: ["silla de ruedas"],
+    directors: [
+      { name: "Lic. Laura Martínez", role: "Directora Técnica" },
+      { name: "Enf. Patricia Gómez", role: "Jefa de Enfermería" }
+    ]
   },
   {
     id: "3",
@@ -199,7 +207,11 @@ export const mockResidences: Residence[] = [
     redIntegra: true,
     whatsapp: "094381658",
     director: "Sra. Ana María García",
-    stayTypes: ["permanente"]
+    directorTitle: "Directora",
+    stayTypes: ["permanente"],
+    directors: [
+      { name: "Sra. Ana María García", role: "Directora" }
+    ]
   },
   {
     id: "4",
@@ -689,7 +701,10 @@ export const mockResidences: Residence[] = [
     facebook: "lasmariasresidencial",
     director: "Liliana Mazzei",
     directorTitle: "Directora Técnica (20+ años)",
-    stayTypes: ["permanente"]
+    stayTypes: ["permanente"],
+    directors: [
+      { name: "Liliana Mazzei", role: "Directora Técnica (20+ años de experiencia)" }
+    ]
   },
   {
     id: "15",
