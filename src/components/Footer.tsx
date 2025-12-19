@@ -1,7 +1,6 @@
 import { Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 export const Footer = () => {
   return (
     <footer className="bg-trust text-trust-foreground">
@@ -35,19 +34,19 @@ export const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Enlaces Rápidos</h3>
+            <h3 className="font-semibold text-lg mb-4">Enlaces rápidos</h3>
             <nav className="flex flex-col space-y-2 text-sm">
               <NavLink to="/" className="hover:text-secondary transition-colors">
                 Inicio
               </NavLink>
               <NavLink to="/buscar" className="hover:text-secondary transition-colors">
-                Buscar Residencias
+                Buscar residencias
               </NavLink>
               <NavLink to="/sobre-integra" className="hover:text-secondary transition-colors">
                 Sobre Integra
               </NavLink>
               <NavLink to="/servicios" className="hover:text-secondary transition-colors">
-                Nuestros Servicios
+                Nuestros servicios
               </NavLink>
               <NavLink to="/noticias" className="hover:text-secondary transition-colors">
                 Noticias
@@ -60,59 +59,49 @@ export const Footer = () => {
 
           {/* For Professionals */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Para Profesionales</h3>
+            <h3 className="font-semibold text-lg mb-4">Para profesionales</h3>
             <nav className="flex flex-col space-y-2 text-sm">
               <NavLink to="/trabaja-con-nosotros" className="hover:text-secondary transition-colors">
-                Trabaja con Nosotros
+                Trabaja con nosotros
               </NavLink>
               <NavLink to="/asociar-residencia" className="hover:text-secondary transition-colors">
-                Asociar tu Residencial
+                Asociar tu residencial
               </NavLink>
               <NavLink to="/asesoramiento" className="hover:text-secondary transition-colors">
-                Buscamos por Ti
+                Buscamos por ti
               </NavLink>
               <NavLink to="/sobre-integra" className="hover:text-secondary transition-colors">
-                Quiénes Somos
+                Quiénes somos
               </NavLink>
             </nav>
           </div>
 
-          {/* Newsletter */}
+          {/* Social Media */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Boletín Informativo</h3>
+            <h3 className="font-semibold text-lg mb-4">Seguinos</h3>
             <p className="text-sm text-trust-foreground/90 mb-4">
-              Suscríbete para recibir consejos y novedades sobre el cuidado de mayores.
+              Encontranos en redes sociales para novedades y consejos sobre el cuidado de mayores.
             </p>
-            <div className="flex gap-2">
-              <Input 
-                type="email" 
-                placeholder="Tu email" 
-                className="bg-trust-foreground/10 border-trust-foreground/20 text-trust-foreground placeholder:text-trust-foreground/60"
-              />
-              <Button variant="secondary" size="icon" className="shrink-0">
-                <Mail className="h-4 w-4" />
-              </Button>
-            </div>
-            
-            {/* Social Media */}
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-4">
               <a 
                 href="https://www.facebook.com/people/Integra-Residenciales-Uy/100063468792108/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hover:text-secondary transition-colors" 
+                className="hover:text-secondary transition-colors flex items-center gap-2" 
                 aria-label="Facebook"
               >
-                <Facebook className="h-5 w-5" />
+                <Facebook className="h-6 w-6" />
+                <span className="text-sm">Facebook</span>
               </a>
               <a 
                 href="https://www.instagram.com/integra_residenciales/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hover:text-secondary transition-colors" 
+                className="hover:text-secondary transition-colors flex items-center gap-2" 
                 aria-label="Instagram"
               >
-                <Instagram className="h-5 w-5" />
+                <Instagram className="h-6 w-6" />
+                <span className="text-sm">Instagram</span>
               </a>
             </div>
           </div>
