@@ -10,13 +10,17 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Search, RotateCcw, MapPin, List, Map, SlidersHorizontal, X, CheckCircle } from "lucide-react";
-import { mockResidences, getAllBarrios, getAllProvinces, Residence } from "@/data/residences";
+import { Search, RotateCcw, List, Map, SlidersHorizontal, CheckCircle } from "lucide-react";
+import { useResidences, useProvinces, useCities, Residence } from "@/hooks/useResidences";
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const SearchResults = () => {
   const navigate = useNavigate();
+  const { data: residences = [], isLoading } = useResidences();
+  const { data: departamentos = [] } = useProvinces();
+  const { data: barrios = [] } = useCities();
+  
   const [compareList, setCompareList] = useState<string[]>([]);
   const [searchName, setSearchName] = useState("");
   const [departamento, setDepartamento] = useState("");
@@ -25,12 +29,9 @@ const SearchResults = () => {
   const [sortBy, setSortBy] = useState("name-asc");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
-  const departamentos = getAllProvinces();
-  const barrios = getAllBarrios();
-
   // Filter and sort residences
   const filteredResidences = useMemo(() => {
-    let results = [...mockResidences];
+    let results = [...residences];
 
     // Filter by name (autocomplete-like)
     if (searchName) {
@@ -77,7 +78,7 @@ const SearchResults = () => {
     }
 
     return results;
-  }, [searchName, departamento, barrio, redIntegraOnly, sortBy]);
+  }, [residences, searchName, departamento, barrio, redIntegraOnly, sortBy]);
 
   const handleCompare = (id: string) => {
     setCompareList((prev) => {
@@ -215,7 +216,7 @@ const SearchResults = () => {
               <div>
                 <h1 className="text-2xl font-bold text-foreground">Residencias en Uruguay</h1>
                 <p className="text-muted-foreground text-sm">
-                  {filteredResidences.length} residencias encontradas
+                  {isLoading ? "Cargando..." : `${filteredResidences.length} residencias encontradas`}
                 </p>
               </div>
               
@@ -278,7 +279,11 @@ const SearchResults = () => {
 
           {/* Main Content */}
           <div className="flex-1">
-            {viewMode === "list" ? (
+            {isLoading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : viewMode === "list" ? (
               <div className="p-6">
                 {filteredResidences.length === 0 ? (
                   <div className="text-center py-12">
@@ -305,7 +310,7 @@ const SearchResults = () => {
             ) : (
               <div className="h-[calc(100vh-180px)]">
                 <GoogleMapComponent 
-                  residences={filteredResidences}
+                  residences={filteredResidences as any}
                   onMarkerClick={(residence: Residence) => navigate(`/residencia/${residence.id}`)}
                 />
               </div>
@@ -333,7 +338,7 @@ const SearchResults = () => {
                   Limpiar
                 </Button>
                 <Button onClick={goToCompare} disabled={compareList.length < 2}>
-                  Comparar Ahora
+                  Comparar ahora
                 </Button>
               </div>
             </div>

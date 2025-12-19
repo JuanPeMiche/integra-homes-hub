@@ -6,14 +6,15 @@ import { ChatBot } from "@/components/ChatBot";
 import { ResidenceCard } from "@/components/ResidenceCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Users, Heart, CheckCircle } from "lucide-react";
-import { mockResidences } from "@/data/residences";
+import { useResidences } from "@/hooks/useResidences";
 import heroBg from "@/assets/hero-residence.jpg";
 
 const Index = () => {
+  const { data: residences = [], isLoading } = useResidences();
+  
   // Get Red Integra residences sorted alphabetically
-  const featuredResidences = mockResidences
+  const featuredResidences = residences
     .filter(r => r.redIntegra)
-    .sort((a, b) => a.name.localeCompare(b.name))
     .slice(0, 6);
   return (
     <div className="min-h-screen flex flex-col">
@@ -87,16 +88,20 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredResidences.map((residence) => (
-                <ResidenceCard
-                  key={residence.id}
-                  residence={residence}
-                  onCompare={() => {}}
-                  isComparing={false}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="col-span-full flex justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredResidences.map((residence) => (
+                  <ResidenceCard
+                    key={residence.id}
+                    residence={residence}
+                  />
+                ))}
+              </div>
+            )}
 
             <div className="text-center mt-10">
               <Button 
