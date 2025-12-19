@@ -12,7 +12,8 @@ import Services from "./pages/Services";
 import About from "./pages/About";
 import News from "./pages/News";
 import Contact from "./pages/Contact";
-import Auth from "./pages/Auth";
+import AdminLogin from "./pages/AdminLogin";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import Asesoramiento from "./pages/Asesoramiento";
 import Favorites from "./pages/Favorites";
@@ -40,7 +41,8 @@ const App = () => {
             <Route path="/noticias/:id" element={<News />} />
             <Route path="/contacto" element={<Contact />} />
             <Route path="/asesoramiento" element={<Asesoramiento />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/favoritos" element={<Favorites />} />
             <Route path="/trabaja-con-nosotros" element={<TrabajaConNosotros />} />
             <Route path="/asociar-residencia" element={<AsociarResidencia />} />
