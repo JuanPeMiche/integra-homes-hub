@@ -30,9 +30,17 @@ import {
   Building,
   Shield,
 } from "lucide-react";
-import { mockResidences } from "@/data/residences";
+import { mockResidences, Director } from "@/data/residences";
 
 const TransparencyStars = ({ rating }: { rating: number }) => {
+  if (rating === 0) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-muted-foreground italic">Transparencia: sin datos</span>
+      </div>
+    );
+  }
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -59,6 +67,16 @@ const TransparencyStars = ({ rating }: { rating: number }) => {
       </Tooltip>
     </TooltipProvider>
   );
+};
+
+// Get initials for placeholder
+const getInitials = (name: string): string => {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map(word => word[0])
+    .join("")
+    .toUpperCase();
 };
 
 const ResidenceDetail = () => {
@@ -100,13 +118,34 @@ const ResidenceDetail = () => {
   };
 
   const openGoogleMaps = () => {
-    const { lat, lng } = residence.coordinates;
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+    if (residence.mapsUrl) {
+      window.open(residence.mapsUrl, '_blank');
+    } else {
+      const { lat, lng } = residence.coordinates;
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, '_blank');
+    }
   };
 
   const whatsappLink = residence.whatsapp 
     ? `https://wa.me/598${residence.whatsapp.replace(/\D/g, '')}`
     : null;
+
+  // Build directors list from legacy or new format
+  const getDirectors = (): Director[] => {
+    if (residence.directors && residence.directors.length > 0) {
+      return residence.directors;
+    }
+    if (residence.director) {
+      return [{
+        name: residence.director,
+        role: residence.directorTitle || "Director/a",
+        photoUrl: undefined
+      }];
+    }
+    return [];
+  };
+
+  const directors = getDirectors();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -126,28 +165,45 @@ const ResidenceDetail = () => {
 
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-6">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="text-3xl lg:text-4xl font-bold text-foreground">
-                    {residence.name}
-                  </h1>
-                  <Badge className="bg-primary text-primary-foreground">
-                    {typeLabels[residence.type]}
-                  </Badge>
-                  {residence.redIntegra && (
-                    <Badge variant="outline" className="gap-1 border-secondary text-secondary">
-                      <CheckCircle className="h-3 w-3" />
-                      Red Integra
-                    </Badge>
+              <div className="flex gap-4 items-start">
+                {/* Logo */}
+                <div className="flex-shrink-0">
+                  {residence.logoUrl ? (
+                    <img 
+                      src={residence.logoUrl} 
+                      alt={`Logo ${residence.name}`}
+                      className="h-20 w-20 rounded-xl bg-white object-contain shadow-md p-2"
+                    />
+                  ) : (
+                    <div className="h-20 w-20 rounded-xl bg-white shadow-md flex items-center justify-center">
+                      <span className="text-2xl font-bold text-primary">{getInitials(residence.name)}</span>
+                    </div>
                   )}
                 </div>
-                <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" />
-                    <span>{residence.address}</span>
+
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <h1 className="text-3xl lg:text-4xl font-bold text-foreground">
+                      {residence.name}
+                    </h1>
+                    <Badge className="bg-primary text-primary-foreground">
+                      {typeLabels[residence.type]}
+                    </Badge>
+                    {residence.redIntegra && (
+                      <Badge variant="outline" className="gap-1 border-secondary text-secondary">
+                        <CheckCircle className="h-3 w-3" />
+                        Red Integra
+                      </Badge>
+                    )}
                   </div>
+                  <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{residence.city}, {residence.province}</span>
+                    </div>
+                  </div>
+                  <TransparencyStars rating={residence.transparency} />
                 </div>
-                <TransparencyStars rating={residence.transparency} />
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -169,7 +225,7 @@ const ResidenceDetail = () => {
                 )}
                 <Button size="lg" variant="secondary" className="gap-2" onClick={openGoogleMaps}>
                   <Navigation className="h-4 w-4" />
-                  Cómo Llegar
+                  Cómo llegar
                 </Button>
               </div>
             </div>
@@ -196,7 +252,7 @@ const ResidenceDetail = () => {
               {/* Services */}
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Servicios Disponibles</h2>
+                  <h2 className="text-2xl font-bold mb-4">Servicios disponibles</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {residence.services.map((service, idx) => (
                       <div key={idx} className="flex items-start gap-2">
@@ -240,27 +296,40 @@ const ResidenceDetail = () => {
                 </Card>
               )}
 
-              {/* Director / Team */}
-              {(residence.director || residence.directorTitle) && (
-                <Card>
-                  <CardContent className="p-6">
-                    <h2 className="text-2xl font-bold mb-4">Equipo Directivo</h2>
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                        <User className="h-8 w-8 text-primary" />
-                      </div>
-                      <div>
-                        {residence.director && (
-                          <p className="font-semibold text-lg">{residence.director}</p>
-                        )}
-                        {residence.directorTitle && (
-                          <p className="text-muted-foreground">{residence.directorTitle}</p>
-                        )}
-                      </div>
+              {/* Directors / Team */}
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-bold mb-4">Directivos / Equipo responsable</h2>
+                  {directors.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {directors.map((director, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
+                          {director.photoUrl ? (
+                            <img 
+                              src={director.photoUrl} 
+                              alt={director.name}
+                              className="w-16 h-16 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                              <User className="h-8 w-8 text-primary" />
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-semibold">{director.name}</p>
+                            <p className="text-sm text-muted-foreground">{director.role}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </CardContent>
-                </Card>
-              )}
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <User className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                      <p>Información de directivos pendiente</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
               {/* Map */}
               <Card>
@@ -269,20 +338,35 @@ const ResidenceDetail = () => {
                     <h2 className="text-2xl font-bold">Ubicación</h2>
                     <Button variant="outline" className="gap-2" onClick={openGoogleMaps}>
                       <Navigation className="h-4 w-4" />
-                      Cómo Llegar
+                      Cómo llegar
                     </Button>
                   </div>
-                  <div className="h-80 rounded-lg overflow-hidden">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(residence.address)}&zoom=15`}
-                      allowFullScreen
-                    />
-                  </div>
+                  {residence.address && residence.coordinates ? (
+                    <>
+                      <p className="text-muted-foreground mb-4 flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        {residence.address}
+                      </p>
+                      <div className="h-80 rounded-lg overflow-hidden">
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          referrerPolicy="no-referrer-when-downgrade"
+                          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(residence.address)}&zoom=15`}
+                          allowFullScreen
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <div className="h-80 rounded-lg bg-muted flex items-center justify-center">
+                      <div className="text-center text-muted-foreground">
+                        <MapPin className="h-12 w-12 mx-auto mb-3 opacity-50" />
+                        <p>Ubicación pendiente</p>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -324,7 +408,7 @@ const ResidenceDetail = () => {
                 {/* Contact Info */}
                 <Card>
                   <CardContent className="p-6 space-y-4">
-                    <h3 className="font-semibold text-lg">Información de Contacto</h3>
+                    <h3 className="font-semibold text-lg">Información de contacto</h3>
                     <div className="space-y-3 text-sm">
                       {residence.phone && (
                         <a href={`tel:${residence.phone}`} className="flex items-center gap-3 hover:text-primary transition-colors">
@@ -392,7 +476,7 @@ const ResidenceDetail = () => {
                 {/* Contact Form */}
                 <Card>
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg mb-4">Solicitar Información</h3>
+                    <h3 className="font-semibold text-lg mb-4">Solicitar información</h3>
                     <form onSubmit={handleContactSubmit} className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="name">Nombre</Label>
@@ -426,14 +510,14 @@ const ResidenceDetail = () => {
                         <Label htmlFor="message">Mensaje</Label>
                         <Textarea 
                           id="message" 
-                          rows={4} 
-                          required 
+                          rows={3} 
+                          placeholder="Cuéntanos tus necesidades..."
                           value={contactForm.mensaje}
                           onChange={(e) => setContactForm(prev => ({ ...prev, mensaje: e.target.value }))}
                         />
                       </div>
                       <Button type="submit" className="w-full">
-                        Enviar Solicitud
+                        Enviar consulta
                       </Button>
                     </form>
                   </CardContent>
@@ -449,9 +533,10 @@ const ResidenceDetail = () => {
       <SendMethodDialog
         open={showSendDialog}
         onOpenChange={setShowSendDialog}
-        formData={{ ...contactForm, residencia: residence.name }}
-        subject={`Consulta sobre ${residence.name}`}
+        formData={contactForm}
+        recipientEmail={residence.email || "hola@integraresidenciales.com.uy"}
         recipientWhatsApp={residence.whatsapp ? `598${residence.whatsapp.replace(/\D/g, '')}` : "59899923330"}
+        subject={`Consulta sobre ${residence.name}`}
       />
     </div>
   );

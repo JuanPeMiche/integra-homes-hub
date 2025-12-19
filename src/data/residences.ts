@@ -1,3 +1,9 @@
+export interface Director {
+  name: string;
+  role: string;
+  photoUrl?: string;
+}
+
 export interface Residence {
   id: string;
   name: string;
@@ -32,6 +38,10 @@ export interface Residence {
   certifications?: string[]; // MSP, MIDES, Bomberos
   director?: string;
   directorTitle?: string;
+  // New fields
+  logoUrl?: string;
+  directors?: Director[];
+  mapsUrl?: string;
 }
 
 // Helper to get all unique barrios

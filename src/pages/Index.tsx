@@ -32,7 +32,7 @@ const Index = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center space-y-6 mb-12">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Encontrá el Mejor Hogar para Tus Mayores en Uruguay
+                Encontrá el mejor hogar para tus mayores en Uruguay
               </h1>
               <p className="text-lg md:text-xl text-white/95 leading-relaxed">
                 Integra Residenciales te ayuda a encontrar la residencia perfecta con la mejor atención, cuidados personalizados y trato digno
@@ -43,7 +43,7 @@ const Index = () => {
                   className="gap-2 text-base h-14 px-8 bg-secondary hover:bg-secondary/90 text-secondary-foreground"
                   onClick={() => window.location.href = '/buscar'}
                 >
-                  Buscar Ahora
+                  Buscar ahora
                   <ArrowRight className="h-5 w-5" />
                 </Button>
                 <Button 
@@ -52,7 +52,7 @@ const Index = () => {
                   className="gap-2 text-base h-14 px-8 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
                   onClick={() => window.location.href = '/contacto'}
                 >
-                  Asesoramiento Gratuito
+                  Asesoramiento gratuito
                 </Button>
               </div>
             </div>
@@ -80,7 +80,7 @@ const Index = () => {
                 <span className="font-medium">Red Integra</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Residencias Destacadas
+                Residencias de la red
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Conocé las residencias que forman parte de nuestra red de confianza
@@ -105,7 +105,7 @@ const Index = () => {
                 className="gap-2"
                 onClick={() => window.location.href = '/buscar'}
               >
-                Ver Todas las Residencias
+                Ver todas las residencias
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </div>
@@ -117,7 +117,7 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                ¿Por Qué Elegir Integra Residenciales?
+                ¿Por qué elegir Integra Residenciales?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Nuestro compromiso es ayudarte a encontrar el mejor cuidado para tus seres queridos en Uruguay
@@ -129,7 +129,7 @@ const Index = () => {
                 <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                   <Shield className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Confianza y Seguridad</h3>
+                <h3 className="text-xl font-semibold mb-3">Confianza y seguridad</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Todas nuestras residencias están verificadas y cumplen con los más altos estándares de calidad y atención.
                 </p>
@@ -139,7 +139,7 @@ const Index = () => {
                 <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mb-6">
                   <Users className="h-7 w-7 text-secondary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Asesoramiento Personalizado</h3>
+                <h3 className="text-xl font-semibold mb-3">Asesoramiento personalizado</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Te acompañamos en todo el proceso, desde la búsqueda hasta la elección de la residencia ideal.
                 </p>
@@ -149,7 +149,7 @@ const Index = () => {
                 <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center mb-6">
                   <Heart className="h-7 w-7 text-accent-foreground" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Cuidado Centrado en la Persona</h3>
+                <h3 className="text-xl font-semibold mb-3">Cuidado centrado en la persona</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Priorizamos el bienestar, la dignidad y la felicidad de cada residente en todas nuestras recomendaciones, con un enfoque humano y cálido.
                 </p>
@@ -163,7 +163,7 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                ¿Necesitas Ayuda para Elegir?
+                ¿Necesitás ayuda para elegir?
               </h2>
               <p className="text-lg text-muted-foreground">
                 Nuestro equipo de expertos está disponible para ofrecerte asesoramiento gratuito y personalizado
@@ -174,7 +174,7 @@ const Index = () => {
                   className="gap-2 text-base h-14 px-8"
                   onClick={() => window.location.href = '/contacto'}
                 >
-                  Contactar Ahora
+                  Contactar ahora
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </div>
