@@ -65,6 +65,152 @@ export type Database = {
         }
         Relationships: []
       }
+      residence_directors: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          name: string
+          photo_url: string | null
+          residence_id: string
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          name: string
+          photo_url?: string | null
+          residence_id: string
+          role: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          name?: string
+          photo_url?: string | null
+          residence_id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "residence_directors_residence_id_fkey"
+            columns: ["residence_id"]
+            isOneToOne: false
+            referencedRelation: "residences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      residences: {
+        Row: {
+          address: string
+          admissions: string[] | null
+          capacity: number | null
+          certifications: string[] | null
+          city: string
+          coordinates_lat: number | null
+          coordinates_lng: number | null
+          created_at: string
+          description: string | null
+          email: string | null
+          facebook: string | null
+          facilities: string[] | null
+          id: string
+          image: string | null
+          images: string[] | null
+          instagram: string | null
+          logo_url: string | null
+          maps_url: string | null
+          name: string
+          phone: string | null
+          price: number | null
+          price_range: string | null
+          province: string
+          rating: number | null
+          red_integra: boolean | null
+          schedule: string | null
+          services: string[] | null
+          stay_types: string[] | null
+          transparency: number | null
+          type: string
+          updated_at: string
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          address: string
+          admissions?: string[] | null
+          capacity?: number | null
+          certifications?: string[] | null
+          city: string
+          coordinates_lat?: number | null
+          coordinates_lng?: number | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          facebook?: string | null
+          facilities?: string[] | null
+          id?: string
+          image?: string | null
+          images?: string[] | null
+          instagram?: string | null
+          logo_url?: string | null
+          maps_url?: string | null
+          name: string
+          phone?: string | null
+          price?: number | null
+          price_range?: string | null
+          province: string
+          rating?: number | null
+          red_integra?: boolean | null
+          schedule?: string | null
+          services?: string[] | null
+          stay_types?: string[] | null
+          transparency?: number | null
+          type: string
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          address?: string
+          admissions?: string[] | null
+          capacity?: number | null
+          certifications?: string[] | null
+          city?: string
+          coordinates_lat?: number | null
+          coordinates_lng?: number | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          facebook?: string | null
+          facilities?: string[] | null
+          id?: string
+          image?: string | null
+          images?: string[] | null
+          instagram?: string | null
+          logo_url?: string | null
+          maps_url?: string | null
+          name?: string
+          phone?: string | null
+          price?: number | null
+          price_range?: string | null
+          province?: string
+          rating?: number | null
+          red_integra?: boolean | null
+          schedule?: string | null
+          services?: string[] | null
+          stay_types?: string[] | null
+          transparency?: number | null
+          type?: string
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
