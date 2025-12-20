@@ -4,6 +4,7 @@ import { SearchForm } from "@/components/SearchForm";
 import { StatsSection } from "@/components/StatsSection";
 import { ChatBot } from "@/components/ChatBot";
 import { ResidenceCard } from "@/components/ResidenceCard";
+import { ConveniosSection } from "@/components/ConveniosSection";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Users, Heart, CheckCircle } from "lucide-react";
 import { useResidences } from "@/hooks/useResidences";
@@ -162,6 +163,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Convenios Section */}
+        <ConveniosSection />
 
         {/* CTA Section */}
         <section className="py-16 bg-muted">
