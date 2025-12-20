@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut, Heart } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, Heart, ChevronDown, FileText, Shield, Info, Newspaper, Handshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
@@ -56,8 +56,6 @@ export const Header = () => {
               { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar Residencias" },
               { to: "/convenios", label: "Convenios" },
-              { to: "/sobre-integra", label: "Sobre Integra" },
-              { to: "/noticias", label: "Noticias" },
               { to: "/asesoramiento", label: "Buscamos por Ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
@@ -70,6 +68,38 @@ export const Header = () => {
                 {link.label}
               </NavLink>
             ))}
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={`flex items-center gap-1 text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}>
+                  Más
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-background">
+                <DropdownMenuItem onClick={() => navigate("/sobre-integra")} className="cursor-pointer">
+                  <Info className="mr-2 h-4 w-4" />
+                  Sobre Integra
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/noticias")} className="cursor-pointer">
+                  <Newspaper className="mr-2 h-4 w-4" />
+                  Noticias
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/trabaja-con-nosotros")} className="cursor-pointer">
+                  <Handshake className="mr-2 h-4 w-4" />
+                  Trabaja con Nosotros
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/politica-privacidad")} className="cursor-pointer">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Política de Privacidad
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/terminos-condiciones")} className="cursor-pointer">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Términos y Condiciones
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           <div className="hidden lg:flex items-center gap-3">
