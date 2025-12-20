@@ -124,7 +124,7 @@ export const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <nav className="lg:hidden py-4 space-y-3 border-t border-border bg-background rounded-b-lg">
+          <nav className="lg:hidden py-3 space-y-1 border-t border-border bg-background rounded-b-lg px-2">
             {[
               { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar Residencias" },
@@ -134,7 +134,12 @@ export const Header = () => {
               { to: "/asesoramiento", label: "Buscamos por Ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
-              <NavLink key={link.to} to={link.to} className="block py-2 text-base font-medium text-foreground/80 hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+              <NavLink 
+                key={link.to} 
+                to={link.to} 
+                className="block py-2.5 px-3 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-muted/50 rounded-md transition-colors" 
+                onClick={() => setIsMenuOpen(false)}
+              >
                 {link.label}
               </NavLink>
             ))}
@@ -142,24 +147,28 @@ export const Header = () => {
             {!loading && (
               user ? (
                 <>
-                  <NavLink to="/favoritos" className="block py-2 text-base font-medium text-foreground/80 hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                  <NavLink 
+                    to="/favoritos" 
+                    className="block py-2.5 px-3 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-muted/50 rounded-md transition-colors" 
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     <Heart className="inline mr-2 h-4 w-4" />
                     Mis Favoritos
                   </NavLink>
-                  <Button variant="outline" className="w-full justify-start text-destructive" onClick={handleSignOut}>
+                  <Button variant="outline" size="sm" className="w-full justify-start text-destructive mt-2" onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Cerrar Sesión
                   </Button>
                 </>
               ) : (
-                <Button variant="default" className="w-full" onClick={() => { setIsMenuOpen(false); navigate("/auth"); }}>
+                <Button variant="default" size="sm" className="w-full mt-2" onClick={() => { setIsMenuOpen(false); navigate("/auth"); }}>
                   <User className="mr-2 h-4 w-4" />
                   Ingresar / Registrarse
                 </Button>
               )
             )}
             
-            <Button variant="outline" size="lg" className="w-full gap-2 mt-4" asChild>
+            <Button variant="outline" size="sm" className="w-full gap-2 mt-2" asChild>
               <a href="tel:+59899923330">
                 <Phone className="h-4 w-4" />
                 (+598) 99 923 330
