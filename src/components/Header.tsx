@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut, Heart } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, Heart, MoreHorizontal, FileText, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
@@ -70,6 +70,25 @@ export const Header = () => {
                 {link.label}
               </NavLink>
             ))}
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className={`flex items-center gap-1 text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}>
+                  <MoreHorizontal className="h-5 w-5" />
+                  Más
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-background">
+                <DropdownMenuItem onClick={() => navigate("/politica-privacidad")} className="cursor-pointer">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Política de Privacidad
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/terminos-condiciones")} className="cursor-pointer">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Términos y Condiciones
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
 
           <div className="hidden lg:flex items-center gap-3">
@@ -143,6 +162,26 @@ export const Header = () => {
                 {link.label}
               </NavLink>
             ))}
+            
+            <div className="border-t border-border my-2 pt-2">
+              <p className="px-3 py-1 text-xs text-muted-foreground font-medium">Legal</p>
+              <NavLink 
+                to="/politica-privacidad" 
+                className="block py-2.5 px-3 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-muted/50 rounded-md transition-colors" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Shield className="inline mr-2 h-4 w-4" />
+                Política de Privacidad
+              </NavLink>
+              <NavLink 
+                to="/terminos-condiciones" 
+                className="block py-2.5 px-3 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-muted/50 rounded-md transition-colors" 
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FileText className="inline mr-2 h-4 w-4" />
+                Términos y Condiciones
+              </NavLink>
+            </div>
             
             {!loading && (
               user ? (
