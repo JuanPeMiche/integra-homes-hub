@@ -21,6 +21,8 @@ import TrabajaConNosotros from "./pages/TrabajaConNosotros";
 import AsociarResidencia from "./pages/AsociarResidencia";
 import Convenios from "./pages/Convenios";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
 
@@ -51,9 +53,11 @@ const App = () => {
             <Route path="/asociar-residencia" element={<AsociarResidencia />} />
             <Route path="/convenios" element={<Convenios />} />
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
+            <Route path="/terminos-condiciones" element={<TermsConditions />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <CookieConsent />
         </BrowserRouter>
       </TooltipProvider>
       </AuthProvider>

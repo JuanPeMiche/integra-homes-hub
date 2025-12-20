@@ -110,9 +110,15 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-trust-foreground/20 pt-6 text-center text-sm text-trust-foreground/80">
           <p className="mb-2">&copy; {new Date().getFullYear()} Integra Residenciales. Todos los derechos reservados.</p>
-          <NavLink to="/politica-privacidad" className="hover:text-secondary transition-colors underline">
-            Política de Privacidad y Cookies
-          </NavLink>
+          <div className="flex justify-center gap-4">
+            <NavLink to="/politica-privacidad" className="hover:text-secondary transition-colors underline">
+              Política de Privacidad
+            </NavLink>
+            <span className="text-trust-foreground/40">|</span>
+            <NavLink to="/terminos-condiciones" className="hover:text-secondary transition-colors underline">
+              Términos y Condiciones
+            </NavLink>
+          </div>
         </div>
       </div>
     </footer>
