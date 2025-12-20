@@ -95,13 +95,8 @@ const Index = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {allFeaturedResidences.slice(0, 6).map((residence, index) => (
-                  <div 
-                    key={residence.id}
-                    className={index >= 3 ? "hidden md:block" : ""}
-                  >
-                    <ResidenceCard residence={residence} />
-                  </div>
+                {allFeaturedResidences.slice(0, 3).map((residence) => (
+                  <ResidenceCard key={residence.id} residence={residence} />
                 ))}
               </div>
             )}
