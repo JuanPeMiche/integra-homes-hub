@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      convenios: {
+        Row: {
+          conditions: string | null
+          created_at: string
+          cta_label: string | null
+          cta_link: string | null
+          details: string | null
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          main_benefit: string
+          name: string
+          secondary_logo_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          conditions?: string | null
+          created_at?: string
+          cta_label?: string | null
+          cta_link?: string | null
+          details?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          main_benefit: string
+          name: string
+          secondary_logo_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          conditions?: string | null
+          created_at?: string
+          cta_label?: string | null
+          cta_link?: string | null
+          details?: string | null
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          main_benefit?: string
+          name?: string
+          secondary_logo_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       favorites: {
         Row: {
           created_at: string

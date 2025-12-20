@@ -1,70 +1,42 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Handshake, ExternalLink } from "lucide-react";
+import { useConvenios, Convenio } from "@/hooks/useConvenios";
 
-// Logos
+// Fallback logos for initial data
 import tiendaInglesaLogo from "@/assets/convenios/tienda-inglesa.png";
 import macroMercadoLogo from "@/assets/convenios/macro-mercado.png";
 import sumumLogo from "@/assets/convenios/sumum.png";
 import hospitalBritanicoLogo from "@/assets/convenios/hospital-britanico.png";
 import indaslipLogo from "@/assets/convenios/indaslip.png";
 
-interface Convenio {
-  id: string;
-  name: string;
-  mainBenefit: string;
-  details: string;
-  conditions: string;
-  logoUrl?: string;
-  ctaLabel?: string;
-  ctaLink?: string;
-}
-
-const convenios: Convenio[] = [
-  {
-    id: "tienda-inglesa",
-    name: "Tienda Inglesa",
-    mainBenefit: "10% de descuento en góndolas (todos los productos)",
-    details: "Descuento directo en compras en Tienda Inglesa.",
-    conditions: "Aplicable con la tarjeta de Tienda Inglesa provista por Integra / la Red.",
-    logoUrl: tiendaInglesaLogo,
-    ctaLabel: "Consultar",
-    ctaLink: "/contacto",
-  },
-  {
-    id: "macro-mercado",
-    name: "Macro Mercado",
-    mainBenefit: "Mejor descuento por unidad (no requiere comprar 6 o 12)",
-    details: "Ahorro inmediato sin compra mínima.",
-    conditions: "El precio con descuento aplica desde 1 unidad.",
-    logoUrl: macroMercadoLogo,
-    ctaLabel: "Consultar",
-    ctaLink: "/contacto",
-  },
-  {
-    id: "sumum-britanico",
-    name: "SUMUM + Hospital Británico",
-    mainBenefit: "40% de descuento en la cuota mensual del plan",
-    details: "Beneficio mensual con condiciones de afiliación/plan.",
-    conditions: "Plan asociado a SUMUM e internación en el Hospital Británico.",
-    logoUrl: sumumLogo,
-    secondaryLogoUrl: hospitalBritanicoLogo,
-    ctaLabel: "Consultar",
-    ctaLink: "/contacto",
-  } as Convenio & { secondaryLogoUrl?: string },
-  {
-    id: "indaslip",
-    name: "Pañales IndaSlip",
-    mainBenefit: "Pañales europeos premium a mitad de precio vs farmacia",
-    details: "IndaSlip — alta calidad con ahorro significativo.",
-    conditions: "Compra directa de fábrica en España.",
-    logoUrl: indaslipLogo,
-    ctaLabel: "Consultar",
-    ctaLink: "/contacto",
-  },
-];
+// Map of fallback logos by name for existing convenios without uploaded logos
+const fallbackLogos: Record<string, { primary: string; secondary?: string }> = {
+  "Tienda Inglesa": { primary: tiendaInglesaLogo },
+  "Macro Mercado": { primary: macroMercadoLogo },
+  "SUMUM + Hospital Británico": { primary: sumumLogo, secondary: hospitalBritanicoLogo },
+  "Pañales IndaSlip": { primary: indaslipLogo },
+};
 
 export const ConveniosSection = () => {
+  const { data: convenios, isLoading } = useConvenios();
+
+  if (isLoading) {
+    return (
+      <section id="convenios" className="py-16 md:py-20 bg-gradient-to-b from-background to-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!convenios || convenios.length === 0) {
+    return null;
+  }
+
   return (
     <section id="convenios" className="py-16 md:py-20 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4">
@@ -99,34 +71,39 @@ export const ConveniosSection = () => {
 };
 
 interface ConvenioCardProps {
-  convenio: Convenio & { secondaryLogoUrl?: string };
+  convenio: Convenio;
 }
 
 const ConvenioCard = ({ convenio }: ConvenioCardProps) => {
   const handleClick = () => {
-    if (convenio.ctaLink) {
-      window.location.href = convenio.ctaLink;
+    if (convenio.cta_link) {
+      window.location.href = convenio.cta_link;
     }
   };
+
+  // Use uploaded logos or fallback to bundled assets
+  const fallback = fallbackLogos[convenio.name];
+  const primaryLogo = convenio.logo_url || fallback?.primary;
+  const secondaryLogo = convenio.secondary_logo_url || fallback?.secondary;
 
   return (
     <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-soft transition-all duration-300 hover:border-primary/20 flex flex-col">
       {/* Header with Logo and Badge */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          {convenio.logoUrl && (
+          {primaryLogo && (
             <div className="flex items-center gap-2">
               <div className="h-14 w-14 rounded-lg bg-white border border-border flex items-center justify-center p-1.5 overflow-hidden">
                 <img 
-                  src={convenio.logoUrl} 
+                  src={primaryLogo} 
                   alt={convenio.name}
                   className="h-full w-full object-contain"
                 />
               </div>
-              {convenio.secondaryLogoUrl && (
+              {secondaryLogo && (
                 <div className="h-14 w-14 rounded-lg bg-white border border-border flex items-center justify-center p-1.5 overflow-hidden">
                   <img 
-                    src={convenio.secondaryLogoUrl} 
+                    src={secondaryLogo} 
                     alt={`${convenio.name} secundario`}
                     className="h-full w-full object-contain"
                   />
@@ -149,30 +126,34 @@ const ConvenioCard = ({ convenio }: ConvenioCardProps) => {
         {/* Main Benefit - Highlighted */}
         <div className="bg-primary/5 border border-primary/10 rounded-lg p-3 mb-3">
           <p className="font-bold text-primary text-sm md:text-base">
-            {convenio.mainBenefit}
+            {convenio.main_benefit}
           </p>
         </div>
 
         {/* Details */}
-        <p className="text-muted-foreground text-sm mb-2">
-          {convenio.details}
-        </p>
+        {convenio.details && (
+          <p className="text-muted-foreground text-sm mb-2">
+            {convenio.details}
+          </p>
+        )}
         
         {/* Conditions */}
-        <p className="text-xs text-muted-foreground/80 italic">
-          {convenio.conditions}
-        </p>
+        {convenio.conditions && (
+          <p className="text-xs text-muted-foreground/80 italic">
+            {convenio.conditions}
+          </p>
+        )}
       </div>
 
       {/* CTA Button */}
-      {convenio.ctaLabel && (
+      {convenio.cta_label && (
         <Button 
           variant="outline" 
           size="sm" 
           className="mt-4 w-full gap-2"
           onClick={handleClick}
         >
-          {convenio.ctaLabel}
+          {convenio.cta_label}
           <ExternalLink className="h-4 w-4" />
         </Button>
       )}

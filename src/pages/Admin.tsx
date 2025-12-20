@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ImageUploader } from "@/components/ImageUploader";
 import { GalleryUploader } from "@/components/GalleryUploader";
+import { ConveniosAdmin } from "@/components/admin/ConveniosAdmin";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   LogOut, 
@@ -21,7 +22,8 @@ import {
   Trash2,
   Users,
   Image as ImageIcon,
-  ChevronLeft
+  ChevronLeft,
+  Handshake
 } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -37,6 +39,7 @@ const Admin = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Residence>>({});
+  const [activeSection, setActiveSection] = useState<'residencias' | 'convenios'>('residencias');
 
   // Fetch residences directly from DB
   const { data: residences, isLoading: residencesLoading, refetch } = useQuery({
@@ -225,6 +228,21 @@ const Admin = () => {
       </header>
 
       <div className="container mx-auto px-4 py-6">
+        {/* Main Section Tabs */}
+        <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as 'residencias' | 'convenios')} className="mb-6">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="residencias" className="gap-2">
+              <Building2 className="w-4 h-4" />
+              Residencias
+            </TabsTrigger>
+            <TabsTrigger value="convenios" className="gap-2">
+              <Handshake className="w-4 h-4" />
+              Convenios
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        {activeSection === 'residencias' ? (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar - Lista de Residencias */}
           <Card className="lg:col-span-1">
@@ -232,7 +250,7 @@ const Admin = () => {
               <CardTitle className="text-lg">Residencias</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <ScrollArea className="h-[calc(100vh-250px)]">
+              <ScrollArea className="h-[calc(100vh-350px)]">
                 {residencesLoading ? (
                   <div className="p-4 text-center text-muted-foreground">Cargando...</div>
                 ) : (
@@ -506,6 +524,9 @@ const Admin = () => {
             )}
           </div>
         </div>
+        ) : (
+          <ConveniosAdmin />
+        )}
       </div>
     </div>
   );
