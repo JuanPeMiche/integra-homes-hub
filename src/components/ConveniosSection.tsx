@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Handshake, ExternalLink } from "lucide-react";
+import { Handshake, ExternalLink, ArrowRight } from "lucide-react";
 import { useConvenios, Convenio } from "@/hooks/useConvenios";
+import { Link } from "react-router-dom";
 
 // Fallback logos for initial data
 import tiendaInglesaLogo from "@/assets/convenios/tienda-inglesa.png";
@@ -14,7 +15,7 @@ import indaslipLogo from "@/assets/convenios/indaslip.png";
 const fallbackLogos: Record<string, { primary: string; secondary?: string }> = {
   "Tienda Inglesa": { primary: tiendaInglesaLogo },
   "Macro Mercado": { primary: macroMercadoLogo },
-  "SUMUM + Hospital Británico": { primary: sumumLogo, secondary: hospitalBritanicoLogo },
+  "SUMMUM + Hospital Británico": { primary: sumumLogo, secondary: hospitalBritanicoLogo },
   "Pañales IndaSlip": { primary: indaslipLogo },
 };
 
@@ -62,9 +63,17 @@ export const ConveniosSection = () => {
         </div>
 
         {/* Disclaimer */}
-        <p className="text-center text-sm text-muted-foreground mt-10 max-w-xl mx-auto">
-          Los beneficios pueden estar sujetos a condiciones. Consultá para más información.
-        </p>
+        <div className="text-center mt-10">
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-4">
+            Los beneficios pueden estar sujetos a condiciones. Consultá para más información.
+          </p>
+          <Button asChild variant="outline" className="gap-2">
+            <Link to="/convenios">
+              Mostrar más
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
       </div>
     </section>
   );
