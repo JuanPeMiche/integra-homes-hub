@@ -19,6 +19,7 @@ import Asesoramiento from "./pages/Asesoramiento";
 import Favorites from "./pages/Favorites";
 import TrabajaConNosotros from "./pages/TrabajaConNosotros";
 import AsociarResidencia from "./pages/AsociarResidencia";
+import Convenios from "./pages/Convenios";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/favoritos" element={<Favorites />} />
             <Route path="/trabaja-con-nosotros" element={<TrabajaConNosotros />} />
             <Route path="/asociar-residencia" element={<AsociarResidencia />} />
+            <Route path="/convenios" element={<Convenios />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

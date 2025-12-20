@@ -55,37 +55,20 @@ export const Header = () => {
             {[
               { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar Residencias" },
-              { to: "/#convenios", label: "Convenios", isHash: true },
+              { to: "/convenios", label: "Convenios" },
               { to: "/sobre-integra", label: "Sobre Integra" },
               { to: "/noticias", label: "Noticias" },
               { to: "/asesoramiento", label: "Buscamos por Ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
-              link.isHash ? (
-                <a
-                  key={link.to}
-                  href={link.to}
-                  onClick={(e) => {
-                    if (isHomePage) {
-                      e.preventDefault();
-                      const element = document.getElementById('convenios');
-                      element?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className={`text-base font-medium transition-colors cursor-pointer ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <NavLink
-                  key={link.to}
-                  to={link.to}
-                  className={`text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}
-                  activeClassName={showSolidHeader ? "text-primary font-semibold" : "text-white font-semibold"}
-                >
-                  {link.label}
-                </NavLink>
-              )
+              <NavLink
+                key={link.to}
+                to={link.to}
+                className={`text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}
+                activeClassName={showSolidHeader ? "text-primary font-semibold" : "text-white font-semibold"}
+              >
+                {link.label}
+              </NavLink>
             ))}
           </nav>
 
@@ -145,33 +128,15 @@ export const Header = () => {
             {[
               { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar Residencias" },
-              { to: "/#convenios", label: "Convenios", isHash: true },
+              { to: "/convenios", label: "Convenios" },
               { to: "/sobre-integra", label: "Sobre Integra" },
               { to: "/noticias", label: "Noticias" },
               { to: "/asesoramiento", label: "Buscamos por Ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
-              link.isHash ? (
-                <a
-                  key={link.to}
-                  href={link.to}
-                  onClick={(e) => {
-                    setIsMenuOpen(false);
-                    if (isHomePage) {
-                      e.preventDefault();
-                      const element = document.getElementById('convenios');
-                      element?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="block py-2 text-base font-medium text-foreground/80 hover:text-primary"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <NavLink key={link.to} to={link.to} className="block py-2 text-base font-medium text-foreground/80 hover:text-primary" onClick={() => setIsMenuOpen(false)}>
-                  {link.label}
-                </NavLink>
-              )
+              <NavLink key={link.to} to={link.to} className="block py-2 text-base font-medium text-foreground/80 hover:text-primary" onClick={() => setIsMenuOpen(false)}>
+                {link.label}
+              </NavLink>
             ))}
             
             {!loading && (
