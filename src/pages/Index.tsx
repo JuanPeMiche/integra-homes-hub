@@ -14,9 +14,9 @@ const Index = () => {
   const { data: residences = [], isLoading } = useResidences();
   
   // Get Red Integra residences sorted alphabetically
-  const featuredResidences = residences
-    .filter(r => r.redIntegra)
-    .slice(0, 6);
+  const allFeaturedResidences = residences.filter(r => r.redIntegra);
+  
+  // Show 3 on mobile, 6 on desktop (handled via CSS)
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -95,11 +95,13 @@ const Index = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {featuredResidences.map((residence) => (
-                  <ResidenceCard
+                {allFeaturedResidences.slice(0, 6).map((residence, index) => (
+                  <div 
                     key={residence.id}
-                    residence={residence}
-                  />
+                    className={index >= 3 ? "hidden md:block" : ""}
+                  >
+                    <ResidenceCard residence={residence} />
+                  </div>
                 ))}
               </div>
             )}
