@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
@@ -14,7 +14,135 @@ import { Search, RotateCcw, List, Map, SlidersHorizontal, CheckCircle } from "lu
 import { useResidences, useProvinces, useCities, Residence } from "@/hooks/useResidences";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useDebouncedCallback } from "@/hooks/useDebouncedSearch";
+
+// Filter Panel as a separate component to prevent re-creation on each render
+interface FilterPanelProps {
+  searchInputValue: string;
+  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  departamento: string;
+  onDepartamentoChange: (value: string) => void;
+  departamentos: string[];
+  barrio: string;
+  onBarrioChange: (value: string) => void;
+  barrios: string[];
+  redIntegraOnly: boolean;
+  onRedIntegraChange: (checked: boolean) => void;
+  sortBy: string;
+  onSortChange: (value: string) => void;
+  onReset: () => void;
+}
+
+const FilterPanel = React.memo(({
+  searchInputValue,
+  onSearchChange,
+  departamento,
+  onDepartamentoChange,
+  departamentos,
+  barrio,
+  onBarrioChange,
+  barrios,
+  redIntegraOnly,
+  onRedIntegraChange,
+  sortBy,
+  onSortChange,
+  onReset,
+}: FilterPanelProps) => (
+  <div className="space-y-6">
+    {/* Search by Name */}
+    <div>
+      <Label className="text-sm font-medium mb-2 block">Buscar por nombre</Label>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input 
+          value={searchInputValue}
+          onChange={onSearchChange}
+          placeholder="Ej: Moiru, Dolce..."
+          className="pl-10 bg-background"
+        />
+      </div>
+    </div>
+
+    {/* Departamento */}
+    <div>
+      <Label className="text-sm font-medium mb-2 block">Departamento</Label>
+      <Select value={departamento || "_all"} onValueChange={(val) => onDepartamentoChange(val === "_all" ? "" : val)}>
+        <SelectTrigger className="bg-background">
+          <SelectValue placeholder="Todos" />
+        </SelectTrigger>
+        <SelectContent className="bg-background">
+          <SelectItem value="_all">Todos</SelectItem>
+          {departamentos.map((dep) => (
+            <SelectItem key={dep} value={dep}>
+              {dep}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* Barrio / Localidad */}
+    <div>
+      <Label className="text-sm font-medium mb-2 block">Barrio / Zona</Label>
+      <Select value={barrio || "_all"} onValueChange={(val) => onBarrioChange(val === "_all" ? "" : val)}>
+        <SelectTrigger className="bg-background">
+          <SelectValue placeholder="Todos" />
+        </SelectTrigger>
+        <SelectContent className="bg-background">
+          <SelectItem value="_all">Todos</SelectItem>
+          {barrios.map((b) => (
+            <SelectItem key={b} value={b}>
+              {b}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* Red Integra Filter */}
+    <div className="flex items-center space-x-3 p-3 bg-secondary/10 rounded-lg border border-secondary/20">
+      <Checkbox
+        id="redIntegra"
+        checked={redIntegraOnly}
+        onCheckedChange={(checked) => onRedIntegraChange(checked as boolean)}
+      />
+      <label
+        htmlFor="redIntegra"
+        className="text-sm font-medium leading-none cursor-pointer flex items-center gap-2"
+      >
+        <CheckCircle className="h-4 w-4 text-secondary" />
+        Solo Red Integra
+      </label>
+    </div>
+
+    {/* Sort By */}
+    <div>
+      <Label className="text-sm font-medium mb-2 block">Ordenar por</Label>
+      <Select value={sortBy} onValueChange={onSortChange}>
+        <SelectTrigger className="bg-background">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="bg-background">
+          <SelectItem value="name-asc">Nombre (A → Z)</SelectItem>
+          <SelectItem value="name-desc">Nombre (Z → A)</SelectItem>
+          <SelectItem value="transparency-desc">Mayor transparencia</SelectItem>
+          <SelectItem value="transparency-asc">Menor transparencia</SelectItem>
+          <SelectItem value="rating-desc">Mejor valoración</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* Reset Filters */}
+    <button 
+      onClick={onReset}
+      className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+    >
+      <RotateCcw className="h-4 w-4" />
+      Limpiar filtros
+    </button>
+  </div>
+));
+
+FilterPanel.displayName = 'FilterPanel';
 
 const SearchResults = () => {
   const navigate = useNavigate();
@@ -31,6 +159,7 @@ const SearchResults = () => {
   const [redIntegraOnly, setRedIntegraOnly] = useState(false);
   const [sortBy, setSortBy] = useState("name-asc");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout>();
 
   // Read URL params on mount
   useEffect(() => {
@@ -44,20 +173,19 @@ const SearchResults = () => {
     }
   }, [searchParams]);
 
-  // Debounce search input to avoid losing focus
-  const debouncedSetSearchName = useCallback((value: string) => {
-    setSearchName(value);
-  }, []);
-
+  // Handle search input with debounce - using ref to avoid re-creating function
   const handleSearchInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchInputValue(value);
-    // Debounce the actual filter update
-    const timeoutId = setTimeout(() => {
-      debouncedSetSearchName(value);
+    
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    searchTimeoutRef.current = setTimeout(() => {
+      setSearchName(value);
     }, 300);
-    return () => clearTimeout(timeoutId);
-  }, [debouncedSetSearchName]);
+  }, []);
 
   // Filter and sort residences
   const filteredResidences = useMemo(() => {
@@ -110,6 +238,13 @@ const SearchResults = () => {
     return results;
   }, [residences, searchName, departamento, barrio, redIntegraOnly, sortBy]);
 
+  // Filter residences with valid coordinates for the map
+  const residencesWithCoordinates = useMemo(() => {
+    return filteredResidences.filter(r => 
+      r.coordinates && r.coordinates.lat !== 0 && r.coordinates.lng !== 0
+    );
+  }, [filteredResidences]);
+
   const handleCompare = (id: string) => {
     setCompareList((prev) => {
       if (prev.includes(id)) {
@@ -128,112 +263,32 @@ const SearchResults = () => {
     }
   };
 
-  const resetFilters = () => {
+  const resetFilters = useCallback(() => {
     setSearchName("");
     setSearchInputValue("");
     setDepartamento("");
     setBarrio("");
     setRedIntegraOnly(false);
     setSortBy("name-asc");
-  };
+  }, []);
 
   const activeFiltersCount = [searchName, departamento, barrio, redIntegraOnly].filter(Boolean).length;
 
-  const FilterPanel = () => (
-    <div className="space-y-6">
-      {/* Search by Name */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">Buscar por nombre</Label>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            value={searchInputValue}
-            onChange={handleSearchInputChange}
-            placeholder="Ej: Moiru, Dolce..."
-            className="pl-10 bg-background"
-          />
-        </div>
-      </div>
-
-      {/* Departamento */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">Departamento</Label>
-        <Select value={departamento || "_all"} onValueChange={(val) => setDepartamento(val === "_all" ? "" : val)}>
-          <SelectTrigger className="bg-background">
-            <SelectValue placeholder="Todos" />
-          </SelectTrigger>
-          <SelectContent className="bg-background">
-            <SelectItem value="_all">Todos</SelectItem>
-            {departamentos.map((dep) => (
-              <SelectItem key={dep} value={dep}>
-                {dep}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Barrio / Localidad */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">Barrio / Zona</Label>
-        <Select value={barrio || "_all"} onValueChange={(val) => setBarrio(val === "_all" ? "" : val)}>
-          <SelectTrigger className="bg-background">
-            <SelectValue placeholder="Todos" />
-          </SelectTrigger>
-          <SelectContent className="bg-background">
-            <SelectItem value="_all">Todos</SelectItem>
-            {barrios.map((b) => (
-              <SelectItem key={b} value={b}>
-                {b}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Red Integra Filter */}
-      <div className="flex items-center space-x-3 p-3 bg-secondary/10 rounded-lg border border-secondary/20">
-        <Checkbox
-          id="redIntegra"
-          checked={redIntegraOnly}
-          onCheckedChange={(checked) => setRedIntegraOnly(checked as boolean)}
-        />
-        <label
-          htmlFor="redIntegra"
-          className="text-sm font-medium leading-none cursor-pointer flex items-center gap-2"
-        >
-          <CheckCircle className="h-4 w-4 text-secondary" />
-          Solo Red Integra
-        </label>
-      </div>
-
-      {/* Sort By */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">Ordenar por</Label>
-        <Select value={sortBy} onValueChange={setSortBy}>
-          <SelectTrigger className="bg-background">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-background">
-            <SelectItem value="name-asc">Nombre (A → Z)</SelectItem>
-            <SelectItem value="name-desc">Nombre (Z → A)</SelectItem>
-            <SelectItem value="transparency-desc">Mayor transparencia</SelectItem>
-            <SelectItem value="transparency-asc">Menor transparencia</SelectItem>
-            <SelectItem value="rating-desc">Mejor valoración</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Reset Filters */}
-      <button 
-        onClick={resetFilters}
-        className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
-      >
-        <RotateCcw className="h-4 w-4" />
-        Limpiar filtros
-      </button>
-    </div>
-  );
+  const filterPanelProps: FilterPanelProps = {
+    searchInputValue,
+    onSearchChange: handleSearchInputChange,
+    departamento,
+    onDepartamentoChange: setDepartamento,
+    departamentos,
+    barrio,
+    onBarrioChange: setBarrio,
+    barrios,
+    redIntegraOnly,
+    onRedIntegraChange: setRedIntegraOnly,
+    sortBy,
+    onSortChange: setSortBy,
+    onReset: resetFilters,
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -292,7 +347,7 @@ const SearchResults = () => {
                       <SheetTitle>Filtrar resultados</SheetTitle>
                     </SheetHeader>
                     <div className="mt-6">
-                      <FilterPanel />
+                      <FilterPanel {...filterPanelProps} />
                     </div>
                   </SheetContent>
                 </Sheet>
@@ -305,7 +360,7 @@ const SearchResults = () => {
           {/* Desktop Sidebar - Filters */}
           <aside className="hidden lg:block w-80 border-r border-border min-h-[calc(100vh-180px)] p-6 flex-shrink-0 bg-card">
             <h2 className="text-lg font-semibold mb-6">Filtrar resultados</h2>
-            <FilterPanel />
+            <FilterPanel {...filterPanelProps} />
           </aside>
 
           {/* Main Content */}
@@ -341,7 +396,7 @@ const SearchResults = () => {
             ) : (
               <div className="h-[calc(100vh-180px)]">
                 <GoogleMapComponent 
-                  residences={filteredResidences as any}
+                  residences={residencesWithCoordinates as any}
                   onMarkerClick={(residence: Residence) => navigate(`/residencia/${residence.id}`)}
                 />
               </div>
