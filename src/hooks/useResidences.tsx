@@ -25,6 +25,7 @@ export interface Residence {
   description: string;
   services: string[];
   facilities: string[];
+  activities: string[];
   coordinates: {
     lat: number;
     lng: number;
@@ -63,6 +64,7 @@ const transformResidence = (row: any, directors: any[] = []): Residence => ({
   description: row.description || '',
   services: row.services || [],
   facilities: row.facilities || [],
+  activities: row.activities || [],
   coordinates: {
     lat: parseFloat(row.coordinates_lat) || 0,
     lng: parseFloat(row.coordinates_lng) || 0,

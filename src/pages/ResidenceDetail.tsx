@@ -276,6 +276,25 @@ const ResidenceDetail = () => {
                 </CardContent>
               </Card>
 
+              {/* Activities */}
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-bold mb-4">Actividades</h2>
+                  {residence.activities && residence.activities.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {residence.activities.map((activity, idx) => (
+                        <div key={idx} className="flex items-start gap-2">
+                          <Star className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                          <span>{activity}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground italic">Lista de actividades pendiente</p>
+                  )}
+                </CardContent>
+              </Card>
+
               {/* Certifications */}
               {residence.certifications && residence.certifications.length > 0 && (
                 <Card>

@@ -153,6 +153,7 @@ export type Database = {
       }
       residences: {
         Row: {
+          activities: string[] | null
           address: string
           admissions: string[] | null
           capacity: number | null
@@ -188,6 +189,7 @@ export type Database = {
           whatsapp: string | null
         }
         Insert: {
+          activities?: string[] | null
           address: string
           admissions?: string[] | null
           capacity?: number | null
@@ -223,6 +225,7 @@ export type Database = {
           whatsapp?: string | null
         }
         Update: {
+          activities?: string[] | null
           address?: string
           admissions?: string[] | null
           capacity?: number | null
