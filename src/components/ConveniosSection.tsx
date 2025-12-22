@@ -82,12 +82,12 @@ export const ConveniosSection = () => {
           </p>
         </div>
 
-        {/* Convenios Grid */}
-        <div className="flex flex-wrap justify-center items-stretch gap-8 md:gap-10 max-w-5xl mx-auto mb-10">
+        {/* Convenios Grid - 4 columns on desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-10">
           {convenioData.map((convenio, index) => (
             <div 
               key={index}
-              className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-white/20 flex flex-col items-center text-center min-w-[200px] max-w-[250px]"
+              className="group bg-white rounded-2xl p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-white/20 flex flex-col items-center text-center"
             >
               <div className="flex items-center justify-center gap-3 mb-4">
                 {convenio.primaryLogo && (
