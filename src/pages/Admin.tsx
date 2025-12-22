@@ -23,7 +23,9 @@ import {
   Users,
   Image as ImageIcon,
   ChevronLeft,
-  Handshake
+  Handshake,
+  Wrench,
+  Star
 } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -304,7 +306,7 @@ const Admin = () => {
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="info">
-                    <TabsList className="mb-6">
+                    <TabsList className="mb-6 flex-wrap h-auto gap-1">
                       <TabsTrigger value="info">
                         <Building2 className="w-4 h-4 mr-2" />
                         Información
@@ -312,6 +314,14 @@ const Admin = () => {
                       <TabsTrigger value="images">
                         <ImageIcon className="w-4 h-4 mr-2" />
                         Imágenes
+                      </TabsTrigger>
+                      <TabsTrigger value="services">
+                        <Wrench className="w-4 h-4 mr-2" />
+                        Servicios
+                      </TabsTrigger>
+                      <TabsTrigger value="activities">
+                        <Star className="w-4 h-4 mr-2" />
+                        Actividades
                       </TabsTrigger>
                       <TabsTrigger value="team">
                         <Users className="w-4 h-4 mr-2" />
@@ -440,6 +450,151 @@ const Admin = () => {
                           images={formData.images || []}
                           onChange={handleGalleryChange}
                         />
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="services" className="space-y-6">
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <Label className="text-lg font-semibold">Servicios Disponibles</Label>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              const currentServices = formData.services || [];
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                services: [...currentServices, 'Nuevo servicio'] 
+                              }));
+                            }}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Agregar Servicio
+                          </Button>
+                        </div>
+                        <div className="space-y-2">
+                          {(formData.services || []).map((service, idx) => (
+                            <div key={idx} className="flex gap-2">
+                              <Input
+                                value={service}
+                                onChange={(e) => {
+                                  const newServices = [...(formData.services || [])];
+                                  newServices[idx] = e.target.value;
+                                  setFormData(prev => ({ ...prev, services: newServices }));
+                                }}
+                                placeholder="Nombre del servicio"
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  const newServices = (formData.services || []).filter((_, i) => i !== idx);
+                                  setFormData(prev => ({ ...prev, services: newServices }));
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4 text-destructive" />
+                              </Button>
+                            </div>
+                          ))}
+                          {(!formData.services || formData.services.length === 0) && (
+                            <p className="text-muted-foreground text-sm italic">No hay servicios agregados. Haz clic en "Agregar Servicio" para añadir uno.</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <Label className="text-lg font-semibold">Instalaciones</Label>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              const currentFacilities = formData.facilities || [];
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                facilities: [...currentFacilities, 'Nueva instalación'] 
+                              }));
+                            }}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Agregar Instalación
+                          </Button>
+                        </div>
+                        <div className="space-y-2">
+                          {(formData.facilities || []).map((facility, idx) => (
+                            <div key={idx} className="flex gap-2">
+                              <Input
+                                value={facility}
+                                onChange={(e) => {
+                                  const newFacilities = [...(formData.facilities || [])];
+                                  newFacilities[idx] = e.target.value;
+                                  setFormData(prev => ({ ...prev, facilities: newFacilities }));
+                                }}
+                                placeholder="Nombre de la instalación"
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  const newFacilities = (formData.facilities || []).filter((_, i) => i !== idx);
+                                  setFormData(prev => ({ ...prev, facilities: newFacilities }));
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4 text-destructive" />
+                              </Button>
+                            </div>
+                          ))}
+                          {(!formData.facilities || formData.facilities.length === 0) && (
+                            <p className="text-muted-foreground text-sm italic">No hay instalaciones agregadas. Haz clic en "Agregar Instalación" para añadir una.</p>
+                          )}
+                        </div>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="activities" className="space-y-6">
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                          <Label className="text-lg font-semibold">Actividades</Label>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              const currentActivities = formData.activities || [];
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                activities: [...currentActivities, 'Nueva actividad'] 
+                              }));
+                            }}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Agregar Actividad
+                          </Button>
+                        </div>
+                        <div className="space-y-2">
+                          {(formData.activities || []).map((activity, idx) => (
+                            <div key={idx} className="flex gap-2">
+                              <Input
+                                value={activity}
+                                onChange={(e) => {
+                                  const newActivities = [...(formData.activities || [])];
+                                  newActivities[idx] = e.target.value;
+                                  setFormData(prev => ({ ...prev, activities: newActivities }));
+                                }}
+                                placeholder="Nombre de la actividad"
+                              />
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  const newActivities = (formData.activities || []).filter((_, i) => i !== idx);
+                                  setFormData(prev => ({ ...prev, activities: newActivities }));
+                                }}
+                              >
+                                <Trash2 className="w-4 h-4 text-destructive" />
+                              </Button>
+                            </div>
+                          ))}
+                          {(!formData.activities || formData.activities.length === 0) && (
+                            <p className="text-muted-foreground text-sm italic">No hay actividades agregadas. Haz clic en "Agregar Actividad" para añadir una.</p>
+                          )}
+                        </div>
                       </div>
                     </TabsContent>
 
