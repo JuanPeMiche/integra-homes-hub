@@ -9,18 +9,18 @@ export const StatsSection = () => {
     },
     {
       icon: Users,
-      value: "+1.000",
-      label: "Familias Ayudadas",
+      value: "+200",
+      label: "Hogares encontrados",
     },
     {
       icon: Award,
       value: "100%",
-      label: "Asesoramiento Gratuito",
+      label: "Asesoramiento gratuito",
     },
     {
       icon: HeartHandshake,
-      value: "Sin Fines",
-      label: "de Lucro",
+      value: "Sin fines",
+      label: "de lucro",
     },
   ];
 

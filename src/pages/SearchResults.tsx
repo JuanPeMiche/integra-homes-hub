@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ChatBot } from "@/components/ChatBot";
@@ -12,22 +12,52 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, List, Map, SlidersHorizontal, CheckCircle } from "lucide-react";
 import { useResidences, useProvinces, useCities, Residence } from "@/hooks/useResidences";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useDebouncedCallback } from "@/hooks/useDebouncedSearch";
 
 const SearchResults = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { data: residences = [], isLoading } = useResidences();
   const { data: departamentos = [] } = useProvinces();
   const { data: barrios = [] } = useCities();
   
   const [compareList, setCompareList] = useState<string[]>([]);
   const [searchName, setSearchName] = useState("");
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [departamento, setDepartamento] = useState("");
   const [barrio, setBarrio] = useState("");
   const [redIntegraOnly, setRedIntegraOnly] = useState(false);
   const [sortBy, setSortBy] = useState("name-asc");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+
+  // Read URL params on mount
+  useEffect(() => {
+    const depParam = searchParams.get('departamento');
+    const barrioParam = searchParams.get('barrio');
+    
+    if (depParam) setDepartamento(depParam);
+    if (barrioParam) {
+      setBarrio(barrioParam);
+      setSearchInputValue(barrioParam);
+    }
+  }, [searchParams]);
+
+  // Debounce search input to avoid losing focus
+  const debouncedSetSearchName = useCallback((value: string) => {
+    setSearchName(value);
+  }, []);
+
+  const handleSearchInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchInputValue(value);
+    // Debounce the actual filter update
+    const timeoutId = setTimeout(() => {
+      debouncedSetSearchName(value);
+    }, 300);
+    return () => clearTimeout(timeoutId);
+  }, [debouncedSetSearchName]);
 
   // Filter and sort residences
   const filteredResidences = useMemo(() => {
@@ -100,6 +130,7 @@ const SearchResults = () => {
 
   const resetFilters = () => {
     setSearchName("");
+    setSearchInputValue("");
     setDepartamento("");
     setBarrio("");
     setRedIntegraOnly(false);
@@ -116,8 +147,8 @@ const SearchResults = () => {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
-            value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
+            value={searchInputValue}
+            onChange={handleSearchInputChange}
             placeholder="Ej: Moiru, Dolce..."
             className="pl-10 bg-background"
           />

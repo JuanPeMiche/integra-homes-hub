@@ -81,9 +81,6 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
           alt={residence.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-        <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground">
-          {typeLabels[residence.type]}
-        </Badge>
         {residence.redIntegra && (
           <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-soft">
             <CheckCircle className="h-4 w-4 text-secondary" />
