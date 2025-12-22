@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-type BucketType = 'residence-logos' | 'residence-images' | 'director-photos' | 'convenio-logos';
+type BucketType = 'residence-logos' | 'residence-images' | 'director-photos' | 'convenio-logos' | 'team-photos';
 
 export function useStorageUpload() {
   const [uploading, setUploading] = useState(false);
