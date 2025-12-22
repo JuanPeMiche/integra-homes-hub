@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useCommissions } from "@/hooks/useCommissions";
 
 interface TeamMember {
   id: string;
@@ -18,20 +19,6 @@ interface TeamMember {
   photo_url: string | null;
   display_order: number;
 }
-
-// Comisión Fiscal members
-const comisionFiscal = [
-  { name: "Gerardo Pilatti", role: "Presidente" },
-  { name: "María José Pintos", role: "" },
-  { name: "Liliana Massei", role: "" },
-];
-
-// Comisión de Ética members
-const comisionEtica = [
-  { name: "Claudia Hernández", role: "" },
-  { name: "Mariana López", role: "" },
-  { name: "Sandra Berlín", role: "" },
-];
 
 export const TeamSection = () => {
   const [fiscalOpen, setFiscalOpen] = useState(false);
@@ -49,6 +36,9 @@ export const TeamSection = () => {
       return data as TeamMember[];
     },
   });
+
+  const { data: fiscalMembers = [] } = useCommissions('fiscal');
+  const { data: eticaMembers = [] } = useCommissions('etica');
 
   if (isLoading) {
     return (
@@ -117,15 +107,15 @@ export const TeamSection = () => {
                 <DialogTitle className="text-2xl font-bold text-center">Comisión fiscal</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                {comisionFiscal.map((member, idx) => (
-                  <div key={idx} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
+                {fiscalMembers.map((member) => (
+                  <div key={member.id} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <User className="h-6 w-6 text-primary" />
                     </div>
                     <div>
                       <p className="font-semibold text-foreground">{member.name}</p>
                       {member.role && (
-                        <p className="text-sm text-primary font-medium">{member.role}</p>
+                        <p className="text-sm text-primary font-medium capitalize">{member.role}</p>
                       )}
                     </div>
                   </div>
@@ -146,13 +136,16 @@ export const TeamSection = () => {
                 <DialogTitle className="text-2xl font-bold text-center">Comisión de ética</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                {comisionEtica.map((member, idx) => (
-                  <div key={idx} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
+                {eticaMembers.map((member) => (
+                  <div key={member.id} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
                     <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <User className="h-6 w-6 text-primary" />
                     </div>
                     <div>
                       <p className="font-semibold text-foreground">{member.name}</p>
+                      {member.role && (
+                        <p className="text-sm text-primary font-medium capitalize">{member.role}</p>
+                      )}
                     </div>
                   </div>
                 ))}
