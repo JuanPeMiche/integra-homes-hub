@@ -10,12 +10,25 @@ import sumumLogo from "@/assets/convenios/sumum.png";
 import hospitalBritanicoLogo from "@/assets/convenios/hospital-britanico.png";
 import indaslipLogo from "@/assets/convenios/indaslip.png";
 
-// Map of fallback logos by name for existing convenios without uploaded logos
-const fallbackLogos: Record<string, { primary: string; secondary?: string }> = {
-  "Tienda Inglesa": { primary: tiendaInglesaLogo },
-  "Macro Mercado": { primary: macroMercadoLogo },
-  "SUMMUM + Hospital Británico": { primary: sumumLogo, secondary: hospitalBritanicoLogo },
-  "Pañales IndaSlip": { primary: indaslipLogo },
+// Map of fallback logos and benefits by name for existing convenios
+const fallbackData: Record<string, { primary: string; secondary?: string; benefit: string }> = {
+  "Tienda Inglesa": { 
+    primary: tiendaInglesaLogo,
+    benefit: "10% de descuento"
+  },
+  "Macro Mercado": { 
+    primary: macroMercadoLogo,
+    benefit: "Mejor descuento por unidad"
+  },
+  "SUMMUM + Hospital Británico": { 
+    primary: sumumLogo, 
+    secondary: hospitalBritanicoLogo,
+    benefit: "40% de descuento en la cuota mensual del plan"
+  },
+  "Pañales IndaSlip": { 
+    primary: indaslipLogo,
+    benefit: "Pañales premium a mitad de precio vs farmacia"
+  },
 };
 
 export const ConveniosSection = () => {
@@ -37,27 +50,24 @@ export const ConveniosSection = () => {
     return null;
   }
 
-  // Get unique logos from convenios
-  const getLogos = () => {
-    const logos: { src: string; alt: string }[] = [];
-    
-    convenios.forEach((convenio) => {
-      const fallback = fallbackLogos[convenio.name];
+  // Get convenios with their logos and benefits
+  const getConvenioData = () => {
+    return convenios.map((convenio) => {
+      const fallback = fallbackData[convenio.name];
       const primaryLogo = convenio.logo_url || fallback?.primary;
       const secondaryLogo = convenio.secondary_logo_url || fallback?.secondary;
+      const benefit = convenio.main_benefit || fallback?.benefit || "";
       
-      if (primaryLogo) {
-        logos.push({ src: primaryLogo, alt: convenio.name });
-      }
-      if (secondaryLogo) {
-        logos.push({ src: secondaryLogo, alt: `${convenio.name} secundario` });
-      }
+      return {
+        name: convenio.name,
+        primaryLogo,
+        secondaryLogo,
+        benefit
+      };
     });
-    
-    return logos;
   };
 
-  const logos = getLogos();
+  const convenioData = getConvenioData();
 
   return (
     <section id="convenios" className="py-16 md:py-20 bg-primary">
@@ -72,18 +82,34 @@ export const ConveniosSection = () => {
           </p>
         </div>
 
-        {/* Logos Grid */}
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 max-w-5xl mx-auto mb-10">
-          {logos.map((logo, index) => (
+        {/* Convenios Grid */}
+        <div className="flex flex-wrap justify-center items-stretch gap-8 md:gap-10 max-w-5xl mx-auto mb-10">
+          {convenioData.map((convenio, index) => (
             <div 
               key={index}
-              className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-white/20"
+              className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-white/20 flex flex-col items-center text-center min-w-[200px] max-w-[250px]"
             >
-              <img 
-                src={logo.src} 
-                alt={logo.alt}
-                className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
-              />
+              <div className="flex items-center justify-center gap-3 mb-4">
+                {convenio.primaryLogo && (
+                  <img 
+                    src={convenio.primaryLogo} 
+                    alt={convenio.name}
+                    className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
+                  />
+                )}
+                {convenio.secondaryLogo && (
+                  <img 
+                    src={convenio.secondaryLogo} 
+                    alt={`${convenio.name} secundario`}
+                    className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
+                  />
+                )}
+              </div>
+              {convenio.benefit && (
+                <p className="text-sm text-muted-foreground font-medium mt-2">
+                  {convenio.benefit}
+                </p>
+              )}
             </div>
           ))}
         </div>

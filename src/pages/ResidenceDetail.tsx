@@ -58,6 +58,14 @@ import {
   Flower2,
   Coffee,
   HeartPulse,
+  Waves,
+  Sparkles,
+  Snowflake,
+  Flame,
+  ArrowUpDown,
+  Accessibility,
+  WashingMachine,
+  DoorOpen,
 } from "lucide-react";
 import { useResidence } from "@/hooks/useResidences";
 
@@ -80,6 +88,9 @@ const getServiceIcon = (service: string) => {
   if (text.includes('acompañamiento') || text.includes('compañía')) return HandHeart;
   if (text.includes('religios') || text.includes('espiritual') || text.includes('misa')) return Church;
   if (text.includes('mascota') || text.includes('pet')) return Dog;
+  if (text.includes('seguridad') || text.includes('vigilancia')) return Shield;
+  if (text.includes('emergencia')) return HeartPulse;
+  if (text.includes('nutrición') || text.includes('dietista')) return UtensilsCrossed;
   return Check;
 };
 
@@ -101,6 +112,14 @@ const getFacilityIcon = (facility: string) => {
   if (text.includes('terraza') || text.includes('balcón')) return Flower2;
   if (text.includes('café') || text.includes('cafetería')) return Coffee;
   if (text.includes('consultorio') || text.includes('enfermería')) return Stethoscope;
+  if (text.includes('piscina') || text.includes('pileta')) return Waves;
+  if (text.includes('spa') || text.includes('jacuzzi') || text.includes('sauna')) return Sparkles;
+  if (text.includes('aire acondicionado') || text.includes('climatización') || text.includes('refrigeración')) return Snowflake;
+  if (text.includes('calefacción') || text.includes('calefactor')) return Flame;
+  if (text.includes('ascensor') || text.includes('elevador')) return ArrowUpDown;
+  if (text.includes('rampa') || text.includes('accesibilidad')) return Accessibility;
+  if (text.includes('lavadero') || text.includes('lavadora')) return WashingMachine;
+  if (text.includes('recepción') || text.includes('lobby')) return DoorOpen;
   return Building;
 };
 
