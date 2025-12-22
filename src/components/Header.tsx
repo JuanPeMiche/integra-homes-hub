@@ -45,8 +45,11 @@ export const Header = () => {
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${showSolidHeader ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"}`}>
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          <div className="flex items-center">
-            <img src={logoIntegra} alt="Integra Residenciales" className="h-14 md:h-16 w-auto object-contain" />
+          <div className="flex items-center gap-3">
+            <img src={logoIntegra} alt="Integra Residenciales" className="h-16 md:h-20 w-auto object-contain" />
+            <span className={`text-xl md:text-2xl font-bold transition-colors ${showSolidHeader ? "text-foreground" : "text-white"}`}>
+              Integra Residenciales
+            </span>
           </div>
 
           <nav className="hidden lg:flex items-center space-x-6">

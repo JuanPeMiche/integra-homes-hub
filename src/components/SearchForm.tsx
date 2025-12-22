@@ -103,7 +103,7 @@ export const SearchForm = () => {
           {/* Price Range */}
           <div className="space-y-2">
             <Label className="text-base font-medium flex items-center gap-2">
-              Rango de precio mensual (UY$)
+              Rango de precio mensual ($UY)
             </Label>
             <div className="grid grid-cols-2 gap-4">
               <Input type="number" placeholder="Mínimo $UY" className="h-12" />
