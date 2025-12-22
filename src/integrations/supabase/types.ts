@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      commission_members: {
+        Row: {
+          commission_type: string
+          created_at: string
+          display_order: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          commission_type: string
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          commission_type?: string
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       convenios: {
         Row: {
           conditions: string | null
