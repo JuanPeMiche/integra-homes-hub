@@ -29,8 +29,99 @@ import {
   User,
   Building,
   Shield,
+  Stethoscope,
+  Pill,
+  UtensilsCrossed,
+  ShowerHead,
+  Bed,
+  Tv,
+  Wifi,
+  Car,
+  TreeDeciduous,
+  Dumbbell,
+  Heart,
+  Music,
+  Palette,
+  BookOpen,
+  Gamepad2,
+  Dog,
+  Church,
+  Scissors,
+  Calculator,
+  Brain,
+  HandHeart,
+  Utensils,
+  Shirt,
+  BedDouble,
+  Sofa,
+  LampDesk,
+  Flower2,
+  Coffee,
+  HeartPulse,
 } from "lucide-react";
 import { useResidence } from "@/hooks/useResidences";
+
+// Icon mapping for services
+const getServiceIcon = (service: string) => {
+  const text = service.toLowerCase();
+  if (text.includes('enfermería') || text.includes('enfermeria')) return Stethoscope;
+  if (text.includes('médic') || text.includes('medic') || text.includes('doctor')) return HeartPulse;
+  if (text.includes('medicación') || text.includes('medicacion') || text.includes('farmacia')) return Pill;
+  if (text.includes('alimentación') || text.includes('alimentacion') || text.includes('comida') || text.includes('cocina')) return UtensilsCrossed;
+  if (text.includes('lavandería') || text.includes('lavanderia') || text.includes('ropa')) return Shirt;
+  if (text.includes('limpieza') || text.includes('aseo')) return ShowerHead;
+  if (text.includes('fisioterapia') || text.includes('kinesiología') || text.includes('rehabilitación')) return Dumbbell;
+  if (text.includes('psicología') || text.includes('psicolog')) return Brain;
+  if (text.includes('podología') || text.includes('podolog')) return Scissors;
+  if (text.includes('peluquería') || text.includes('peluquer')) return Scissors;
+  if (text.includes('transporte') || text.includes('traslado')) return Car;
+  if (text.includes('wifi') || text.includes('internet')) return Wifi;
+  if (text.includes('televisión') || text.includes('television') || text.includes('tv') || text.includes('cable')) return Tv;
+  if (text.includes('acompañamiento') || text.includes('compañía')) return HandHeart;
+  if (text.includes('religios') || text.includes('espiritual') || text.includes('misa')) return Church;
+  if (text.includes('mascota') || text.includes('pet')) return Dog;
+  return Check;
+};
+
+// Icon mapping for facilities
+const getFacilityIcon = (facility: string) => {
+  const text = facility.toLowerCase();
+  if (text.includes('habitación') || text.includes('habitacion') || text.includes('dormitorio')) return BedDouble;
+  if (text.includes('baño') || text.includes('bano')) return ShowerHead;
+  if (text.includes('comedor')) return Utensils;
+  if (text.includes('jardín') || text.includes('jardin') || text.includes('parque') || text.includes('patio')) return TreeDeciduous;
+  if (text.includes('cocina')) return UtensilsCrossed;
+  if (text.includes('living') || text.includes('sala') || text.includes('estar')) return Sofa;
+  if (text.includes('gimnasio') || text.includes('ejercicio')) return Dumbbell;
+  if (text.includes('biblioteca') || text.includes('lectura')) return BookOpen;
+  if (text.includes('capilla') || text.includes('oratorio')) return Church;
+  if (text.includes('estacionamiento') || text.includes('parking') || text.includes('garage')) return Car;
+  if (text.includes('televisión') || text.includes('tv')) return Tv;
+  if (text.includes('wifi') || text.includes('internet')) return Wifi;
+  if (text.includes('terraza') || text.includes('balcón')) return Flower2;
+  if (text.includes('café') || text.includes('cafetería')) return Coffee;
+  if (text.includes('consultorio') || text.includes('enfermería')) return Stethoscope;
+  return Building;
+};
+
+// Icon mapping for activities
+const getActivityIcon = (activity: string) => {
+  const text = activity.toLowerCase();
+  if (text.includes('música') || text.includes('musica') || text.includes('canto') || text.includes('coral')) return Music;
+  if (text.includes('pintura') || text.includes('arte') || text.includes('manualidades') || text.includes('dibujo')) return Palette;
+  if (text.includes('lectura') || text.includes('biblioteca') || text.includes('libro')) return BookOpen;
+  if (text.includes('juego') || text.includes('bingo') || text.includes('cartas') || text.includes('dominó')) return Gamepad2;
+  if (text.includes('gimnasia') || text.includes('ejercicio') || text.includes('físic') || text.includes('yoga')) return Dumbbell;
+  if (text.includes('jardín') || text.includes('jardinería') || text.includes('huerta')) return Flower2;
+  if (text.includes('paseo') || text.includes('salida') || text.includes('excursión')) return TreeDeciduous;
+  if (text.includes('película') || text.includes('cine') || text.includes('televisión')) return Tv;
+  if (text.includes('cocina') || text.includes('repostería')) return UtensilsCrossed;
+  if (text.includes('religios') || text.includes('misa') || text.includes('espiritual')) return Church;
+  if (text.includes('mascota') || text.includes('animal')) return Dog;
+  if (text.includes('memoria') || text.includes('cognitiv') || text.includes('estimulación')) return Brain;
+  if (text.includes('terapia') || text.includes('grupo')) return Heart;
+  return Star;
+};
 
 const TransparencyStars = ({ rating }: { rating: number }) => {
   if (rating === 0) {
@@ -258,14 +349,17 @@ const ResidenceDetail = () => {
                     <h2 className="text-2xl font-bold">Servicios disponibles</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {residence.services.map((service, idx) => (
-                      <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/5 hover:bg-secondary/10 transition-colors">
-                        <div className="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="h-4 w-4 text-secondary" />
+                    {residence.services.map((service, idx) => {
+                      const ServiceIcon = getServiceIcon(service);
+                      return (
+                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                          <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                            <ServiceIcon className="h-4 w-4 text-secondary" />
+                          </div>
+                          <span className="font-medium self-center">{service}</span>
                         </div>
-                        <span className="font-medium">{service}</span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
@@ -280,14 +374,17 @@ const ResidenceDetail = () => {
                     <h2 className="text-2xl font-bold">Instalaciones</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {residence.facilities.map((facility, idx) => (
-                      <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors">
-                        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Building className="h-4 w-4 text-primary" />
+                    {residence.facilities.map((facility, idx) => {
+                      const FacilityIcon = getFacilityIcon(facility);
+                      return (
+                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors">
+                          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                            <FacilityIcon className="h-4 w-4 text-primary" />
+                          </div>
+                          <span className="font-medium self-center">{facility}</span>
                         </div>
-                        <span className="font-medium">{facility}</span>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>
@@ -303,14 +400,17 @@ const ResidenceDetail = () => {
                   </div>
                   {residence.activities && residence.activities.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {residence.activities.map((activity, idx) => (
-                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/5 hover:bg-yellow-500/10 transition-colors">
-                          <div className="w-6 h-6 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Star className="h-4 w-4 text-yellow-500" />
+                      {residence.activities.map((activity, idx) => {
+                        const ActivityIcon = getActivityIcon(activity);
+                        return (
+                          <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/5 hover:bg-yellow-500/10 transition-colors">
+                            <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                              <ActivityIcon className="h-4 w-4 text-yellow-500" />
+                            </div>
+                            <span className="font-medium self-center">{activity}</span>
                           </div>
-                          <span className="font-medium">{activity}</span>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="text-center py-6 bg-muted/30 rounded-lg">

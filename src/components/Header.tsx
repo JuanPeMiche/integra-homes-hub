@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import logoIntegra from "@/assets/logo-integra-new.png";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,11 +45,8 @@ export const Header = () => {
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${showSolidHeader ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"}`}>
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <img src="/logo-integra.ico" alt="Integra" className="h-12 w-12 object-contain" />
-            <span className={`text-2xl font-bold transition-colors ${showSolidHeader ? "text-primary" : "text-white"}`}>
-              <span className="font-light">integra</span>Residenciales
-            </span>
+          <div className="flex items-center">
+            <img src={logoIntegra} alt="Integra Residenciales" className="h-14 md:h-16 w-auto object-contain" />
           </div>
 
           <nav className="hidden lg:flex items-center space-x-6">
