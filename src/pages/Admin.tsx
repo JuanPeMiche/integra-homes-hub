@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ImageUploader } from "@/components/ImageUploader";
 import { GalleryUploader } from "@/components/GalleryUploader";
 import { ConveniosAdmin } from "@/components/admin/ConveniosAdmin";
+import { TeamAdmin } from "@/components/admin/TeamAdmin";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   LogOut, 
@@ -41,7 +42,7 @@ const Admin = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Residence>>({});
-  const [activeSection, setActiveSection] = useState<'residencias' | 'convenios'>('residencias');
+  const [activeSection, setActiveSection] = useState<'residencias' | 'convenios' | 'equipo'>('residencias');
 
   // Fetch residences directly from DB
   const { data: residences, isLoading: residencesLoading, refetch } = useQuery({
@@ -231,8 +232,8 @@ const Admin = () => {
 
       <div className="container mx-auto px-4 py-6">
         {/* Main Section Tabs */}
-        <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as 'residencias' | 'convenios')} className="mb-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+        <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as 'residencias' | 'convenios' | 'equipo')} className="mb-6">
+          <TabsList className="grid w-full max-w-lg grid-cols-3">
             <TabsTrigger value="residencias" className="gap-2">
               <Building2 className="w-4 h-4" />
               Residencias
@@ -240,6 +241,10 @@ const Admin = () => {
             <TabsTrigger value="convenios" className="gap-2">
               <Handshake className="w-4 h-4" />
               Convenios
+            </TabsTrigger>
+            <TabsTrigger value="equipo" className="gap-2">
+              <Users className="w-4 h-4" />
+              Directiva
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -679,8 +684,10 @@ const Admin = () => {
             )}
           </div>
         </div>
-        ) : (
+        ) : activeSection === 'convenios' ? (
           <ConveniosAdmin />
+        ) : (
+          <TeamAdmin />
         )}
       </div>
     </div>

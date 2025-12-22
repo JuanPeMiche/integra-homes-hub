@@ -5,8 +5,9 @@ import { StatsSection } from "@/components/StatsSection";
 import { ChatBot } from "@/components/ChatBot";
 import { ResidenceCard } from "@/components/ResidenceCard";
 import { ConveniosSection } from "@/components/ConveniosSection";
+import { TeamSection } from "@/components/TeamSection";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Users, Heart, CheckCircle } from "lucide-react";
+import { ArrowRight, Shield, Target, Heart, CheckCircle } from "lucide-react";
 import { useResidences } from "@/hooks/useResidences";
 import heroBg from "@/assets/hero-residence.jpg";
 
@@ -140,11 +141,11 @@ const Index = () => {
 
               <div className="bg-card border border-border rounded-xl p-8 shadow-card hover:shadow-soft transition-shadow">
                 <div className="w-14 h-14 rounded-full bg-secondary/10 flex items-center justify-center mb-6">
-                  <Users className="h-7 w-7 text-secondary" />
+                  <Target className="h-7 w-7 text-secondary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Asesoramiento personalizado</h3>
+                <h3 className="text-xl font-semibold mb-3">Selección estratégica</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Te acompañamos en todo el proceso, desde la búsqueda hasta la elección de la residencia ideal.
+                  Conocemos cada institución y ubicamos a cada persona en el entorno que mejor la acompaña.
                 </p>
               </div>
 
@@ -164,7 +165,8 @@ const Index = () => {
         {/* Convenios Section */}
         <ConveniosSection />
 
-        {/* CTA Section */}
+        {/* Team Section */}
+        <TeamSection />
         <section className="py-16 bg-muted">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center space-y-6">

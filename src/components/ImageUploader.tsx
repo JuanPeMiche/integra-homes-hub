@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useStorageUpload } from '@/hooks/useStorageUpload';
 
 interface ImageUploaderProps {
-  bucket: 'residence-logos' | 'residence-images' | 'director-photos' | 'convenio-logos';
+  bucket: 'residence-logos' | 'residence-images' | 'director-photos' | 'convenio-logos' | 'team-photos';
   folder: string;
   currentImage?: string | null;
   onUpload: (url: string) => void;
