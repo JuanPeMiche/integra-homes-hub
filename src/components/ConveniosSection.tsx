@@ -77,12 +77,12 @@ export const ConveniosSection = () => {
           {logos.map((logo, index) => (
             <div 
               key={index}
-              className="bg-white rounded-xl p-4 md:p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-white/20"
             >
               <img 
                 src={logo.src} 
                 alt={logo.alt}
-                className="h-16 md:h-20 w-auto object-contain"
+                className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>
           ))}
