@@ -183,9 +183,6 @@ const ResidenceDetail = () => {
                     <h1 className="text-3xl lg:text-4xl font-bold text-foreground">
                       {residence.name}
                     </h1>
-                    <Badge className="bg-primary text-primary-foreground">
-                      {typeLabels[residence.type]}
-                    </Badge>
                     {residence.redIntegra && (
                       <Badge variant="outline" className="gap-1 border-secondary text-secondary">
                         <CheckCircle className="h-3 w-3" />
@@ -237,24 +234,36 @@ const ResidenceDetail = () => {
               <ResidenceGallery residenceName={residence.name} images={residence.images} />
 
               {/* Description */}
-              <Card>
+              <Card className="overflow-hidden border-l-4 border-l-primary">
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Descripción</h2>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Building className="h-5 w-5 text-primary" />
+                    </div>
+                    <h2 className="text-2xl font-bold">Descripción</h2>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed text-lg">
                     {residence.description}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Services */}
-              <Card>
+              <Card className="overflow-hidden border-l-4 border-l-secondary">
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Servicios disponibles</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <Check className="h-5 w-5 text-secondary" />
+                    </div>
+                    <h2 className="text-2xl font-bold">Servicios disponibles</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {residence.services.map((service, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
-                        <span>{service}</span>
+                      <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                        <div className="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="h-4 w-4 text-secondary" />
+                        </div>
+                        <span className="font-medium">{service}</span>
                       </div>
                     ))}
                   </div>
@@ -262,14 +271,21 @@ const ResidenceDetail = () => {
               </Card>
 
               {/* Facilities */}
-              <Card>
+              <Card className="overflow-hidden border-l-4 border-l-primary">
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Instalaciones</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Building className="h-5 w-5 text-primary" />
+                    </div>
+                    <h2 className="text-2xl font-bold">Instalaciones</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {residence.facilities.map((facility, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <Building className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span>{facility}</span>
+                      <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors">
+                        <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Building className="h-4 w-4 text-primary" />
+                        </div>
+                        <span className="font-medium">{facility}</span>
                       </div>
                     ))}
                   </div>
@@ -277,20 +293,30 @@ const ResidenceDetail = () => {
               </Card>
 
               {/* Activities */}
-              <Card>
+              <Card className="overflow-hidden border-l-4 border-l-yellow-500">
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-bold mb-4">Actividades</h2>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                      <Star className="h-5 w-5 text-yellow-500" />
+                    </div>
+                    <h2 className="text-2xl font-bold">Actividades</h2>
+                  </div>
                   {residence.activities && residence.activities.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {residence.activities.map((activity, idx) => (
-                        <div key={idx} className="flex items-start gap-2">
-                          <Star className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-                          <span>{activity}</span>
+                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/5 hover:bg-yellow-500/10 transition-colors">
+                          <div className="w-6 h-6 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Star className="h-4 w-4 text-yellow-500" />
+                          </div>
+                          <span className="font-medium">{activity}</span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-muted-foreground italic">Lista de actividades pendiente</p>
+                    <div className="text-center py-6 bg-muted/30 rounded-lg">
+                      <Star className="h-10 w-10 text-yellow-500/30 mx-auto mb-2" />
+                      <p className="text-muted-foreground italic">Lista de actividades pendiente</p>
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -422,43 +448,55 @@ const ResidenceDetail = () => {
                 </Card>
 
                 {/* Contact Info */}
-                <Card>
+                <Card className="overflow-hidden">
+                  <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-4 border-b border-border">
+                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                      <Phone className="h-5 w-5 text-primary" />
+                      Información de contacto
+                    </h3>
+                  </div>
                   <CardContent className="p-6 space-y-4">
-                    <h3 className="font-semibold text-lg">Información de contacto</h3>
-                    <div className="space-y-3 text-sm">
+                    <div className="space-y-3">
                       {residence.phone && (
-                        <a href={`tel:${residence.phone}`} className="flex items-center gap-3 hover:text-primary transition-colors">
-                          <Phone className="h-4 w-4 text-primary" />
-                          <span>{residence.phone}</span>
+                        <a href={`tel:${residence.phone}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                            <Phone className="h-5 w-5 text-primary" />
+                          </div>
+                          <span className="font-medium">{residence.phone}</span>
                         </a>
                       )}
                       {residence.whatsapp && (
-                        <a href={whatsappLink || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-green-600 transition-colors">
-                          <MessageCircle className="h-4 w-4 text-green-600" />
-                          <span>{residence.whatsapp}</span>
+                        <a href={whatsappLink || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-50 transition-colors group">
+                          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                            <MessageCircle className="h-5 w-5 text-green-600" />
+                          </div>
+                          <span className="font-medium">{residence.whatsapp}</span>
                         </a>
                       )}
                       {residence.email && (
-                        <a href={`mailto:${residence.email}`} className="flex items-center gap-3 hover:text-primary transition-colors">
-                          <Mail className="h-4 w-4 text-primary" />
-                          <span className="truncate">{residence.email}</span>
+                        <a href={`mailto:${residence.email}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                            <Mail className="h-5 w-5 text-primary" />
+                          </div>
+                          <span className="font-medium break-all">{residence.email}</span>
                         </a>
                       )}
                       {residence.website && (
-                        <a 
-                          href={residence.website.startsWith('http') ? residence.website : `https://${residence.website}`} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="flex items-center gap-3 hover:text-primary transition-colors"
-                        >
-                          <Globe className="h-4 w-4 text-primary" />
-                          <span className="truncate">{residence.website}</span>
+                        <a href={residence.website.startsWith('http') ? residence.website : `https://${residence.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                            <Globe className="h-5 w-5 text-primary" />
+                          </div>
+                          <span className="font-medium">{residence.website}</span>
                         </a>
                       )}
-                      <div className="flex items-center gap-3">
-                        <Clock className="h-4 w-4 text-primary" />
-                        <span>{residence.schedule}</span>
-                      </div>
+                      {residence.schedule && (
+                        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                            <Clock className="h-5 w-5 text-primary" />
+                          </div>
+                          <span className="font-medium">{residence.schedule}</span>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Social Links */}

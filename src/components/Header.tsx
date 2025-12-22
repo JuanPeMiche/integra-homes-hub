@@ -54,9 +54,9 @@ export const Header = () => {
           <nav className="hidden lg:flex items-center space-x-6">
             {[
               { to: "/", label: "Inicio" },
-              { to: "/buscar", label: "Buscar Residencias" },
+              { to: "/buscar", label: "Buscar residencias" },
               { to: "/convenios", label: "Convenios" },
-              { to: "/asesoramiento", label: "Buscamos por Ti" },
+              { to: "/asesoramiento", label: "Buscamos por ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
               <NavLink
@@ -87,16 +87,16 @@ export const Header = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate("/trabaja-con-nosotros")} className="cursor-pointer">
                   <Handshake className="mr-2 h-4 w-4" />
-                  Trabaja con Nosotros
+                  Trabaja con nosotros
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/politica-privacidad")} className="cursor-pointer">
                   <Shield className="mr-2 h-4 w-4" />
-                  Política de Privacidad
+                  Política de privacidad
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate("/terminos-condiciones")} className="cursor-pointer">
                   <FileText className="mr-2 h-4 w-4" />
-                  Términos y Condiciones
+                  Términos y condiciones
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -113,18 +113,18 @@ export const Header = () => {
                           {getInitials(user.email || "")}
                         </AvatarFallback>
                       </Avatar>
-                      Mi Cuenta
+                      Mi cuenta
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuItem onClick={() => navigate("/favoritos")} className="cursor-pointer">
                       <Heart className="mr-2 h-4 w-4" />
-                      Mis Favoritos
+                      Mis favoritos
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
-                      Cerrar Sesión
+                      Cerrar sesión
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -157,11 +157,11 @@ export const Header = () => {
           <nav className="lg:hidden py-3 space-y-1 border-t border-border bg-background rounded-b-lg px-2">
             {[
               { to: "/", label: "Inicio" },
-              { to: "/buscar", label: "Buscar Residencias" },
+              { to: "/buscar", label: "Buscar residencias" },
               { to: "/convenios", label: "Convenios" },
               { to: "/sobre-integra", label: "Sobre Integra" },
               { to: "/noticias", label: "Noticias" },
-              { to: "/asesoramiento", label: "Buscamos por Ti" },
+              { to: "/asesoramiento", label: "Buscamos por ti" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
               <NavLink 
@@ -184,11 +184,11 @@ export const Header = () => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Heart className="inline mr-2 h-4 w-4" />
-                    Mis Favoritos
+                    Mis favoritos
                   </NavLink>
                   <Button variant="outline" size="sm" className="w-full justify-start text-destructive mt-2" onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    Cerrar Sesión
+                    Cerrar sesión
                   </Button>
                 </>
               ) : (
