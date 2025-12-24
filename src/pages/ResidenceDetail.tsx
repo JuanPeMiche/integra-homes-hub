@@ -353,7 +353,7 @@ const ResidenceDetail = () => {
                     </div>
                     <h2 className="text-2xl font-bold">Descripción</h2>
                   </div>
-                  <ScrollArea className="max-h-48 pr-4">
+                  <div className="max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent hover:scrollbar-thumb-primary/40">
                     <div className="space-y-4 text-muted-foreground leading-relaxed">
                       {residence.description?.split(/(?<=[.!?])\s+/).reduce<string[][]>((acc, sentence) => {
                         const lastGroup = acc[acc.length - 1];
@@ -367,7 +367,7 @@ const ResidenceDetail = () => {
                         <p key={idx} className="text-base">{paragraph.join(' ')}</p>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
