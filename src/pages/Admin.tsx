@@ -378,6 +378,26 @@ const Admin = () => {
                           />
                         </div>
                         <div className="space-y-2">
+                          <Label>Latitud (para el mapa)</Label>
+                          <Input
+                            type="number"
+                            step="any"
+                            value={formData.coordinates_lat || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, coordinates_lat: parseFloat(e.target.value) || null }))}
+                            placeholder="-34.9011"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Longitud (para el mapa)</Label>
+                          <Input
+                            type="number"
+                            step="any"
+                            value={formData.coordinates_lng || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, coordinates_lng: parseFloat(e.target.value) || null }))}
+                            placeholder="-56.1645"
+                          />
+                        </div>
+                        <div className="space-y-2">
                           <Label>Teléfono</Label>
                           <Input
                             value={formData.phone || ''}
