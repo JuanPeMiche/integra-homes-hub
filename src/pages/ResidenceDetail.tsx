@@ -380,18 +380,20 @@ const ResidenceDetail = () => {
                     </div>
                     <h2 className="text-2xl font-bold">Servicios disponibles</h2>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {residence.services.map((service, idx) => {
-                      const ServiceIcon = getServiceIcon(service);
-                      return (
-                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/5 hover:bg-secondary/10 transition-colors">
-                          <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                            <ServiceIcon className="h-4 w-4 text-secondary" />
+                  <div className="max-h-64 overflow-y-auto pr-2 scrollbar-thin">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {residence.services.map((service, idx) => {
+                        const ServiceIcon = getServiceIcon(service);
+                        return (
+                          <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/5 hover:bg-secondary/10 transition-colors">
+                            <div className="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
+                              <ServiceIcon className="h-4 w-4 text-secondary" />
+                            </div>
+                            <span className="font-medium self-center">{service}</span>
                           </div>
-                          <span className="font-medium self-center">{service}</span>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -405,18 +407,20 @@ const ResidenceDetail = () => {
                     </div>
                     <h2 className="text-2xl font-bold">Instalaciones</h2>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {residence.facilities.map((facility, idx) => {
-                      const FacilityIcon = getFacilityIcon(facility);
-                      return (
-                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors">
-                          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                            <FacilityIcon className="h-4 w-4 text-primary" />
+                  <div className="max-h-64 overflow-y-auto pr-2 scrollbar-thin">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {residence.facilities.map((facility, idx) => {
+                        const FacilityIcon = getFacilityIcon(facility);
+                        return (
+                          <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors">
+                            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                              <FacilityIcon className="h-4 w-4 text-primary" />
+                            </div>
+                            <span className="font-medium self-center">{facility}</span>
                           </div>
-                          <span className="font-medium self-center">{facility}</span>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -431,18 +435,20 @@ const ResidenceDetail = () => {
                     <h2 className="text-2xl font-bold">Actividades</h2>
                   </div>
                   {residence.activities && residence.activities.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {residence.activities.map((activity, idx) => {
-                        const ActivityIcon = getActivityIcon(activity);
-                        return (
-                          <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/5 hover:bg-yellow-500/10 transition-colors">
-                            <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
-                              <ActivityIcon className="h-4 w-4 text-yellow-500" />
+                    <div className="max-h-64 overflow-y-auto pr-2 scrollbar-thin">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {residence.activities.map((activity, idx) => {
+                          const ActivityIcon = getActivityIcon(activity);
+                          return (
+                            <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-yellow-500/5 hover:bg-yellow-500/10 transition-colors">
+                              <div className="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                <ActivityIcon className="h-4 w-4 text-yellow-500" />
+                              </div>
+                              <span className="font-medium self-center">{activity}</span>
                             </div>
-                            <span className="font-medium self-center">{activity}</span>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   ) : (
                     <div className="text-center py-6 bg-muted/30 rounded-lg">
@@ -475,26 +481,28 @@ const ResidenceDetail = () => {
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-bold mb-4">Directivos / Equipo responsable</h2>
                   {directors.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {directors.map((director, idx) => (
-                        <div key={idx} className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
-                          {director.photo_url ? (
-                            <img 
-                              src={director.photo_url} 
-                              alt={director.name}
-                              className="w-16 h-16 rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                              <User className="h-8 w-8 text-primary" />
+                    <div className="max-h-64 overflow-y-auto pr-2 scrollbar-thin">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {directors.map((director, idx) => (
+                          <div key={idx} className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
+                            {director.photo_url ? (
+                              <img 
+                                src={director.photo_url} 
+                                alt={director.name}
+                                className="w-16 h-16 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                <User className="h-8 w-8 text-primary" />
+                              </div>
+                            )}
+                            <div>
+                              <p className="font-semibold">{director.name}</p>
+                              <p className="text-sm text-muted-foreground">{director.role}</p>
                             </div>
-                          )}
-                          <div>
-                            <p className="font-semibold">{director.name}</p>
-                            <p className="text-sm text-muted-foreground">{director.role}</p>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     <div className="text-center py-8 text-muted-foreground">
