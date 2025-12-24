@@ -188,9 +188,11 @@ export type Database = {
         Row: {
           activities: string[] | null
           address: string
+          addresses: string[] | null
           admissions: string[] | null
           capacity: number | null
           certifications: string[] | null
+          cities: string[] | null
           city: string
           coordinates_lat: number | null
           coordinates_lng: number | null
@@ -207,6 +209,7 @@ export type Database = {
           maps_url: string | null
           name: string
           phone: string | null
+          phones: string[] | null
           price: number | null
           price_range: string | null
           province: string
@@ -220,13 +223,16 @@ export type Database = {
           updated_at: string
           website: string | null
           whatsapp: string | null
+          whatsapps: string[] | null
         }
         Insert: {
           activities?: string[] | null
           address: string
+          addresses?: string[] | null
           admissions?: string[] | null
           capacity?: number | null
           certifications?: string[] | null
+          cities?: string[] | null
           city: string
           coordinates_lat?: number | null
           coordinates_lng?: number | null
@@ -243,6 +249,7 @@ export type Database = {
           maps_url?: string | null
           name: string
           phone?: string | null
+          phones?: string[] | null
           price?: number | null
           price_range?: string | null
           province: string
@@ -256,13 +263,16 @@ export type Database = {
           updated_at?: string
           website?: string | null
           whatsapp?: string | null
+          whatsapps?: string[] | null
         }
         Update: {
           activities?: string[] | null
           address?: string
+          addresses?: string[] | null
           admissions?: string[] | null
           capacity?: number | null
           certifications?: string[] | null
+          cities?: string[] | null
           city?: string
           coordinates_lat?: number | null
           coordinates_lng?: number | null
@@ -279,6 +289,7 @@ export type Database = {
           maps_url?: string | null
           name?: string
           phone?: string | null
+          phones?: string[] | null
           price?: number | null
           price_range?: string | null
           province?: string
@@ -292,6 +303,7 @@ export type Database = {
           updated_at?: string
           website?: string | null
           whatsapp?: string | null
+          whatsapps?: string[] | null
         }
         Relationships: []
       }

@@ -15,6 +15,7 @@ import { GalleryUploader } from "@/components/GalleryUploader";
 import { ConveniosAdmin } from "@/components/admin/ConveniosAdmin";
 import { TeamAdmin } from "@/components/admin/TeamAdmin";
 import { CommissionsAdmin } from "@/components/admin/CommissionsAdmin";
+import { MultiValueInput } from "@/components/admin/MultiValueInput";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   LogOut, 
@@ -398,7 +399,7 @@ const Admin = () => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label>Teléfono</Label>
+                          <Label>Teléfono principal</Label>
                           <Input
                             value={formData.phone || ''}
                             onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
@@ -419,7 +420,7 @@ const Admin = () => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label>WhatsApp</Label>
+                          <Label>WhatsApp principal</Label>
                           <Input
                             value={formData.whatsapp || ''}
                             onChange={(e) => setFormData(prev => ({ ...prev, whatsapp: e.target.value }))}
@@ -441,6 +442,35 @@ const Admin = () => {
                           />
                         </div>
                       </div>
+
+                      {/* Multi-value fields */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                        <MultiValueInput
+                          label="Teléfonos adicionales"
+                          values={formData.phones || []}
+                          onChange={(phones) => setFormData(prev => ({ ...prev, phones }))}
+                          placeholder="Agregar teléfono adicional"
+                        />
+                        <MultiValueInput
+                          label="WhatsApps adicionales"
+                          values={formData.whatsapps || []}
+                          onChange={(whatsapps) => setFormData(prev => ({ ...prev, whatsapps }))}
+                          placeholder="Agregar WhatsApp adicional"
+                        />
+                        <MultiValueInput
+                          label="Direcciones adicionales"
+                          values={formData.addresses || []}
+                          onChange={(addresses) => setFormData(prev => ({ ...prev, addresses }))}
+                          placeholder="Agregar dirección adicional"
+                        />
+                        <MultiValueInput
+                          label="Ciudades adicionales"
+                          values={formData.cities || []}
+                          onChange={(cities) => setFormData(prev => ({ ...prev, cities }))}
+                          placeholder="Agregar ciudad adicional"
+                        />
+                      </div>
+
                       <div className="space-y-2">
                         <Label>Descripción</Label>
                         <Textarea
