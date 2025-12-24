@@ -117,9 +117,38 @@ const Admin = () => {
     
     setIsSaving(true);
     
+    let updatedFormData = { ...formData };
+    
+    // Auto-geocode if address changed
+    if (formData.address !== selectedResidence.address || 
+        formData.city !== selectedResidence.city || 
+        formData.province !== selectedResidence.province) {
+      try {
+        toast.info("Obteniendo coordenadas de la dirección...");
+        const { data, error: geocodeError } = await supabase.functions.invoke('geocode-address', {
+          body: {
+            address: formData.address,
+            city: formData.city,
+            province: formData.province
+          }
+        });
+        
+        if (geocodeError) {
+          console.error('Geocode error:', geocodeError);
+          toast.warning("No se pudieron obtener las coordenadas automáticamente");
+        } else if (data?.lat && data?.lng) {
+          updatedFormData.coordinates_lat = data.lat;
+          updatedFormData.coordinates_lng = data.lng;
+          toast.success("Coordenadas actualizadas automáticamente");
+        }
+      } catch (err) {
+        console.error('Geocode fetch error:', err);
+      }
+    }
+    
     const { error } = await supabase
       .from('residences')
-      .update(formData)
+      .update(updatedFormData)
       .eq('id', selectedResidence.id);
     
     if (error) {
@@ -372,30 +401,10 @@ const Admin = () => {
                           />
                         </div>
                         <div className="space-y-2 md:col-span-2">
-                          <Label>Dirección</Label>
+                          <Label>Dirección (las coordenadas del mapa se actualizan automáticamente)</Label>
                           <Input
                             value={formData.address || ''}
                             onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Latitud (para el mapa)</Label>
-                          <Input
-                            type="number"
-                            step="any"
-                            value={formData.coordinates_lat || ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, coordinates_lat: parseFloat(e.target.value) || null }))}
-                            placeholder="-34.9011"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Longitud (para el mapa)</Label>
-                          <Input
-                            type="number"
-                            step="any"
-                            value={formData.coordinates_lng || ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, coordinates_lng: parseFloat(e.target.value) || null }))}
-                            placeholder="-56.1645"
                           />
                         </div>
                         <div className="space-y-2">
