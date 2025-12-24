@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   MapPin,
   Phone,
@@ -352,9 +353,21 @@ const ResidenceDetail = () => {
                     </div>
                     <h2 className="text-2xl font-bold">Descripción</h2>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed text-lg">
-                    {residence.description}
-                  </p>
+                  <ScrollArea className="max-h-48 pr-4">
+                    <div className="space-y-4 text-muted-foreground leading-relaxed">
+                      {residence.description?.split(/(?<=[.!?])\s+/).reduce<string[][]>((acc, sentence) => {
+                        const lastGroup = acc[acc.length - 1];
+                        if (!lastGroup || lastGroup.length >= 3) {
+                          acc.push([sentence]);
+                        } else {
+                          lastGroup.push(sentence);
+                        }
+                        return acc;
+                      }, []).map((paragraph, idx) => (
+                        <p key={idx} className="text-base">{paragraph.join(' ')}</p>
+                      ))}
+                    </div>
+                  </ScrollArea>
                 </CardContent>
               </Card>
 
