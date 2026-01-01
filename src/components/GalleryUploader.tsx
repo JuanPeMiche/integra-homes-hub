@@ -16,7 +16,7 @@ export function GalleryUploader({
   folder,
   images,
   onChange,
-  maxImages = 20
+  maxImages = 50
 }: GalleryUploaderProps) {
   const { uploadFile, uploading } = useStorageUpload();
   const inputRef = useRef<HTMLInputElement>(null);
