@@ -162,6 +162,63 @@ const Admin = () => {
     setIsSaving(false);
   };
 
+  const handleCreateResidence = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('residences')
+        .insert({
+          name: 'Nueva Residencia',
+          type: 'Residencial',
+          city: 'Ciudad',
+          province: 'Departamento',
+          address: 'Dirección',
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      
+      toast.success("Residencia creada");
+      refetch();
+      if (data) {
+        setSelectedResidence(data);
+        setFormData(data);
+      }
+    } catch (error: any) {
+      toast.error("Error al crear residencia: " + error.message);
+    }
+  };
+
+  const handleDeleteResidence = async () => {
+    if (!selectedResidence) return;
+    
+    if (!confirm(`¿Estás seguro de eliminar "${selectedResidence.name}"? Esta acción no se puede deshacer.`)) return;
+    
+    try {
+      // First delete associated directors
+      await supabase
+        .from('residence_directors')
+        .delete()
+        .eq('residence_id', selectedResidence.id);
+      
+      // Then delete the residence
+      const { error } = await supabase
+        .from('residences')
+        .delete()
+        .eq('id', selectedResidence.id);
+      
+      if (error) throw error;
+      
+      toast.success("Residencia eliminada");
+      setSelectedResidence(null);
+      setFormData({});
+      refetch();
+      queryClient.invalidateQueries({ queryKey: ['residences'] });
+    } catch (error: any) {
+      toast.error("Error al eliminar residencia: " + error.message);
+    }
+  };
+
   const handleLogoUpload = async (url: string) => {
     setFormData(prev => ({ ...prev, logo_url: url }));
   };
@@ -289,8 +346,12 @@ const Admin = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar - Lista de Residencias */}
           <Card className="lg:col-span-1">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
               <CardTitle className="text-lg">Residencias</CardTitle>
+              <Button size="sm" onClick={handleCreateResidence}>
+                <Plus className="w-4 h-4 mr-1" />
+                Nueva
+              </Button>
             </CardHeader>
             <CardContent className="p-0">
               <ScrollArea className="h-[calc(100vh-350px)]">
@@ -340,10 +401,16 @@ const Admin = () => {
                     </Button>
                     <CardTitle>{formData.name}</CardTitle>
                   </div>
-                  <Button onClick={handleSave} disabled={isSaving}>
-                    <Save className="w-4 h-4 mr-2" />
-                    {isSaving ? "Guardando..." : "Guardar Cambios"}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button variant="destructive" size="sm" onClick={handleDeleteResidence}>
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Eliminar
+                    </Button>
+                    <Button onClick={handleSave} disabled={isSaving}>
+                      <Save className="w-4 h-4 mr-2" />
+                      {isSaving ? "Guardando..." : "Guardar Cambios"}
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <Tabs defaultValue="info">
