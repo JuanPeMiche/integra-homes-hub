@@ -1,9 +1,25 @@
 import { useState, useRef } from 'react';
-import { Plus, X, Loader2, ImagePlus } from 'lucide-react';
+import { X, Loader2, ImagePlus, GripVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useStorageUpload } from '@/hooks/useStorageUpload';
 import { Progress } from '@/components/ui/progress';
 import { toast } from 'sonner';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import { SortableGalleryItem } from './SortableGalleryItem';
 
 interface GalleryUploaderProps {
   folder: string;
@@ -22,6 +38,17 @@ export function GalleryUploader({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState({ current: 0, total: 0 });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -66,59 +93,63 @@ export function GalleryUploader({
     onChange(newImages);
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = images.findIndex((img) => img === active.id);
+      const newIndex = images.findIndex((img) => img === over.id);
+      
+      const newImages = arrayMove(images, oldIndex, newIndex);
+      onChange(newImages);
+      toast.success('Orden actualizado');
+    }
+  };
+
   const canAddMore = images.length < maxImages;
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className="relative aspect-video rounded-lg overflow-hidden border border-border bg-muted group"
-          >
-            <img
-              src={image}
-              alt={`Imagen ${index + 1}`}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <Button
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={images} strategy={rectSortingStrategy}>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {images.map((image, index) => (
+              <SortableGalleryItem
+                key={image}
+                id={image}
+                image={image}
+                index={index}
+                onRemove={() => handleRemove(index)}
+              />
+            ))}
+            
+            {isUploading && (
+              <div className="aspect-video rounded-lg border-2 border-dashed border-primary bg-muted/50 flex flex-col items-center justify-center gap-2 p-2">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                <span className="text-xs text-muted-foreground text-center">
+                  Subiendo {uploadProgress.current}/{uploadProgress.total}
+                </span>
+              </div>
+            )}
+            
+            {canAddMore && !isUploading && (
+              <button
                 type="button"
-                variant="destructive"
-                size="icon"
-                className="h-8 w-8"
-                onClick={() => handleRemove(index)}
+                onClick={() => inputRef.current?.click()}
+                className="aspect-video rounded-lg border-2 border-dashed border-border bg-muted/50 hover:bg-muted transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
               >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-            <div className="absolute top-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
-              {index + 1}
-            </div>
+                <ImagePlus className="h-8 w-8" />
+                <span className="text-sm">Agregar</span>
+                <span className="text-xs opacity-70">Múltiples</span>
+              </button>
+            )}
           </div>
-        ))}
-        
-        {isUploading && (
-          <div className="aspect-video rounded-lg border-2 border-dashed border-primary bg-muted/50 flex flex-col items-center justify-center gap-2 p-2">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            <span className="text-xs text-muted-foreground text-center">
-              Subiendo {uploadProgress.current}/{uploadProgress.total}
-            </span>
-          </div>
-        )}
-        
-        {canAddMore && !isUploading && (
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            className="aspect-video rounded-lg border-2 border-dashed border-border bg-muted/50 hover:bg-muted transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
-          >
-            <ImagePlus className="h-8 w-8" />
-            <span className="text-sm">Agregar</span>
-            <span className="text-xs opacity-70">Múltiples</span>
-          </button>
-        )}
-      </div>
+        </SortableContext>
+      </DndContext>
       
       {isUploading && uploadProgress.total > 1 && (
         <Progress value={(uploadProgress.current / uploadProgress.total) * 100} className="h-2" />
@@ -134,10 +165,12 @@ export function GalleryUploader({
         disabled={isUploading}
       />
       
-      <p className="text-sm text-muted-foreground">
-        {images.length} de {maxImages} imágenes. La primera imagen será la principal. 
-        <span className="text-primary ml-1">Puedes seleccionar varias a la vez.</span>
-      </p>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <GripVertical className="h-4 w-4" />
+        <span>
+          Arrastra para reordenar. {images.length} de {maxImages} imágenes. La primera será la principal.
+        </span>
+      </div>
     </div>
   );
 }
