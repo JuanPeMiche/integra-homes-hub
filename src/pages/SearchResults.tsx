@@ -14,6 +14,9 @@ import { Search, RotateCcw, List, Map, SlidersHorizontal, CheckCircle } from "lu
 import { useResidences, useProvinces, useCities, Residence } from "@/hooks/useResidences";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { AdvancedFilters } from "@/components/AdvancedFilters";
+import { useAllServices, useAllFacilities, useAllActivities } from "@/hooks/useAdvancedFilters";
+import { Separator } from "@/components/ui/separator";
 
 // Filter Panel as a separate component to prevent re-creation on each render
 interface FilterPanelProps {
@@ -30,6 +33,17 @@ interface FilterPanelProps {
   sortBy: string;
   onSortChange: (value: string) => void;
   onReset: () => void;
+  // Advanced filters
+  allServices: string[];
+  allFacilities: string[];
+  allActivities: string[];
+  selectedServices: string[];
+  selectedFacilities: string[];
+  selectedActivities: string[];
+  onServicesChange: (services: string[]) => void;
+  onFacilitiesChange: (facilities: string[]) => void;
+  onActivitiesChange: (activities: string[]) => void;
+  onClearAdvanced: () => void;
 }
 
 const FilterPanel = React.memo(({
@@ -46,6 +60,16 @@ const FilterPanel = React.memo(({
   sortBy,
   onSortChange,
   onReset,
+  allServices,
+  allFacilities,
+  allActivities,
+  selectedServices,
+  selectedFacilities,
+  selectedActivities,
+  onServicesChange,
+  onFacilitiesChange,
+  onActivitiesChange,
+  onClearAdvanced,
 }: FilterPanelProps) => (
   <div className="space-y-6">
     {/* Search by Name */}
@@ -131,13 +155,29 @@ const FilterPanel = React.memo(({
       </Select>
     </div>
 
+    <Separator />
+
+    {/* Advanced Filters */}
+    <AdvancedFilters
+      allServices={allServices}
+      allFacilities={allFacilities}
+      allActivities={allActivities}
+      selectedServices={selectedServices}
+      selectedFacilities={selectedFacilities}
+      selectedActivities={selectedActivities}
+      onServicesChange={onServicesChange}
+      onFacilitiesChange={onFacilitiesChange}
+      onActivitiesChange={onActivitiesChange}
+      onClearAll={onClearAdvanced}
+    />
+
     {/* Reset Filters */}
     <button 
       onClick={onReset}
       className="w-full flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
     >
       <RotateCcw className="h-4 w-4" />
-      Limpiar filtros
+      Limpiar todos los filtros
     </button>
   </div>
 ));
@@ -151,6 +191,11 @@ const SearchResults = () => {
   const { data: departamentos = [] } = useProvinces();
   const { data: barrios = [] } = useCities();
   
+  // Advanced filters data
+  const { data: allServices = [] } = useAllServices();
+  const { data: allFacilities = [] } = useAllFacilities();
+  const { data: allActivities = [] } = useAllActivities();
+  
   const [compareList, setCompareList] = useState<string[]>([]);
   const [searchName, setSearchName] = useState("");
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -160,6 +205,11 @@ const SearchResults = () => {
   const [sortBy, setSortBy] = useState("name-asc");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const searchTimeoutRef = React.useRef<NodeJS.Timeout>();
+  
+  // Advanced filters state
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
 
   // Read URL params on mount
   useEffect(() => {
@@ -216,6 +266,27 @@ const SearchResults = () => {
       results = results.filter(r => r.redIntegra);
     }
 
+    // Filter by selected services
+    if (selectedServices.length > 0) {
+      results = results.filter(r => 
+        selectedServices.every(service => r.services.includes(service))
+      );
+    }
+
+    // Filter by selected facilities
+    if (selectedFacilities.length > 0) {
+      results = results.filter(r => 
+        selectedFacilities.every(facility => r.facilities.includes(facility))
+      );
+    }
+
+    // Filter by selected activities
+    if (selectedActivities.length > 0) {
+      results = results.filter(r => 
+        selectedActivities.every(activity => r.activities.includes(activity))
+      );
+    }
+
     // Sort
     switch (sortBy) {
       case "name-asc":
@@ -236,7 +307,7 @@ const SearchResults = () => {
     }
 
     return results;
-  }, [residences, searchName, departamento, barrio, redIntegraOnly, sortBy]);
+  }, [residences, searchName, departamento, barrio, redIntegraOnly, sortBy, selectedServices, selectedFacilities, selectedActivities]);
 
   // Filter residences with valid coordinates for the map
   const residencesWithCoordinates = useMemo(() => {
@@ -270,9 +341,19 @@ const SearchResults = () => {
     setBarrio("");
     setRedIntegraOnly(false);
     setSortBy("name-asc");
+    setSelectedServices([]);
+    setSelectedFacilities([]);
+    setSelectedActivities([]);
   }, []);
 
-  const activeFiltersCount = [searchName, departamento, barrio, redIntegraOnly].filter(Boolean).length;
+  const clearAdvancedFilters = useCallback(() => {
+    setSelectedServices([]);
+    setSelectedFacilities([]);
+    setSelectedActivities([]);
+  }, []);
+
+  const advancedFiltersCount = selectedServices.length + selectedFacilities.length + selectedActivities.length;
+  const activeFiltersCount = [searchName, departamento, barrio, redIntegraOnly].filter(Boolean).length + advancedFiltersCount;
 
   const filterPanelProps: FilterPanelProps = {
     searchInputValue,
@@ -288,6 +369,16 @@ const SearchResults = () => {
     sortBy,
     onSortChange: setSortBy,
     onReset: resetFilters,
+    allServices,
+    allFacilities,
+    allActivities,
+    selectedServices,
+    selectedFacilities,
+    selectedActivities,
+    onServicesChange: setSelectedServices,
+    onFacilitiesChange: setSelectedFacilities,
+    onActivitiesChange: setSelectedActivities,
+    onClearAdvanced: clearAdvancedFilters,
   };
 
   return (
