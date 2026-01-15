@@ -4,7 +4,7 @@ export const StatsSection = () => {
   const stats = [
     {
       icon: Building2,
-      value: "+30",
+      value: "+120",
       label: "Residencias en Uruguay",
     },
     {
