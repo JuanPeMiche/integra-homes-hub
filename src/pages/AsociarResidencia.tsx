@@ -416,7 +416,7 @@ const AsociarResidencia = () => {
                 size="lg"
                 asChild
               >
-                <a href="https://wa.me/59899923330" target="_blank" rel="noopener noreferrer">
+                <a href="https://wa.me/59899923330?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20para%20asociar%20mi%20residencial%20a%20Integra" target="_blank" rel="noopener noreferrer">
                   WhatsApp
                 </a>
               </Button>

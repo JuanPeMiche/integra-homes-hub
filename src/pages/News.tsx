@@ -1,11 +1,25 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, ArrowRight } from "lucide-react";
+import { Calendar, User, ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
-const newsArticles = [
+interface NewsArticle {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  author: string;
+  excerpt: string;
+  image: string;
+  externalLink?: string;
+}
+
+const newsArticles: NewsArticle[] = [
   {
     id: "1",
     title: "Palabras Mayores Uruguay - Temporada 3: Entrevista a Sabino Montenegro y Martín Felípez",
@@ -13,7 +27,8 @@ const newsArticles = [
     category: "Entrevistas",
     author: "Integra Residenciales",
     excerpt: "Nuestro presidente Sabino Montenegro y el Dr. Martín Felípez participan en el programa 'Palabras Mayores Uruguay' discutiendo temas fundamentales sobre el cuidado de personas mayores y la nueva longevidad.",
-    image: "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80",
+    externalLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   },
   {
     id: "2",
@@ -31,7 +46,7 @@ const newsArticles = [
     category: "Convenios",
     author: "Integra Residenciales",
     excerpt: "Firmamos un importante convenio de cooperación con el Ministerio de Desarrollo Social para mejorar la calidad de los servicios de cuidados de larga estadía en Uruguay.",
-    image: "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80",
   },
   {
     id: "4",
@@ -62,24 +77,86 @@ const newsArticles = [
   },
 ];
 
+const INITIAL_COUNT = 6;
+const LOAD_MORE_COUNT = 3;
+
 const News = () => {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
   const categoryColors: Record<string, string> = {
-    "Entrevistas": "bg-primary text-primary-foreground",
-    "Eventos": "bg-secondary text-secondary-foreground",
-    "Convenios": "bg-accent text-accent-foreground",
-    "Salud": "bg-trust text-trust-foreground",
-    "Formación": "bg-muted text-muted-foreground",
+    "Entrevistas": "bg-primary/10 text-primary border-primary/20",
+    "Eventos": "bg-secondary/10 text-secondary border-secondary/20",
+    "Convenios": "bg-accent text-accent-foreground border-accent",
+    "Salud": "bg-trust/10 text-trust border-trust/20",
+    "Formación": "bg-muted text-muted-foreground border-muted",
   };
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + LOAD_MORE_COUNT, newsArticles.length));
+  };
+
+  const handleArticleClick = (article: NewsArticle) => {
+    if (article.externalLink) {
+      window.open(article.externalLink, "_blank", "noopener,noreferrer");
+    } else {
+      // For now, show a toast - in future can navigate to /noticias/[id]
+      toast.info("Próximamente: Detalle de artículo", {
+        description: article.title,
+      });
+    }
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      toast.error("Por favor ingresá tu email");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Por favor ingresá un email válido");
+      return;
+    }
+
+    setIsSubscribing(true);
+    
+    // Simulate API call - in production this would call an actual endpoint
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success("¡Gracias por suscribirte!", {
+        description: "Te enviaremos las últimas novedades a tu correo.",
+      });
+      setEmail("");
+    } catch (error) {
+      toast.error("Error al suscribirse", {
+        description: "Por favor intentá nuevamente.",
+      });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80";
+  };
+
+  const visibleArticles = newsArticles.slice(0, visibleCount);
+  const hasMore = visibleCount < newsArticles.length;
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1">
+      <main className="flex-1 pt-20">
         {/* Hero Section */}
-        <section className="bg-gradient-hero text-white py-20">
+        <section className="bg-gradient-hero text-white py-16 md:py-20">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center space-y-6">
+            <div className="max-w-3xl mx-auto text-center space-y-6 animate-fade-in">
               <h1 className="text-4xl md:text-5xl font-bold">Noticias y Artículos</h1>
               <p className="text-xl text-white/95 leading-relaxed">
                 Mantente informado sobre las últimas novedades de Integra Residenciales 
@@ -94,17 +171,34 @@ const News = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {newsArticles.map((article) => (
-                  <Card key={article.id} className="overflow-hidden hover:shadow-hover transition-all duration-300 group">
-                    <div className="relative h-48 overflow-hidden">
+                {visibleArticles.map((article, index) => (
+                  <Card 
+                    key={article.id} 
+                    className="overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all duration-300 group cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 animate-fade-in-up"
+                    style={{ animationDelay: `${Math.min(index * 50, 200)}ms` }}
+                    onClick={() => handleArticleClick(article)}
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleArticleClick(article)}
+                    role="article"
+                  >
+                    <div className="relative h-48 overflow-hidden bg-muted">
                       <img
                         src={article.image}
                         alt={article.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={handleImageError}
+                        loading="lazy"
                       />
-                      <Badge className={`absolute top-4 left-4 ${categoryColors[article.category]}`}>
+                      <Badge 
+                        className={`absolute top-4 left-4 ${categoryColors[article.category] || categoryColors["Formación"]} border rounded-full px-3 py-1 text-xs font-medium`}
+                      >
                         {article.category}
                       </Badge>
+                      {article.externalLink && (
+                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-1.5">
+                          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                      )}
                     </div>
                     <CardContent className="p-6 space-y-4">
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -114,7 +208,7 @@ const News = () => {
                         </div>
                         <div className="flex items-center gap-1">
                           <User className="h-4 w-4" />
-                          <span>{article.author}</span>
+                          <span className="truncate max-w-[120px]">{article.author}</span>
                         </div>
                       </div>
                       
@@ -126,7 +220,14 @@ const News = () => {
                         {article.excerpt}
                       </p>
                       
-                      <Button variant="ghost" className="gap-2 group-hover:gap-3 transition-all p-0">
+                      <Button 
+                        variant="ghost" 
+                        className="gap-2 group-hover:gap-3 transition-all p-0 h-auto text-primary hover:text-primary hover:bg-transparent"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArticleClick(article);
+                        }}
+                      >
                         Leer más
                         <ArrowRight className="h-4 w-4" />
                       </Button>
@@ -136,11 +237,24 @@ const News = () => {
               </div>
 
               {/* Load More Button */}
-              <div className="flex justify-center mt-12">
-                <Button size="lg" variant="outline">
-                  Cargar más noticias
-                </Button>
-              </div>
+              {hasMore && (
+                <div className="flex justify-center mt-12">
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    onClick={handleLoadMore}
+                    className="hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    Cargar más noticias
+                  </Button>
+                </div>
+              )}
+
+              {!hasMore && visibleCount > INITIAL_COUNT && (
+                <p className="text-center text-muted-foreground mt-8">
+                  Has visto todas las noticias
+                </p>
+              )}
             </div>
           </div>
         </section>
@@ -148,7 +262,7 @@ const News = () => {
         {/* Newsletter Section */}
         <section className="py-16 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center space-y-6">
+            <div className="max-w-3xl mx-auto text-center space-y-6 animate-fade-in">
               <h2 className="text-3xl md:text-4xl font-bold">
                 Suscribite a nuestro boletín
               </h2>
@@ -156,16 +270,36 @@ const News = () => {
                 Recibí las últimas noticias y artículos sobre cuidado de personas mayores 
                 directamente en tu correo
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-                <input
+              <form 
+                onSubmit={handleSubscribe}
+                className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+              >
+                <Input
                   type="email"
                   placeholder="Tu email"
-                  className="flex-1 px-4 py-3 rounded-lg text-foreground"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 px-4 py-3 rounded-lg text-foreground bg-white"
+                  disabled={isSubscribing}
+                  aria-label="Email para suscripción"
                 />
-                <Button size="lg" variant="secondary">
-                  Suscribirse
+                <Button 
+                  type="submit"
+                  size="lg" 
+                  variant="secondary"
+                  disabled={isSubscribing}
+                  className="min-w-[140px]"
+                >
+                  {isSubscribing ? (
+                    <span className="flex items-center gap-2">
+                      <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span>
+                      Enviando...
+                    </span>
+                  ) : (
+                    "Suscribirse"
+                  )}
                 </Button>
-              </div>
+              </form>
             </div>
           </div>
         </section>

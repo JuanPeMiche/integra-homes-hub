@@ -6,8 +6,8 @@ const TermsConditions = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       
-      <main className="flex-grow py-12 md:py-16">
-        <div className="container mx-auto px-4 max-w-4xl">
+      <main className="flex-grow pt-28 pb-12 md:pt-32 md:pb-16">
+        <div className="container mx-auto px-4 max-w-4xl animate-fade-in">
           <h1 className="text-3xl md:text-4xl font-bold text-primary mb-8">
             Términos y Condiciones de Uso
           </h1>

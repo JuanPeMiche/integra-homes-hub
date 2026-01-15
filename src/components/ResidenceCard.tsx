@@ -74,7 +74,7 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-hover transition-all duration-300 group">
+    <Card className="overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all duration-300 group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
       <div className="relative h-48 overflow-hidden">
         <img
           src={residence.image}
@@ -245,13 +245,20 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
 
         <div className="flex flex-wrap gap-1.5 pt-2">
           {residence.services.slice(0, 2).map((service, idx) => (
-            <Badge key={idx} variant="secondary" className="text-xs">
-              {service.length > 20 ? service.substring(0, 20) + '...' : service}
+            <Badge 
+              key={idx} 
+              variant="secondary" 
+              className="text-xs font-medium rounded-full px-2.5 py-0.5 bg-secondary/10 text-secondary border-0"
+            >
+              {service.length > 18 ? service.substring(0, 18) + '…' : service}
             </Badge>
           ))}
           {residence.services.length > 2 && (
-            <Badge variant="outline" className="text-xs">
-              +{residence.services.length - 2} más
+            <Badge 
+              variant="outline" 
+              className="text-xs font-medium rounded-full px-2.5 py-0.5"
+            >
+              +{residence.services.length - 2}
             </Badge>
           )}
         </div>

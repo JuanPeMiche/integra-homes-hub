@@ -62,7 +62,7 @@ const Contact = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-2xl">
-                      <Send className="h-6 w-6 text-primary" />
+                      <Send className="h-5 w-5 text-primary" />
                       Envianos tu consulta
                     </CardTitle>
                     <CardDescription>
