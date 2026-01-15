@@ -162,13 +162,21 @@ const Admin = () => {
     setIsSaving(false);
   };
 
+  // Valid residence types according to database constraint
+  const RESIDENCE_TYPES = ['publica', 'privada', 'concertada'] as const;
+  const RESIDENCE_TYPE_LABELS: Record<string, string> = {
+    'publica': 'Pública',
+    'privada': 'Privada',
+    'concertada': 'Concertada',
+  };
+
   const handleCreateResidence = async () => {
     try {
       const { data, error } = await supabase
         .from('residences')
         .insert({
           name: 'Nueva Residencia',
-          type: 'Residencial',
+          type: 'privada', // Default valid type
           city: 'Ciudad',
           province: 'Departamento',
           address: 'Dirección',
@@ -176,7 +184,13 @@ const Admin = () => {
         .select()
         .single();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating residence:', error);
+        if (error.message.includes('residences_type_check')) {
+          throw new Error('Tipo de residencia inválido. Los valores permitidos son: Pública, Privada, Concertada.');
+        }
+        throw error;
+      }
       
       toast.success("Residencia creada");
       refetch();
@@ -186,6 +200,7 @@ const Admin = () => {
       }
     } catch (error: any) {
       toast.error("Error al crear residencia: " + error.message);
+      console.error('Create residence payload failed:', error);
     }
   };
 
@@ -448,10 +463,17 @@ const Admin = () => {
                         </div>
                         <div className="space-y-2">
                           <Label>Tipo</Label>
-                          <Input
-                            value={formData.type || ''}
+                          <select
+                            value={formData.type || 'privada'}
                             onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
-                          />
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {RESIDENCE_TYPES.map((type) => (
+                              <option key={type} value={type}>
+                                {RESIDENCE_TYPE_LABELS[type]}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                         <div className="space-y-2">
                           <Label>Ciudad</Label>

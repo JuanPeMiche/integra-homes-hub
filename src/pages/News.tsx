@@ -3,10 +3,16 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, ArrowRight, ExternalLink } from "lucide-react";
+import { Calendar, User, ArrowRight, ExternalLink, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface NewsArticle {
   id: string;
@@ -18,6 +24,59 @@ interface NewsArticle {
   image: string;
   externalLink?: string;
 }
+
+interface Interview {
+  id: string;
+  title: string;
+  source: "YouTube" | "X";
+  url: string;
+  thumbnail: string;
+}
+
+const interviews: Interview[] = [
+  {
+    id: "int-1",
+    title: "Entrevista Integra Residenciales - Cuidados de larga duración",
+    source: "YouTube",
+    url: "https://www.youtube.com/watch?v=KDHvTFm_AzY",
+    thumbnail: "https://img.youtube.com/vi/KDHvTFm_AzY/maxresdefault.jpg",
+  },
+  {
+    id: "int-2",
+    title: "Atención a personas mayores en Uruguay",
+    source: "YouTube",
+    url: "https://www.youtube.com/watch?v=b3af__NQl3E",
+    thumbnail: "https://img.youtube.com/vi/b3af__NQl3E/maxresdefault.jpg",
+  },
+  {
+    id: "int-3",
+    title: "Políticas de cuidado y bienestar",
+    source: "YouTube",
+    url: "https://www.youtube.com/watch?v=8imgQj_0cxk",
+    thumbnail: "https://img.youtube.com/vi/8imgQj_0cxk/maxresdefault.jpg",
+  },
+  {
+    id: "int-4",
+    title: "Nuevas tendencias en residencias para mayores",
+    source: "YouTube",
+    url: "https://www.youtube.com/watch?v=If3caBEtoMQ",
+    thumbnail: "https://img.youtube.com/vi/If3caBEtoMQ/maxresdefault.jpg",
+  },
+  {
+    id: "int-5",
+    title: "Entrevista Radio Sarandí - Integra Residenciales",
+    source: "X",
+    url: "https://x.com/radiosarandi690/status/1814264894151152094",
+    thumbnail: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80",
+  },
+  {
+    id: "int-6",
+    title: "Perspectivas del sector de cuidados",
+    source: "YouTube",
+    url: "https://www.youtube.com/watch?v=fJqTdwHWB5k",
+    thumbnail: "https://img.youtube.com/vi/fJqTdwHWB5k/maxresdefault.jpg",
+  },
+];
 
 const newsArticles: NewsArticle[] = [
   {
@@ -80,10 +139,17 @@ const newsArticles: NewsArticle[] = [
 const INITIAL_COUNT = 6;
 const LOAD_MORE_COUNT = 3;
 
+// Helper to extract YouTube video ID
+const getYouTubeVideoId = (url: string): string | null => {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
+  return match ? match[1] : null;
+};
+
 const News = () => {
   const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
+  const [selectedInterview, setSelectedInterview] = useState<Interview | null>(null);
 
   const categoryColors: Record<string, string> = {
     "Entrevistas": "bg-primary/10 text-primary border-primary/20",
@@ -143,6 +209,19 @@ const News = () => {
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     e.currentTarget.src = "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80";
+  };
+
+  const handleInterviewThumbnailError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    e.currentTarget.src = "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=800&q=80";
+  };
+
+  const handleInterviewClick = (interview: Interview) => {
+    if (interview.source === "YouTube") {
+      setSelectedInterview(interview);
+    } else {
+      // X (Twitter) - open in new tab
+      window.open(interview.url, "_blank", "noopener,noreferrer");
+    }
   };
 
   const visibleArticles = newsArticles.slice(0, visibleCount);
@@ -259,6 +338,85 @@ const News = () => {
           </div>
         </section>
 
+        {/* Interviews Section */}
+        <section className="py-16 bg-muted">
+          <div className="container mx-auto px-4">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/20 rounded-full px-4 py-1">
+                  <Play className="h-4 w-4 mr-2" />
+                  Multimedia
+                </Badge>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  Entrevistas
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Conocé más sobre nuestra labor a través de entrevistas en medios de comunicación
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {interviews.map((interview, index) => (
+                  <Card 
+                    key={interview.id}
+                    className="overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all duration-300 group cursor-pointer animate-fade-in-up"
+                    style={{ animationDelay: `${Math.min(index * 50, 200)}ms` }}
+                    onClick={() => handleInterviewClick(interview)}
+                  >
+                    <div className="relative h-48 overflow-hidden bg-muted">
+                      <img
+                        src={interview.thumbnail}
+                        alt={interview.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={handleInterviewThumbnailError}
+                        loading="lazy"
+                      />
+                      {/* Play button overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                        <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Play className="h-8 w-8 text-primary fill-primary ml-1" />
+                        </div>
+                      </div>
+                      {/* Source badge */}
+                      <Badge 
+                        className={`absolute top-4 left-4 rounded-full px-3 py-1 text-xs font-medium ${
+                          interview.source === "YouTube" 
+                            ? "bg-red-500 text-white border-red-600" 
+                            : "bg-gray-900 text-white border-gray-800"
+                        }`}
+                      >
+                        {interview.source}
+                      </Badge>
+                      {interview.source === "X" && (
+                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-1.5">
+                          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-5">
+                      <h3 className="font-semibold line-clamp-2 group-hover:text-primary transition-colors mb-3">
+                        {interview.title}
+                      </h3>
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        className="w-full gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleInterviewClick(interview);
+                        }}
+                      >
+                        <Play className="h-4 w-4" />
+                        Ver entrevista
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Newsletter Section */}
         <section className="py-16 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4">
@@ -304,6 +462,28 @@ const News = () => {
           </div>
         </section>
       </main>
+
+      {/* YouTube Video Modal */}
+      <Dialog open={!!selectedInterview} onOpenChange={() => setSelectedInterview(null)}>
+        <DialogContent className="max-w-4xl w-full p-0 overflow-hidden">
+          <DialogHeader className="p-4 pb-0">
+            <DialogTitle className="pr-8 line-clamp-1">
+              {selectedInterview?.title}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="aspect-video w-full">
+            {selectedInterview && selectedInterview.source === "YouTube" && (
+              <iframe
+                src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedInterview.url)}?autoplay=1`}
+                title={selectedInterview.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

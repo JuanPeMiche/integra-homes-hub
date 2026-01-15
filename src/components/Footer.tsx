@@ -96,6 +96,14 @@ export const Footer = () => {
               <NavLink to="/sobre-integra" className="hover:text-secondary transition-colors">
                 Quiénes somos
               </NavLink>
+              <a 
+                href="https://app.integrasoft.com.uy/IntegraSoft/com.gp.seguridad.login" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-secondary transition-colors"
+              >
+                Acceso a residenciales
+              </a>
             </nav>
           </div>
 
