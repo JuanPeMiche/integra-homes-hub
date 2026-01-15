@@ -9,7 +9,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
-import { Shield, ArrowLeft } from "lucide-react";
+import { Shield, ArrowLeft, ExternalLink } from "lucide-react";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "La contraseña debe tener al menos 6 caracteres");
@@ -229,14 +229,27 @@ const AdminLogin = () => {
             </TabsContent>
           </Tabs>
           
-          <div className="mt-6 text-center">
-            <Link 
-              to="/" 
-              className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver al sitio
-            </Link>
+          <div className="mt-6 pt-6 border-t border-border">
+            <div className="text-center mb-4">
+              <a 
+                href="https://app.integrasoft.com.uy/IntegraSoft/com.gp.seguridad.login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-secondary/50 hover:bg-secondary text-foreground rounded-lg font-medium transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Acceso a Residenciales (Plataforma de Gestión)
+              </a>
+            </div>
+            <div className="text-center">
+              <Link 
+                to="/" 
+                className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Volver al sitio
+              </Link>
+            </div>
           </div>
         </CardContent>
       </Card>
