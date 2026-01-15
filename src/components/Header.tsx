@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Phone, User, LogOut, Heart, ChevronDown, FileText, Shield, Info, Newspaper, Handshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
@@ -45,16 +45,21 @@ export const Header = () => {
     <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${showSolidHeader ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-transparent"}`}>
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src={logoIntegra} alt="Integra Residenciales" className="h-16 md:h-20 w-auto object-contain" />
-            <span className={`text-xl md:text-2xl font-bold transition-colors ${showSolidHeader ? "text-foreground" : "text-white"}`}>
+          {/* Logo - Clickeable, más grande y visible */}
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-90 transition-opacity">
+            <img 
+              src={logoIntegra} 
+              alt="Integra Residenciales" 
+              className="h-12 sm:h-14 md:h-16 lg:h-20 w-auto object-contain drop-shadow-sm" 
+            />
+            <span className={`text-base sm:text-lg md:text-xl lg:text-2xl font-bold transition-colors whitespace-nowrap ${showSolidHeader ? "text-foreground" : "text-white drop-shadow-md"}`}>
               Integra Residenciales
             </span>
-          </div>
+          </Link>
 
-          <nav className="hidden lg:flex items-center space-x-6">
+          {/* Desktop Nav - Sin "Inicio" ya que el logo lleva al home */}
+          <nav className="hidden xl:flex items-center space-x-4 2xl:space-x-6">
             {[
-              { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar residencias" },
               { to: "/convenios", label: "Convenios" },
               { to: "/asesoramiento", label: "Buscamos por ti" },
@@ -63,7 +68,7 @@ export const Header = () => {
               <NavLink
                 key={link.to}
                 to={link.to}
-                className={`text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}
+                className={`text-sm lg:text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}
                 activeClassName={showSolidHeader ? "text-primary font-semibold" : "text-white font-semibold"}
               >
                 {link.label}
@@ -72,7 +77,7 @@ export const Header = () => {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className={`flex items-center gap-1 text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}>
+                <button className={`flex items-center gap-1 text-sm lg:text-base font-medium transition-colors ${showSolidHeader ? "text-foreground/80 hover:text-primary" : "text-white/90 hover:text-white"}`}>
                   Más
                   <ChevronDown className="h-4 w-4" />
                 </button>
@@ -103,7 +108,7 @@ export const Header = () => {
             </DropdownMenu>
           </nav>
 
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-2 lg:gap-3">
             {!loading && (
               user ? (
                 <DropdownMenu>
@@ -144,26 +149,33 @@ export const Header = () => {
             <Button variant={showSolidHeader ? "outline" : "secondary"} size="sm" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`} asChild>
               <a href="tel:+59899923330">
                 <Phone className="h-4 w-4" />
-                (+598) 99 923 330
+                <span className="hidden lg:inline">(+598) 99 923 330</span>
+                <span className="lg:hidden">Llamar</span>
               </a>
             </Button>
           </div>
 
-          <button className={`lg:hidden p-2 rounded-md ${showSolidHeader ? "hover:bg-accent" : "hover:bg-white/10"}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {/* Mobile/Tablet menu button - visible below xl (1280px) */}
+          <button 
+            className={`xl:hidden p-2 rounded-md transition-colors ${showSolidHeader ? "hover:bg-accent" : "hover:bg-white/10"}`} 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+          >
             {isMenuOpen ? <X className={`h-6 w-6 ${showSolidHeader ? "" : "text-white"}`} /> : <Menu className={`h-6 w-6 ${showSolidHeader ? "" : "text-white"}`} />}
           </button>
         </div>
 
+        {/* Mobile Menu */}
         {isMenuOpen && (
-          <nav className="lg:hidden py-3 space-y-1 border-t border-border bg-background rounded-b-lg px-2">
+          <nav className="xl:hidden py-3 space-y-1 border-t border-border bg-background rounded-b-lg px-2 animate-fade-in">
             {[
-              { to: "/", label: "Inicio" },
               { to: "/buscar", label: "Buscar residencias" },
               { to: "/convenios", label: "Convenios" },
               { to: "/sobre-integra", label: "Sobre Integra" },
               { to: "/noticias", label: "Noticias" },
               { to: "/asesoramiento", label: "Buscamos por ti" },
               { to: "/contacto", label: "Contacto" },
+              { to: "/trabaja-con-nosotros", label: "Trabaja con nosotros" },
             ].map((link) => (
               <NavLink 
                 key={link.to} 

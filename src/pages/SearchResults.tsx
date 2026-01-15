@@ -448,20 +448,22 @@ const SearchResults = () => {
         </div>
 
         <div className="flex">
-          {/* Desktop Sidebar - Filters */}
-          <aside className="hidden lg:block w-80 border-r border-border min-h-[calc(100vh-180px)] p-6 flex-shrink-0 bg-card">
-            <h2 className="text-lg font-semibold mb-6">Filtrar resultados</h2>
-            <FilterPanel {...filterPanelProps} />
+          {/* Desktop Sidebar - Filters (Sticky) */}
+          <aside className="hidden lg:block w-80 border-r border-border flex-shrink-0 bg-card">
+            <div className="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto p-6 scrollbar-thin">
+              <h2 className="text-lg font-semibold mb-6">Filtrar resultados</h2>
+              <FilterPanel {...filterPanelProps} />
+            </div>
           </aside>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 min-h-[calc(100vh-180px)]">
             {isLoading ? (
               <div className="flex justify-center items-center py-20">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
               </div>
             ) : viewMode === "list" ? (
-              <div className="p-6">
+              <div className="p-6 pb-24 animate-fade-in">
                 {filteredResidences.length === 0 ? (
                   <div className="text-center py-12">
                     <p className="text-muted-foreground text-lg mb-4">
@@ -473,13 +475,18 @@ const SearchResults = () => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {filteredResidences.map((residence) => (
-                      <ResidenceCard
-                        key={residence.id}
-                        residence={residence}
-                        onCompare={handleCompare}
-                        isComparing={compareList.includes(residence.id)}
-                      />
+                    {filteredResidences.map((residence, index) => (
+                      <div 
+                        key={residence.id} 
+                        className="animate-fade-in-up"
+                        style={{ animationDelay: `${Math.min(index * 50, 300)}ms` }}
+                      >
+                        <ResidenceCard
+                          residence={residence}
+                          onCompare={handleCompare}
+                          isComparing={compareList.includes(residence.id)}
+                        />
+                      </div>
                     ))}
                   </div>
                 )}
