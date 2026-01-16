@@ -119,13 +119,21 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-5xl p-0 overflow-hidden">
-          <div className="relative bg-background">
-            <div className="relative aspect-[16/10] w-full">
+        <DialogContent className="max-w-[95vw] max-h-[95vh] w-auto h-auto p-0 overflow-hidden bg-background/95 backdrop-blur-sm border-none">
+          <div className="relative flex flex-col max-h-[95vh]">
+            {/* Header con contador */}
+            <div className="absolute left-4 top-4 z-10">
+              <span className="text-xs font-medium text-foreground bg-background/90 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 shadow-md">
+                {residenceName} · {index + 1}/{safeImages.length}
+              </span>
+            </div>
+
+            {/* Contenedor de imagen */}
+            <div className="relative flex items-center justify-center min-h-[300px] max-h-[calc(95vh-100px)] p-4">
               <img
                 src={current}
                 alt={`${residenceName} - Foto ampliada ${index + 1} de ${safeImages.length}`}
-                className="absolute inset-0 w-full h-full object-contain bg-background"
+                className="max-w-full max-h-[calc(95vh-120px)] w-auto h-auto object-contain rounded-lg shadow-lg"
                 loading="eager"
               />
 
@@ -134,7 +142,7 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/85 hover:bg-background"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/90 hover:bg-background shadow-lg"
                     onClick={prev}
                     aria-label="Foto anterior"
                   >
@@ -143,7 +151,7 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
                   <Button
                     variant="secondary"
                     size="icon"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/85 hover:bg-background"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/90 hover:bg-background shadow-lg"
                     onClick={next}
                     aria-label="Foto siguiente"
                   >
@@ -151,24 +159,19 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
                   </Button>
                 </>
               )}
-
-              <div className="absolute left-4 top-4">
-                <span className="text-xs font-medium text-foreground bg-background/80 backdrop-blur-sm border border-border rounded-full px-3 py-1">
-                  {residenceName} · {index + 1}/{safeImages.length}
-                </span>
-              </div>
             </div>
 
+            {/* Miniaturas */}
             {hasMany && (
-              <div className="p-4 border-t border-border">
-                <div className="flex gap-2 overflow-x-auto">
+              <div className="p-4 border-t border-border bg-background/80 backdrop-blur-sm">
+                <div className="flex gap-2 overflow-x-auto justify-center">
                   {safeImages.map((img, i) => (
                     <button
                       key={i}
                       type="button"
                       onClick={() => setIndex(i)}
-                      className={`relative w-20 h-16 rounded-md overflow-hidden flex-shrink-0 border-2 transition-colors ${
-                        i === index ? "border-primary" : "border-transparent"
+                      className={`relative w-16 h-12 rounded-md overflow-hidden flex-shrink-0 border-2 transition-all ${
+                        i === index ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-70 hover:opacity-100"
                       }`}
                       aria-label={`Seleccionar foto ${i + 1}`}
                     >
