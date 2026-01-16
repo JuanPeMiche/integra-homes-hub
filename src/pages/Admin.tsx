@@ -16,6 +16,7 @@ import { VideoUploader } from "@/components/VideoUploader";
 import { ConveniosAdmin } from "@/components/admin/ConveniosAdmin";
 import { TeamAdmin } from "@/components/admin/TeamAdmin";
 import { CommissionsAdmin } from "@/components/admin/CommissionsAdmin";
+import { NewsAdmin } from "@/components/admin/NewsAdmin";
 import { MultiValueInput } from "@/components/admin/MultiValueInput";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
@@ -31,7 +32,8 @@ import {
   Wrench,
   Star,
   Scale,
-  Video
+  Video,
+  Newspaper
 } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -47,7 +49,7 @@ const Admin = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Residence>>({});
-  const [activeSection, setActiveSection] = useState<'residencias' | 'convenios' | 'equipo' | 'comisiones'>('residencias');
+  const [activeSection, setActiveSection] = useState<'residencias' | 'convenios' | 'equipo' | 'comisiones' | 'noticias'>('residencias');
 
   // Fetch residences directly from DB
   const { data: residences, isLoading: residencesLoading, refetch } = useQuery({
@@ -338,8 +340,8 @@ const Admin = () => {
 
       <div className="container mx-auto px-4 py-6">
         {/* Main Section Tabs */}
-        <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as 'residencias' | 'convenios' | 'equipo' | 'comisiones')} className="mb-6">
-          <TabsList className="grid w-full max-w-2xl grid-cols-4">
+        <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as 'residencias' | 'convenios' | 'equipo' | 'comisiones' | 'noticias')} className="mb-6">
+          <TabsList className="grid w-full max-w-3xl grid-cols-5">
             <TabsTrigger value="residencias" className="gap-2">
               <Building2 className="w-4 h-4" />
               Residencias
@@ -355,6 +357,10 @@ const Admin = () => {
             <TabsTrigger value="comisiones" className="gap-2">
               <Scale className="w-4 h-4" />
               Comisiones
+            </TabsTrigger>
+            <TabsTrigger value="noticias" className="gap-2">
+              <Newspaper className="w-4 h-4" />
+              Noticias
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -861,6 +867,8 @@ const Admin = () => {
           <ConveniosAdmin />
         ) : activeSection === 'comisiones' ? (
           <CommissionsAdmin />
+        ) : activeSection === 'noticias' ? (
+          <NewsAdmin />
         ) : (
           <TeamAdmin />
         )}
