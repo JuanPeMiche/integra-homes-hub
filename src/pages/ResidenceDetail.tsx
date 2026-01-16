@@ -207,6 +207,11 @@ const ResidenceDetail = () => {
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
+  // Check if URL is a YouTube link
+  const isYouTubeUrl = (url: string): boolean => {
+    return url.includes('youtube.com') || url.includes('youtu.be');
+  };
+
   // Helper to extract YouTube video ID
   const getYouTubeVideoId = (url: string): string | null => {
     const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
@@ -357,36 +362,63 @@ const ResidenceDetail = () => {
 
               {/* Presentation Videos */}
               {residence.videoUrls && residence.videoUrls.length > 0 && (
-                <Card className="overflow-hidden border-l-4 border-l-red-500">
+                <Card className="overflow-hidden border-l-4 border-l-primary">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center">
-                        <Video className="h-5 w-5 text-red-500" />
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Video className="h-5 w-5 text-primary" />
                       </div>
                       <h2 className="text-2xl font-bold">Videos de Presentación</h2>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {residence.videoUrls.map((videoUrl, idx) => {
-                        const videoId = getYouTubeVideoId(videoUrl);
-                        if (!videoId) return null;
+                        // Check if it's a YouTube URL or direct video file
+                        if (isYouTubeUrl(videoUrl)) {
+                          const videoId = getYouTubeVideoId(videoUrl);
+                          if (!videoId) return null;
+                          
+                          return (
+                            <button
+                              key={idx}
+                              onClick={() => setSelectedVideo(videoUrl)}
+                              className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
+                            >
+                              <img
+                                src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+                                alt={`Video de presentación ${idx + 1}`}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                                <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                                  <Play className="w-6 h-6 text-white ml-1" />
+                                </div>
+                              </div>
+                              <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                                Video {idx + 1}
+                              </div>
+                            </button>
+                          );
+                        }
                         
+                        // Direct video file
                         return (
                           <button
                             key={idx}
                             onClick={() => setSelectedVideo(videoUrl)}
                             className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
                           >
-                            <img
-                              src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
-                              alt={`Video de presentación ${idx + 1}`}
+                            <video
+                              src={videoUrl}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              preload="metadata"
                             />
                             <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
-                              <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                              <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
                                 <Play className="w-6 h-6 text-white ml-1" />
                               </div>
                             </div>
-                            <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                            <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+                              <Video className="w-3 h-3" />
                               Video {idx + 1}
                             </div>
                           </button>
@@ -796,7 +828,7 @@ const ResidenceDetail = () => {
           >
             <X className="w-5 h-5" />
           </button>
-          {selectedVideo && getYouTubeVideoId(selectedVideo) && (
+          {selectedVideo && isYouTubeUrl(selectedVideo) && getYouTubeVideoId(selectedVideo) && (
             <div className="aspect-video">
               <iframe
                 src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedVideo)}?autoplay=1`}
@@ -805,6 +837,18 @@ const ResidenceDetail = () => {
                 allowFullScreen
                 className="w-full h-full"
               />
+            </div>
+          )}
+          {selectedVideo && !isYouTubeUrl(selectedVideo) && (
+            <div className="aspect-video">
+              <video
+                src={selectedVideo}
+                controls
+                autoPlay
+                className="w-full h-full"
+              >
+                Tu navegador no soporta la reproducción de videos.
+              </video>
             </div>
           )}
         </DialogContent>
