@@ -38,7 +38,7 @@ const Index = () => {
                 Encontrá el mejor hogar para tus mayores en Uruguay
               </h1>
               <p className="text-lg md:text-xl text-white/95 leading-relaxed">
-                Integra Residenciales te ayuda a encontrar la residencia perfecta con la mejor atención, cuidados personalizados y trato digno
+                Integra Residenciales es la única asociación de residenciales habilitados en Uruguay. Todos nuestros residenciales cuentan con la mejor atención, cuidados personalizados y trato digno.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button 
@@ -124,7 +124,7 @@ const Index = () => {
                 ¿Por qué elegir Integra Residenciales?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Nuestro compromiso es ayudarte a encontrar el mejor cuidado para tus seres queridos en Uruguay
+                Nuestro compromiso es ayudarte a encontrar el mejor cuidado para tus seres queridos en Uruguay.
               </p>
             </div>
 

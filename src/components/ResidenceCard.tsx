@@ -15,6 +15,14 @@ interface ResidenceCardProps {
   showFavorite?: boolean;
 }
 
+const transparencyCriteria = [
+  "Servicios disponibles",
+  "Fotos de instalaciones (mín. 5)",
+  "Página web",
+  "Habilitaciones",
+  "Directivos y equipo responsable"
+];
+
 const TransparencyStars = ({ rating }: { rating: number }) => {
   if (rating === 0) {
     return (
@@ -39,8 +47,18 @@ const TransparencyStars = ({ rating }: { rating: number }) => {
             ))}
           </div>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>Índice de transparencia: {rating}/5</p>
+        <TooltipContent className="max-w-xs">
+          <p className="font-medium mb-2">Índice de transparencia: {rating}/5</p>
+          <ul className="text-xs space-y-1">
+            {transparencyCriteria.map((criteria, idx) => (
+              <li key={idx} className="flex items-center gap-1">
+                <span className={idx < rating ? "text-yellow-400" : "text-muted-foreground"}>
+                  {idx < rating ? "✓" : "○"}
+                </span>
+                {criteria}
+              </li>
+            ))}
+          </ul>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

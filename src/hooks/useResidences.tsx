@@ -47,19 +47,59 @@ export interface Residence {
   videoUrls?: string[];
 }
 
+// Calculate transparency rating based on criteria:
+// ⭐ Servicios disponibles
+// ⭐⭐ Fotos de instalaciones (min 5)
+// ⭐⭐⭐ Página web
+// ⭐⭐⭐⭐ Habilitaciones/certifications
+// ⭐⭐⭐⭐⭐ Directivos y equipo responsable
+const calculateTransparency = (row: any, directors: any[] = []): number => {
+  let stars = 0;
+  
+  // ⭐ Servicios disponibles
+  if (row.services && row.services.length > 0) {
+    stars += 1;
+  }
+  
+  // ⭐⭐ Fotos de instalaciones en buena calidad (min.5)
+  if (row.images && row.images.length >= 5) {
+    stars += 1;
+  }
+  
+  // ⭐⭐⭐ Página web
+  if (row.website && row.website.trim() !== '') {
+    stars += 1;
+  }
+  
+  // ⭐⭐⭐⭐ Habilitaciones/Certificaciones
+  if (row.certifications && row.certifications.length > 0) {
+    stars += 1;
+  }
+  
+  // ⭐⭐⭐⭐⭐ Directivos y equipo responsable
+  if (directors && directors.length > 0) {
+    stars += 1;
+  }
+  
+  return stars;
+};
+
 // Transform database row to frontend format
-const transformResidence = (row: any, directors: any[] = []): Residence => ({
-  id: row.id,
-  name: row.name,
-  type: row.type,
-  city: row.city,
-  province: row.province,
-  address: row.address,
-  price: row.price || 0,
-  priceRange: row.price_range || 'Consultar',
-  capacity: row.capacity || 0,
-  rating: parseFloat(row.rating) || 0,
-  transparency: row.transparency || 0,
+const transformResidence = (row: any, directors: any[] = []): Residence => {
+  const transparency = calculateTransparency(row, directors);
+  
+  return {
+    id: row.id,
+    name: row.name,
+    type: row.type,
+    city: row.city,
+    province: row.province,
+    address: row.address,
+    price: row.price || 0,
+    priceRange: row.price_range || 'Consultar',
+    capacity: row.capacity || 0,
+    rating: parseFloat(row.rating) || 0,
+    transparency,
   image: row.image || '',
   images: row.images || [],
   description: row.description || '',
@@ -81,16 +121,17 @@ const transformResidence = (row: any, directors: any[] = []): Residence => ({
   stayTypes: row.stay_types || [],
   admissions: row.admissions || [],
   certifications: row.certifications || [],
-  logoUrl: row.logo_url,
-  mapsUrl: row.maps_url,
-  directors: directors.map(d => ({
-    id: d.id,
-    name: d.name,
-    role: d.role,
-    photo_url: d.photo_url,
-  })),
-  videoUrls: row.video_urls || [],
-});
+    logoUrl: row.logo_url,
+    mapsUrl: row.maps_url,
+    directors: directors.map(d => ({
+      id: d.id,
+      name: d.name,
+      role: d.role,
+      photo_url: d.photo_url,
+    })),
+    videoUrls: row.video_urls || [],
+  };
+};
 
 export const useResidences = () => {
   return useQuery({
