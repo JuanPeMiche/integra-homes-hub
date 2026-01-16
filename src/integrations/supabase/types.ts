@@ -118,10 +118,13 @@ export type Database = {
       }
       news_articles: {
         Row: {
+          article_type: string
           author: string | null
+          category: string | null
           content: string
           created_at: string
           excerpt: string | null
+          external_link: string | null
           id: string
           image_url: string | null
           is_published: boolean | null
@@ -129,12 +132,17 @@ export type Database = {
           slug: string
           title: string
           updated_at: string
+          video_source: string | null
+          video_url: string | null
         }
         Insert: {
+          article_type?: string
           author?: string | null
+          category?: string | null
           content: string
           created_at?: string
           excerpt?: string | null
+          external_link?: string | null
           id?: string
           image_url?: string | null
           is_published?: boolean | null
@@ -142,12 +150,17 @@ export type Database = {
           slug: string
           title: string
           updated_at?: string
+          video_source?: string | null
+          video_url?: string | null
         }
         Update: {
+          article_type?: string
           author?: string | null
+          category?: string | null
           content?: string
           created_at?: string
           excerpt?: string | null
+          external_link?: string | null
           id?: string
           image_url?: string | null
           is_published?: boolean | null
@@ -155,6 +168,8 @@ export type Database = {
           slug?: string
           title?: string
           updated_at?: string
+          video_source?: string | null
+          video_url?: string | null
         }
         Relationships: []
       }
