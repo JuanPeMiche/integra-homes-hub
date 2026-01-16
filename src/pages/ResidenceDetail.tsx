@@ -67,7 +67,11 @@ import {
   Accessibility,
   WashingMachine,
   DoorOpen,
+  Video,
+  Play,
+  X,
 } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useResidence } from "@/hooks/useResidences";
 
 // Icon mapping for services
@@ -201,6 +205,13 @@ const ResidenceDetail = () => {
     mensaje: "",
   });
   const [showSendDialog, setShowSendDialog] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+
+  // Helper to extract YouTube video ID
+  const getYouTubeVideoId = (url: string): string | null => {
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return match ? match[1] : null;
+  };
 
   if (isLoading) {
     return (
@@ -343,6 +354,48 @@ const ResidenceDetail = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* Image Gallery */}
               <ResidenceGallery residenceName={residence.name} images={residence.images} />
+
+              {/* Presentation Videos */}
+              {residence.videoUrls && residence.videoUrls.length > 0 && (
+                <Card className="overflow-hidden border-l-4 border-l-red-500">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center">
+                        <Video className="h-5 w-5 text-red-500" />
+                      </div>
+                      <h2 className="text-2xl font-bold">Videos de Presentación</h2>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {residence.videoUrls.map((videoUrl, idx) => {
+                        const videoId = getYouTubeVideoId(videoUrl);
+                        if (!videoId) return null;
+                        
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedVideo(videoUrl)}
+                            className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
+                          >
+                            <img
+                              src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+                              alt={`Video de presentación ${idx + 1}`}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                              <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                                <Play className="w-6 h-6 text-white ml-1" />
+                              </div>
+                            </div>
+                            <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                              Video {idx + 1}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Description */}
               <Card className="overflow-hidden border-l-4 border-l-primary">
@@ -732,6 +785,30 @@ const ResidenceDetail = () => {
         recipientWhatsApp={residence.whatsapp ? `598${residence.whatsapp.replace(/\D/g, '')}` : "59899923330"}
         subject={`Consulta sobre ${residence.name}`}
       />
+
+      {/* Video Modal */}
+      <Dialog open={!!selectedVideo} onOpenChange={() => setSelectedVideo(null)}>
+        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black">
+          <DialogTitle className="sr-only">Video de presentación de {residence.name}</DialogTitle>
+          <button
+            onClick={() => setSelectedVideo(null)}
+            className="absolute top-2 right-2 z-50 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          {selectedVideo && getYouTubeVideoId(selectedVideo) && (
+            <div className="aspect-video">
+              <iframe
+                src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedVideo)}?autoplay=1`}
+                title="Video de presentación"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

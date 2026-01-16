@@ -44,6 +44,7 @@ export interface Residence {
   logoUrl?: string;
   mapsUrl?: string;
   directors?: Director[];
+  videoUrls?: string[];
 }
 
 // Transform database row to frontend format
@@ -88,6 +89,7 @@ const transformResidence = (row: any, directors: any[] = []): Residence => ({
     role: d.role,
     photo_url: d.photo_url,
   })),
+  videoUrls: row.video_urls || [],
 });
 
 export const useResidences = () => {

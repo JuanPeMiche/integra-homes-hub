@@ -221,6 +221,7 @@ export type Database = {
           transparency: number | null
           type: string
           updated_at: string
+          video_urls: string[] | null
           website: string | null
           whatsapp: string | null
           whatsapps: string[] | null
@@ -261,6 +262,7 @@ export type Database = {
           transparency?: number | null
           type: string
           updated_at?: string
+          video_urls?: string[] | null
           website?: string | null
           whatsapp?: string | null
           whatsapps?: string[] | null
@@ -301,6 +303,7 @@ export type Database = {
           transparency?: number | null
           type?: string
           updated_at?: string
+          video_urls?: string[] | null
           website?: string | null
           whatsapp?: string | null
           whatsapps?: string[] | null
