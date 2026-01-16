@@ -29,8 +29,12 @@ import {
   Handshake,
   Wrench,
   Star,
-  Scale
+  Scale,
+  Video,
+  Play,
+  AlertCircle
 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tables } from "@/integrations/supabase/types";
 
 type Residence = Tables<"residences">;
@@ -609,6 +613,105 @@ const Admin = () => {
                           images={formData.images || []}
                           onChange={handleGalleryChange}
                         />
+                      </div>
+
+                      {/* Videos de Presentación */}
+                      <div className="space-y-4 pt-6 border-t">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <Video className="w-5 h-5 text-primary" />
+                            <Label className="text-lg font-semibold">Videos de Presentación</Label>
+                          </div>
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              const currentVideos = formData.video_urls || [];
+                              if (currentVideos.length >= 5) {
+                                toast.warning("Máximo 5 videos permitidos");
+                                return;
+                              }
+                              setFormData(prev => ({ 
+                                ...prev, 
+                                video_urls: [...currentVideos, ''] 
+                              }));
+                            }}
+                            disabled={(formData.video_urls || []).length >= 5}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Agregar Video
+                          </Button>
+                        </div>
+                        
+                        <Alert>
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertDescription>
+                            Pegá el link de YouTube del video de presentación (máximo 3 minutos recomendado). 
+                            Formatos aceptados: youtube.com/watch?v=... o youtu.be/...
+                          </AlertDescription>
+                        </Alert>
+
+                        <div className="space-y-3">
+                          {(formData.video_urls || []).map((videoUrl, idx) => {
+                            // Extract YouTube video ID for preview
+                            const getYouTubeId = (url: string) => {
+                              const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+                              return match ? match[1] : null;
+                            };
+                            const videoId = getYouTubeId(videoUrl);
+                            
+                            return (
+                              <div key={idx} className="space-y-2 p-4 border rounded-lg bg-muted/30">
+                                <div className="flex gap-2">
+                                  <Input
+                                    value={videoUrl}
+                                    onChange={(e) => {
+                                      const newVideos = [...(formData.video_urls || [])];
+                                      newVideos[idx] = e.target.value;
+                                      setFormData(prev => ({ ...prev, video_urls: newVideos }));
+                                    }}
+                                    placeholder="https://www.youtube.com/watch?v=..."
+                                  />
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => {
+                                      const newVideos = (formData.video_urls || []).filter((_, i) => i !== idx);
+                                      setFormData(prev => ({ ...prev, video_urls: newVideos }));
+                                    }}
+                                  >
+                                    <Trash2 className="w-4 h-4 text-destructive" />
+                                  </Button>
+                                </div>
+                                
+                                {/* Video Preview */}
+                                {videoId && (
+                                  <div className="relative aspect-video rounded-lg overflow-hidden bg-black/10">
+                                    <img
+                                      src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+                                      alt={`Video ${idx + 1} preview`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                                      <a
+                                        href={videoUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center hover:bg-red-700 transition-colors"
+                                      >
+                                        <Play className="w-5 h-5 text-white ml-1" />
+                                      </a>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                          {(!formData.video_urls || formData.video_urls.length === 0) && (
+                            <p className="text-muted-foreground text-sm italic py-4 text-center">
+                              No hay videos agregados. Haz clic en "Agregar Video" para añadir uno.
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </TabsContent>
 
