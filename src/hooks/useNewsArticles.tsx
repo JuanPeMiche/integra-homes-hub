@@ -14,6 +14,11 @@ export interface NewsArticle {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  article_type: string;
+  category: string | null;
+  external_link: string | null;
+  video_url: string | null;
+  video_source: string | null;
 }
 
 export type NewsArticleInsert = Omit<NewsArticle, "id" | "created_at" | "updated_at">;
@@ -30,17 +35,23 @@ const generateSlug = (title: string): string => {
     .trim();
 };
 
-export const useNewsArticles = () => {
+export const useNewsArticles = (articleType?: 'article' | 'interview') => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: articles = [], isLoading, error } = useQuery({
-    queryKey: ["news-articles"],
+    queryKey: ["news-articles", articleType],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("news_articles")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("published_at", { ascending: false });
+
+      if (articleType) {
+        query = query.eq("article_type", articleType);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       return data as NewsArticle[];
