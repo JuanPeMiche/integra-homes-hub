@@ -34,39 +34,78 @@ async function geocodeWithGoogle(fullAddress: string, apiKey: string): Promise<{
   }
 }
 
-// Fallback to Nominatim (OpenStreetMap) - free service
-async function geocodeWithNominatim(fullAddress: string): Promise<{ lat: number; lng: number; formatted_address: string } | null> {
-  const encodedAddress = encodeURIComponent(fullAddress);
-  const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&limit=1`;
+// Clean address by removing duplicates and extra info
+function cleanAddress(address: string, city: string, province: string): string[] {
+  // Remove common patterns that cause issues
+  const cleanedAddress = address
+    .replace(/,\s*Uruguay/gi, '')
+    .replace(/,\s*Montevideo/gi, '')
+    .trim();
   
-  try {
-    const response = await fetch(nominatimUrl, {
-      headers: {
-        'User-Agent': 'IntegraResidencias/1.0'
+  const cleanedCity = city
+    .replace(/,\s*Uruguay/gi, '')
+    .replace(/,\s*Montevideo/gi, '')
+    .trim();
+  
+  const cleanedProvince = province
+    .replace(/,\s*Uruguay/gi, '')
+    .trim();
+  
+  // Generate multiple search queries to try
+  const queries = [
+    // Most specific: just street address + Uruguay
+    `${cleanedAddress}, Uruguay`,
+    // With city
+    `${cleanedAddress}, ${cleanedCity}, Uruguay`,
+    // Full but cleaned
+    `${cleanedAddress}, ${cleanedCity}, ${cleanedProvince}, Uruguay`,
+    // Try without street number
+    `${cleanedAddress.replace(/\d+/g, '').trim()}, ${cleanedCity}, Uruguay`,
+  ];
+  
+  return [...new Set(queries)]; // Remove duplicates
+}
+
+// Fallback to Nominatim (OpenStreetMap) - free service
+async function geocodeWithNominatim(address: string, city: string, province: string): Promise<{ lat: number; lng: number; formatted_address: string } | null> {
+  const queries = cleanAddress(address, city, province);
+  
+  for (const query of queries) {
+    console.log(`Nominatim: Trying query: ${query}`);
+    const encodedAddress = encodeURIComponent(query);
+    const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&limit=1&countrycodes=uy`;
+    
+    try {
+      const response = await fetch(nominatimUrl, {
+        headers: {
+          'User-Agent': 'IntegraResidencias/1.0 (contact@integraresidencias.uy)'
+        }
+      });
+      const data = await response.json();
+      
+      console.log(`Nominatim response for "${query}": ${JSON.stringify(data)}`);
+      
+      if (data && data.length > 0) {
+        const result = data[0];
+        const lat = parseFloat(result.lat);
+        const lng = parseFloat(result.lon);
+        console.log(`Nominatim: Coordinates found: lat=${lat}, lng=${lng}`);
+        return {
+          lat,
+          lng,
+          formatted_address: result.display_name
+        };
       }
-    });
-    const data = await response.json();
-    
-    console.log(`Nominatim response: ${JSON.stringify(data)}`);
-    
-    if (data && data.length > 0) {
-      const result = data[0];
-      const lat = parseFloat(result.lat);
-      const lng = parseFloat(result.lon);
-      console.log(`Nominatim: Coordinates found: lat=${lat}, lng=${lng}`);
-      return {
-        lat,
-        lng,
-        formatted_address: result.display_name
-      };
+      
+      // Small delay between requests to respect rate limits
+      await new Promise(resolve => setTimeout(resolve, 300));
+    } catch (error) {
+      console.error(`Nominatim geocoding error for "${query}":`, error);
     }
-    
-    console.log('Nominatim: No results found');
-    return null;
-  } catch (error) {
-    console.error('Nominatim geocoding error:', error);
-    return null;
   }
+  
+  console.log('Nominatim: No results found for any query variant');
+  return null;
 }
 
 serve(async (req) => {
@@ -85,9 +124,10 @@ serve(async (req) => {
       );
     }
 
-    // Build full address for better geocoding results
+    console.log(`Geocoding address: ${address}, city: ${city}, province: ${province}`);
+    
+    // Build full address for Google geocoding
     const fullAddress = [address, city, province, 'Uruguay'].filter(Boolean).join(', ');
-    console.log(`Geocoding address: ${fullAddress}`);
     
     // Try Google first
     const googleApiKey = Deno.env.get('GOOGLE_MAPS_API_KEY');
@@ -99,10 +139,10 @@ serve(async (req) => {
       console.log('No Google API key configured, skipping Google geocoding');
     }
     
-    // Fallback to Nominatim if Google fails
+    // Fallback to Nominatim if Google fails (with smarter query handling)
     if (!result) {
       console.log('Trying Nominatim as fallback...');
-      result = await geocodeWithNominatim(fullAddress);
+      result = await geocodeWithNominatim(address, city || '', province || '');
     }
     
     if (result) {
