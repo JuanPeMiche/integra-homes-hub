@@ -571,26 +571,26 @@ const Admin = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <MultiValueInput
                             label="Teléfonos adicionales"
-                            values={formData.phones || []}
-                            onChange={(phones) => setFormData(prev => ({ ...prev, phones }))}
+                            values={Array.isArray(formData.phones) ? formData.phones : []}
+                            onChange={(values) => setFormData(prev => ({ ...prev, phones: values }))}
                             placeholder="Agregar teléfono adicional"
                           />
                           <MultiValueInput
                             label="WhatsApps adicionales"
-                            values={formData.whatsapps || []}
-                            onChange={(whatsapps) => setFormData(prev => ({ ...prev, whatsapps }))}
+                            values={Array.isArray(formData.whatsapps) ? formData.whatsapps : []}
+                            onChange={(values) => setFormData(prev => ({ ...prev, whatsapps: values }))}
                             placeholder="Agregar WhatsApp adicional"
                           />
                           <MultiValueInput
                             label="Direcciones adicionales"
-                            values={formData.addresses || []}
-                            onChange={(addresses) => setFormData(prev => ({ ...prev, addresses }))}
+                            values={Array.isArray(formData.addresses) ? formData.addresses : []}
+                            onChange={(values) => setFormData(prev => ({ ...prev, addresses: values }))}
                             placeholder="Agregar dirección adicional"
                           />
                           <MultiValueInput
                             label="Ciudades adicionales"
-                            values={formData.cities || []}
-                            onChange={(cities) => setFormData(prev => ({ ...prev, cities }))}
+                            values={Array.isArray(formData.cities) ? formData.cities : []}
+                            onChange={(values) => setFormData(prev => ({ ...prev, cities: values }))}
                             placeholder="Agregar ciudad adicional"
                           />
                         </div>
