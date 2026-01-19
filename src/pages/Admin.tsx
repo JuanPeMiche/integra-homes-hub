@@ -570,27 +570,43 @@ const Admin = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <MultiValueInput
+                            key={`phones-${selectedResidence.id}`}
                             label="Teléfonos adicionales"
-                            values={Array.isArray(formData.phones) ? formData.phones : []}
-                            onChange={(values) => setFormData(prev => ({ ...prev, phones: values }))}
+                            values={formData.phones ?? []}
+                            onChange={(newValues) => {
+                              console.log('Updating phones:', newValues);
+                              setFormData(prev => ({ ...prev, phones: newValues }));
+                            }}
                             placeholder="Agregar teléfono adicional"
                           />
                           <MultiValueInput
+                            key={`whatsapps-${selectedResidence.id}`}
                             label="WhatsApps adicionales"
-                            values={Array.isArray(formData.whatsapps) ? formData.whatsapps : []}
-                            onChange={(values) => setFormData(prev => ({ ...prev, whatsapps: values }))}
+                            values={formData.whatsapps ?? []}
+                            onChange={(newValues) => {
+                              console.log('Updating whatsapps:', newValues);
+                              setFormData(prev => ({ ...prev, whatsapps: newValues }));
+                            }}
                             placeholder="Agregar WhatsApp adicional"
                           />
                           <MultiValueInput
+                            key={`addresses-${selectedResidence.id}`}
                             label="Direcciones adicionales"
-                            values={Array.isArray(formData.addresses) ? formData.addresses : []}
-                            onChange={(values) => setFormData(prev => ({ ...prev, addresses: values }))}
+                            values={formData.addresses ?? []}
+                            onChange={(newValues) => {
+                              console.log('Updating addresses:', newValues);
+                              setFormData(prev => ({ ...prev, addresses: newValues }));
+                            }}
                             placeholder="Agregar dirección adicional"
                           />
                           <MultiValueInput
+                            key={`cities-${selectedResidence.id}`}
                             label="Ciudades adicionales"
-                            values={Array.isArray(formData.cities) ? formData.cities : []}
-                            onChange={(values) => setFormData(prev => ({ ...prev, cities: values }))}
+                            values={formData.cities ?? []}
+                            onChange={(newValues) => {
+                              console.log('Updating cities:', newValues);
+                              setFormData(prev => ({ ...prev, cities: newValues }));
+                            }}
                             placeholder="Agregar ciudad adicional"
                           />
                         </div>
