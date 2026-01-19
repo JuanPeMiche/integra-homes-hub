@@ -45,6 +45,11 @@ export interface Residence {
   mapsUrl?: string;
   directors?: Director[];
   videoUrls?: string[];
+  secondaryName?: string;
+  additionalPhones?: string[];
+  additionalWhatsapps?: string[];
+  additionalAddresses?: string[];
+  additionalCities?: string[];
 }
 
 // Calculate transparency rating based on criteria:
@@ -130,6 +135,11 @@ const transformResidence = (row: any, directors: any[] = []): Residence => {
       photo_url: d.photo_url,
     })),
     videoUrls: row.video_urls || [],
+    secondaryName: row.secondary_name,
+    additionalPhones: row.phones || [],
+    additionalWhatsapps: row.whatsapps || [],
+    additionalAddresses: row.addresses || [],
+    additionalCities: row.cities || [],
   };
 };
 

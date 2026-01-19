@@ -549,32 +549,51 @@ const Admin = () => {
                         </div>
                       </div>
 
-                      {/* Multi-value fields */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
-                        <MultiValueInput
-                          label="Teléfonos adicionales"
-                          values={formData.phones || []}
-                          onChange={(phones) => setFormData(prev => ({ ...prev, phones }))}
-                          placeholder="Agregar teléfono adicional"
-                        />
-                        <MultiValueInput
-                          label="WhatsApps adicionales"
-                          values={formData.whatsapps || []}
-                          onChange={(whatsapps) => setFormData(prev => ({ ...prev, whatsapps }))}
-                          placeholder="Agregar WhatsApp adicional"
-                        />
-                        <MultiValueInput
-                          label="Direcciones adicionales"
-                          values={formData.addresses || []}
-                          onChange={(addresses) => setFormData(prev => ({ ...prev, addresses }))}
-                          placeholder="Agregar dirección adicional"
-                        />
-                        <MultiValueInput
-                          label="Ciudades adicionales"
-                          values={formData.cities || []}
-                          onChange={(cities) => setFormData(prev => ({ ...prev, cities }))}
-                          placeholder="Agregar ciudad adicional"
-                        />
+                      {/* Secondary location section */}
+                      <div className="space-y-4 pt-4 border-t">
+                        <div className="flex items-center gap-2">
+                          <Building2 className="w-5 h-5 text-primary" />
+                          <Label className="text-lg font-semibold">Sede Adicional / Sucursal</Label>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Si esta residencia tiene más de una sede, completá los datos adicionales aquí.
+                        </p>
+                        
+                        <div className="space-y-2">
+                          <Label>Nombre de la sede adicional</Label>
+                          <Input
+                            value={(formData as any).secondary_name || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, secondary_name: e.target.value }))}
+                            placeholder="Ej: Sede Pocitos, Sucursal Centro, etc."
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <MultiValueInput
+                            label="Teléfonos adicionales"
+                            values={formData.phones || []}
+                            onChange={(phones) => setFormData(prev => ({ ...prev, phones }))}
+                            placeholder="Agregar teléfono adicional"
+                          />
+                          <MultiValueInput
+                            label="WhatsApps adicionales"
+                            values={formData.whatsapps || []}
+                            onChange={(whatsapps) => setFormData(prev => ({ ...prev, whatsapps }))}
+                            placeholder="Agregar WhatsApp adicional"
+                          />
+                          <MultiValueInput
+                            label="Direcciones adicionales"
+                            values={formData.addresses || []}
+                            onChange={(addresses) => setFormData(prev => ({ ...prev, addresses }))}
+                            placeholder="Agregar dirección adicional"
+                          />
+                          <MultiValueInput
+                            label="Ciudades adicionales"
+                            values={formData.cities || []}
+                            onChange={(cities) => setFormData(prev => ({ ...prev, cities }))}
+                            placeholder="Agregar ciudad adicional"
+                          />
+                        </div>
                       </div>
 
                       <div className="space-y-2">
