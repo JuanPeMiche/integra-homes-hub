@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,6 +51,13 @@ const Admin = () => {
   const [formData, setFormData] = useState<Partial<Residence>>({});
   const [activeSection, setActiveSection] = useState<'residencias' | 'convenios' | 'equipo' | 'comisiones' | 'noticias'>('residencias');
 
+  // Refs para evitar perder el último valor escrito (p.ej. click en "Guardar" sin apretar "+")
+  const phonesRef = useRef<string[]>([]);
+  const whatsappsRef = useRef<string[]>([]);
+  const addressesRef = useRef<string[]>([]);
+  const citiesRef = useRef<string[]>([]);
+
+
   // Fetch residences directly from DB
   const { data: residences, isLoading: residencesLoading, refetch } = useQuery({
     queryKey: ['admin-residences'],
@@ -93,10 +100,27 @@ const Admin = () => {
   }, [user, loading, navigate, signOut]);
 
   useEffect(() => {
-    if (selectedResidence) {
-      setFormData(selectedResidence);
-      fetchDirectors(selectedResidence.id);
-    }
+    if (!selectedResidence) return;
+
+    const phones = Array.isArray(selectedResidence.phones) ? selectedResidence.phones : [];
+    const whatsapps = Array.isArray(selectedResidence.whatsapps) ? selectedResidence.whatsapps : [];
+    const addresses = Array.isArray(selectedResidence.addresses) ? selectedResidence.addresses : [];
+    const cities = Array.isArray(selectedResidence.cities) ? selectedResidence.cities : [];
+
+    phonesRef.current = phones;
+    whatsappsRef.current = whatsapps;
+    addressesRef.current = addresses;
+    citiesRef.current = cities;
+
+    setFormData({
+      ...selectedResidence,
+      phones,
+      whatsapps,
+      addresses,
+      cities,
+    });
+
+    fetchDirectors(selectedResidence.id);
   }, [selectedResidence]);
 
   const fetchDirectors = async (residenceId: string) => {
@@ -118,27 +142,35 @@ const Admin = () => {
 
   const handleSave = async () => {
     if (!selectedResidence) return;
-    
+
     setIsSaving(true);
-    
+
     let updatedFormData = { ...formData };
-    
+
+    // Asegura que se guarde el último estado de los campos multi-valor
+    updatedFormData.phones = phonesRef.current;
+    updatedFormData.whatsapps = whatsappsRef.current;
+    updatedFormData.addresses = addressesRef.current;
+    updatedFormData.cities = citiesRef.current;
+
     // Auto-geocode if address changed
-    if (formData.address !== selectedResidence.address || 
-        formData.city !== selectedResidence.city || 
-        formData.province !== selectedResidence.province) {
+    if (
+      formData.address !== selectedResidence.address ||
+      formData.city !== selectedResidence.city ||
+      formData.province !== selectedResidence.province
+    ) {
       try {
         toast.info("Obteniendo coordenadas de la dirección...");
-        const { data, error: geocodeError } = await supabase.functions.invoke('geocode-address', {
+        const { data, error: geocodeError } = await supabase.functions.invoke("geocode-address", {
           body: {
             address: formData.address,
             city: formData.city,
-            province: formData.province
-          }
+            province: formData.province,
+          },
         });
-        
+
         if (geocodeError) {
-          console.error('Geocode error:', geocodeError);
+          console.error("Geocode error:", geocodeError);
           toast.warning("No se pudieron obtener las coordenadas automáticamente");
         } else if (data?.lat && data?.lng) {
           updatedFormData.coordinates_lat = data.lat;
@@ -146,23 +178,20 @@ const Admin = () => {
           toast.success("Coordenadas actualizadas automáticamente");
         }
       } catch (err) {
-        console.error('Geocode fetch error:', err);
+        console.error("Geocode fetch error:", err);
       }
     }
-    
-    const { error } = await supabase
-      .from('residences')
-      .update(updatedFormData)
-      .eq('id', selectedResidence.id);
-    
+
+    const { error } = await supabase.from("residences").update(updatedFormData).eq("id", selectedResidence.id);
+
     if (error) {
       toast.error("Error al guardar: " + error.message);
     } else {
       toast.success("Residencia actualizada correctamente");
       refetch();
-      queryClient.invalidateQueries({ queryKey: ['residences'] });
+      queryClient.invalidateQueries({ queryKey: ["residences"] });
     }
-    
+
     setIsSaving(false);
   };
 
@@ -572,40 +601,40 @@ const Admin = () => {
                           <MultiValueInput
                             key={`phones-${selectedResidence.id}`}
                             label="Teléfonos adicionales"
-                            values={formData.phones ?? []}
+                            values={Array.isArray(formData.phones) ? formData.phones : []}
                             onChange={(newValues) => {
-                              console.log('Updating phones:', newValues);
-                              setFormData(prev => ({ ...prev, phones: newValues }));
+                              phonesRef.current = newValues;
+                              setFormData((prev) => ({ ...prev, phones: newValues }));
                             }}
                             placeholder="Agregar teléfono adicional"
                           />
                           <MultiValueInput
                             key={`whatsapps-${selectedResidence.id}`}
                             label="WhatsApps adicionales"
-                            values={formData.whatsapps ?? []}
+                            values={Array.isArray(formData.whatsapps) ? formData.whatsapps : []}
                             onChange={(newValues) => {
-                              console.log('Updating whatsapps:', newValues);
-                              setFormData(prev => ({ ...prev, whatsapps: newValues }));
+                              whatsappsRef.current = newValues;
+                              setFormData((prev) => ({ ...prev, whatsapps: newValues }));
                             }}
                             placeholder="Agregar WhatsApp adicional"
                           />
                           <MultiValueInput
                             key={`addresses-${selectedResidence.id}`}
                             label="Direcciones adicionales"
-                            values={formData.addresses ?? []}
+                            values={Array.isArray(formData.addresses) ? formData.addresses : []}
                             onChange={(newValues) => {
-                              console.log('Updating addresses:', newValues);
-                              setFormData(prev => ({ ...prev, addresses: newValues }));
+                              addressesRef.current = newValues;
+                              setFormData((prev) => ({ ...prev, addresses: newValues }));
                             }}
                             placeholder="Agregar dirección adicional"
                           />
                           <MultiValueInput
                             key={`cities-${selectedResidence.id}`}
                             label="Ciudades adicionales"
-                            values={formData.cities ?? []}
+                            values={Array.isArray(formData.cities) ? formData.cities : []}
                             onChange={(newValues) => {
-                              console.log('Updating cities:', newValues);
-                              setFormData(prev => ({ ...prev, cities: newValues }));
+                              citiesRef.current = newValues;
+                              setFormData((prev) => ({ ...prev, cities: newValues }));
                             }}
                             placeholder="Agregar ciudad adicional"
                           />
