@@ -273,6 +273,7 @@ export type Database = {
           rating: number | null
           red_integra: boolean | null
           schedule: string | null
+          secondary_name: string | null
           services: string[] | null
           stay_types: string[] | null
           transparency: number | null
@@ -314,6 +315,7 @@ export type Database = {
           rating?: number | null
           red_integra?: boolean | null
           schedule?: string | null
+          secondary_name?: string | null
           services?: string[] | null
           stay_types?: string[] | null
           transparency?: number | null
@@ -355,6 +357,7 @@ export type Database = {
           rating?: number | null
           red_integra?: boolean | null
           schedule?: string | null
+          secondary_name?: string | null
           services?: string[] | null
           stay_types?: string[] | null
           transparency?: number | null

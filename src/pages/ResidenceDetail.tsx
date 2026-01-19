@@ -29,6 +29,7 @@ import {
   CheckCircle,
   User,
   Building,
+  Building2,
   Shield,
   Stethoscope,
   Pill,
@@ -751,6 +752,100 @@ const ResidenceDetail = () => {
                     )}
                   </CardContent>
                 </Card>
+
+                {/* Additional Locations / Branches */}
+                {(residence.secondaryName || 
+                  (residence.additionalAddresses && residence.additionalAddresses.length > 0) ||
+                  (residence.additionalPhones && residence.additionalPhones.length > 0) ||
+                  (residence.additionalWhatsapps && residence.additionalWhatsapps.length > 0) ||
+                  (residence.additionalCities && residence.additionalCities.length > 0)) && (
+                  <Card className="overflow-hidden border-l-4 border-l-secondary">
+                    <div className="bg-gradient-to-r from-secondary/10 to-primary/10 p-4 border-b border-border">
+                      <h3 className="font-semibold text-lg flex items-center gap-2">
+                        <Building2 className="h-5 w-5 text-secondary" />
+                        {residence.secondaryName || 'Sede Adicional'}
+                      </h3>
+                    </div>
+                    <CardContent className="p-6 space-y-4">
+                      {/* Additional addresses */}
+                      {residence.additionalAddresses && residence.additionalAddresses.length > 0 && (
+                        <div className="space-y-2">
+                          {residence.additionalAddresses.map((addr, idx) => (
+                            <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                              <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0">
+                                <MapPin className="h-4 w-4 text-secondary" />
+                              </div>
+                              <div className="flex-1">
+                                <span className="text-sm font-medium">
+                                  {addr}
+                                  {residence.additionalCities && residence.additionalCities[idx] && (
+                                    <span className="text-muted-foreground"> - {residence.additionalCities[idx]}</span>
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Additional cities (if no addresses but cities exist) */}
+                      {(!residence.additionalAddresses || residence.additionalAddresses.length === 0) && 
+                       residence.additionalCities && residence.additionalCities.length > 0 && (
+                        <div className="space-y-2">
+                          {residence.additionalCities.map((city, idx) => (
+                            <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                              <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                                <MapPin className="h-4 w-4 text-secondary" />
+                              </div>
+                              <span className="font-medium">{city}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Additional phones */}
+                      {residence.additionalPhones && residence.additionalPhones.length > 0 && (
+                        <div className="space-y-2">
+                          {residence.additionalPhones.map((phone, idx) => (
+                            <a 
+                              key={idx}
+                              href={`tel:${phone}`} 
+                              className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group"
+                            >
+                              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                <Phone className="h-4 w-4 text-primary" />
+                              </div>
+                              <span className="font-medium">{phone}</span>
+                            </a>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Additional WhatsApps */}
+                      {residence.additionalWhatsapps && residence.additionalWhatsapps.length > 0 && (
+                        <div className="space-y-2">
+                          {residence.additionalWhatsapps.map((wa, idx) => {
+                            const waLink = `https://wa.me/598${wa.replace(/\D/g, '')}`;
+                            return (
+                              <a 
+                                key={idx}
+                                href={waLink} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 p-3 rounded-lg hover:bg-green-50 transition-colors group"
+                              >
+                                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                                  <MessageCircle className="h-4 w-4 text-green-600" />
+                                </div>
+                                <span className="font-medium">{wa}</span>
+                              </a>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Contact Form */}
                 <Card>
