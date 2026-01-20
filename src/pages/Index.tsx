@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SearchForm } from "@/components/SearchForm";
@@ -12,6 +13,7 @@ import { useResidences } from "@/hooks/useResidences";
 import heroBg from "@/assets/hero-residence.jpg";
 
 const Index = () => {
+  const navigate = useNavigate();
   const { data: residences = [], isLoading } = useResidences();
   
   // Get Red Integra residences sorted alphabetically
@@ -44,7 +46,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="gap-2 text-base h-14 px-8 bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-                  onClick={() => window.location.href = '/buscar'}
+                  onClick={() => navigate('/buscar')}
                 >
                   Buscar ahora
                   <ArrowRight className="h-5 w-5" />
@@ -53,7 +55,7 @@ const Index = () => {
                   size="lg" 
                   variant="outline" 
                   className="gap-2 text-base h-14 px-8 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
-                  onClick={() => window.location.href = '/contacto'}
+                  onClick={() => navigate('/contacto')}
                 >
                   Asesoramiento gratuito
                 </Button>
@@ -107,7 +109,7 @@ const Index = () => {
                 size="lg" 
                 variant="outline"
                 className="gap-2"
-                onClick={() => window.location.href = '/buscar'}
+                onClick={() => navigate('/buscar')}
               >
                 Ver todas las residencias
                 <ArrowRight className="h-5 w-5" />
