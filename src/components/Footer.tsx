@@ -1,6 +1,7 @@
-import { Mail, Phone, MapPin, Facebook, Instagram } from "lucide-react";
+import { Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { Link } from "react-router-dom";
+import { EmailLink } from "@/components/EmailLink";
 import logoIntegra from "@/assets/logo-integra-new.png";
 
 export const Footer = () => {
@@ -47,10 +48,11 @@ export const Footer = () => {
                 </a>
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
-                <Mail className="h-4 w-4 flex-shrink-0" />
-                <a href="mailto:integraresidenciales@cncs.com.uy" className="hover:text-secondary transition-colors text-xs sm:text-sm break-all">
-                  integraresidenciales@cncs.com.uy
-                </a>
+                <EmailLink 
+                  email="integraresidenciales@cncs.com.uy" 
+                  showIcon 
+                  className="hover:text-secondary transition-colors text-xs sm:text-sm break-all"
+                />
               </div>
             </div>
           </div>

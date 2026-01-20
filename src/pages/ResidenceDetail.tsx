@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ResidenceGallery } from "@/components/ResidenceGallery";
 import { SendMethodDialog } from "@/components/SendMethodDialog";
 import { SecondaryLocationMap } from "@/components/SecondaryLocationMap";
+import { EmailLink } from "@/components/EmailLink";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -727,12 +728,16 @@ const ResidenceDetail = () => {
                         </a>
                       )}
                       {residence.email && (
-                        <a href={`mailto:${residence.email}`} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group">
+                        <EmailLink 
+                          email={residence.email}
+                          subject={`Consulta sobre ${residence.name}`}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group"
+                        >
                           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                             <Mail className="h-5 w-5 text-primary" />
                           </div>
                           <span className="font-medium break-all">{residence.email}</span>
-                        </a>
+                        </EmailLink>
                       )}
                       {residence.website && (
                         <a href={residence.website.startsWith('http') ? residence.website : `https://${residence.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group">
