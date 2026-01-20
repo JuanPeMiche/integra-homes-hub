@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Handshake, ExternalLink, ArrowLeft } from "lucide-react";
+import { Handshake, ExternalLink } from "lucide-react";
 import { useConvenios, Convenio } from "@/hooks/useConvenios";
 import { Link } from "react-router-dom";
 
@@ -32,13 +32,6 @@ const Convenios = () => {
         {/* Hero Section */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
           <div className="container mx-auto px-4">
-            <Link 
-              to="/" 
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-6"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Volver al inicio
-            </Link>
             
             <div className="text-center">
               <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-4">
