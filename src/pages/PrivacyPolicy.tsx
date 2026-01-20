@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { EmailLink } from "@/components/EmailLink";
 import { Shield, Mail, Phone, MapPin } from "lucide-react";
 
 const PrivacyPolicy = () => {
@@ -283,7 +284,7 @@ const PrivacyPolicy = () => {
                   <div>
                     <h4 className="font-semibold text-foreground">Correo electrónico</h4>
                     <p className="text-muted-foreground text-sm">
-                      Envíenos un mensaje a <a href="mailto:integraresidenciales@cncs.com.uy" className="text-primary hover:underline">integraresidenciales@cncs.com.uy</a> indicando en el asunto qué derecho desea ejercer.
+                      Envíenos un mensaje a <EmailLink email="integraresidenciales@cncs.com.uy" subject="Ejercer derechos de privacidad" className="text-primary hover:underline" /> indicando en el asunto qué derecho desea ejercer.
                     </p>
                   </div>
                 </div>

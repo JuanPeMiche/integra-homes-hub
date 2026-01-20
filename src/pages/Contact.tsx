@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SendMethodDialog } from "@/components/SendMethodDialog";
+import { EmailLink } from "@/components/EmailLink";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -192,13 +193,13 @@ const Contact = () => {
                     <CardTitle className="text-xl">Vías de contacto</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <a
-                      href="mailto:integraresidenciales@cncs.com.uy"
+                    <EmailLink 
+                      email="integraresidenciales@cncs.com.uy"
                       className="flex items-center gap-3 p-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                     >
                       <Mail className="h-5 w-5" />
                       <span className="text-sm font-medium">integraresidenciales@cncs.com.uy</span>
-                    </a>
+                    </EmailLink>
 
                     <a
                       href="https://wa.me/59897774000"
