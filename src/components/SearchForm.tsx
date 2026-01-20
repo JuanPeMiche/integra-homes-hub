@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, MapPin, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const SearchForm = () => {
+  const navigate = useNavigate();
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [departamento, setDepartamento] = useState("");
   const [barrio, setBarrio] = useState("");
@@ -45,7 +47,7 @@ export const SearchForm = () => {
     if (tipo) params.set('tipo', tipo);
     if (selectedServices.length > 0) params.set('services', selectedServices.join(','));
     
-    window.location.href = `/buscar?${params.toString()}`;
+    navigate(`/buscar?${params.toString()}`);
   };
 
   return (
