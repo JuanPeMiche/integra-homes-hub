@@ -1,15 +1,6 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Scale, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useCommissions } from "@/hooks/useCommissions";
 
 interface TeamMember {
@@ -21,9 +12,6 @@ interface TeamMember {
 }
 
 export const TeamSection = () => {
-  const [fiscalOpen, setFiscalOpen] = useState(false);
-  const [eticaOpen, setEticaOpen] = useState(false);
-  
   const { data: teamMembers = [], isLoading } = useQuery({
     queryKey: ['team-members'],
     queryFn: async () => {
@@ -93,66 +81,52 @@ export const TeamSection = () => {
           ))}
         </div>
 
-        {/* Commission Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mt-12">
-          <Dialog open={fiscalOpen} onOpenChange={setFiscalOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="gap-2">
-                <Scale className="h-5 w-5" />
-                Ver comisión fiscal
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold text-center">Comisión fiscal</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                {fiscalMembers.map((member) => (
-                  <div key={member.id} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <User className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">{member.name}</p>
-                      {member.role && (
-                        <p className="text-sm text-primary font-medium capitalize">{member.role}</p>
-                      )}
+        {/* Commission Sections - as rows like Directiva */}
+        {fiscalMembers.length > 0 && (
+          <div className="mt-16">
+            <h3 className="text-2xl md:text-3xl font-bold mb-8 text-foreground text-center">
+              Comisión fiscal
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {fiscalMembers.map((member) => (
+                <div key={member.id} className="group text-center">
+                  <div className="relative mb-4 mx-auto w-32 h-32 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Scale className="h-12 w-12 text-primary/40" />
                     </div>
                   </div>
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog>
+                  <h4 className="text-lg font-semibold mb-1 text-foreground">{member.name}</h4>
+                  {member.role && (
+                    <p className="text-primary text-sm font-medium capitalize">{member.role}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-          <Dialog open={eticaOpen} onOpenChange={setEticaOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="lg" className="gap-2">
-                <Users className="h-5 w-5" />
-                Ver comisión de ética
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold text-center">Comisión de ética</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                {eticaMembers.map((member) => (
-                  <div key={member.id} className="flex items-center gap-4 p-4 rounded-lg bg-muted/50">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <User className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-foreground">{member.name}</p>
-                      {member.role && (
-                        <p className="text-sm text-primary font-medium capitalize">{member.role}</p>
-                      )}
+        {eticaMembers.length > 0 && (
+          <div className="mt-16">
+            <h3 className="text-2xl md:text-3xl font-bold mb-8 text-foreground text-center">
+              Comisión de ética
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+              {eticaMembers.map((member) => (
+                <div key={member.id} className="group text-center">
+                  <div className="relative mb-4 mx-auto w-32 h-32 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Users className="h-12 w-12 text-primary/40" />
                     </div>
                   </div>
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+                  <h4 className="text-lg font-semibold mb-1 text-foreground">{member.name}</h4>
+                  {member.role && (
+                    <p className="text-primary text-sm font-medium capitalize">{member.role}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
