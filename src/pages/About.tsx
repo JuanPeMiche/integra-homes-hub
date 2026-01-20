@@ -240,7 +240,7 @@ const About = () => {
                 Si sos un residencial y compartís nuestros valores, o si necesitás ayuda para 
                 encontrar el mejor hogar para tu familiar, contactanos.
               </p>
-              <Button size="lg" onClick={() => window.location.href = '/contacto'}>
+              <Button size="lg" onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy?subject=Contacto%20Red%20Integra'}>
                 Contactar Ahora
               </Button>
             </div>
