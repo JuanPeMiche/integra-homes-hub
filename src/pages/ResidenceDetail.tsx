@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ResidenceGallery } from "@/components/ResidenceGallery";
 import { SendMethodDialog } from "@/components/SendMethodDialog";
+import { SecondaryLocationMap } from "@/components/SecondaryLocationMap";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -845,6 +846,15 @@ const ResidenceDetail = () => {
                       )}
                     </CardContent>
                   </Card>
+                )}
+
+                {/* Secondary Location Map */}
+                {residence.additionalAddresses && residence.additionalAddresses.length > 0 && (
+                  <SecondaryLocationMap
+                    address={residence.additionalAddresses[0]}
+                    locationName={residence.secondaryName}
+                    city={residence.additionalCities?.[0]}
+                  />
                 )}
 
                 {/* Contact Form */}

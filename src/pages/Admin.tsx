@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,9 @@ import { TeamAdmin } from "@/components/admin/TeamAdmin";
 import { CommissionsAdmin } from "@/components/admin/CommissionsAdmin";
 import { NewsAdmin } from "@/components/admin/NewsAdmin";
 import { MultiValueInput } from "@/components/admin/MultiValueInput";
+import { UnsavedChangesIndicator } from "@/components/admin/UnsavedChangesIndicator";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
+import { validateAndNormalizePhones } from "@/utils/phoneValidation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   LogOut, 
@@ -50,6 +53,7 @@ const Admin = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<Partial<Residence>>({});
   const [activeSection, setActiveSection] = useState<'residencias' | 'convenios' | 'equipo' | 'comisiones' | 'noticias'>('residencias');
+  const [autosaveEnabled, setAutosaveEnabled] = useState(false);
 
   // Refs para evitar perder el último valor escrito (p.ej. click en "Guardar" sin apretar "+")
   const phonesRef = useRef<string[]>([]);
@@ -140,7 +144,21 @@ const Admin = () => {
     navigate("/admin-login");
   };
 
-  const handleSave = async () => {
+  // Unsaved changes detection
+  const handleAutoSave = useCallback(async () => {
+    if (!selectedResidence || isSaving) return;
+    await handleSaveInternal(true);
+  }, [selectedResidence, isSaving]);
+
+  const { hasChanges, resetChanges } = useUnsavedChanges({
+    initialData: selectedResidence,
+    formData: formData as Residence,
+    autosaveEnabled,
+    autosaveDelay: 30000,
+    onAutoSave: handleAutoSave,
+  });
+
+  const handleSaveInternal = async (isAutoSave = false) => {
     if (!selectedResidence) return;
 
     setIsSaving(true);
@@ -148,8 +166,30 @@ const Admin = () => {
     let updatedFormData = { ...formData };
 
     // Asegura que se guarde el último estado de los campos multi-valor
-    updatedFormData.phones = phonesRef.current;
-    updatedFormData.whatsapps = whatsappsRef.current;
+    // Normalizar y eliminar duplicados de teléfonos y whatsapps
+    const phonesResult = validateAndNormalizePhones(phonesRef.current, {
+      removeInvalid: false,
+      normalize: true,
+      removeDuplicates: true,
+    });
+    const whatsappsResult = validateAndNormalizePhones(whatsappsRef.current, {
+      removeInvalid: false,
+      normalize: true,
+      removeDuplicates: true,
+    });
+
+    // Mostrar advertencias si hay duplicados
+    if (!isAutoSave) {
+      if (phonesResult.duplicates.length > 0) {
+        toast.warning(`Se eliminaron ${phonesResult.duplicates.length} teléfono(s) duplicado(s)`);
+      }
+      if (whatsappsResult.duplicates.length > 0) {
+        toast.warning(`Se eliminaron ${whatsappsResult.duplicates.length} WhatsApp(s) duplicado(s)`);
+      }
+    }
+
+    updatedFormData.phones = phonesResult.valid;
+    updatedFormData.whatsapps = whatsappsResult.valid;
     updatedFormData.addresses = addressesRef.current;
     updatedFormData.cities = citiesRef.current;
 
@@ -160,7 +200,7 @@ const Admin = () => {
       formData.province !== selectedResidence.province
     ) {
       try {
-        toast.info("Obteniendo coordenadas de la dirección...");
+        if (!isAutoSave) toast.info("Obteniendo coordenadas de la dirección...");
         const { data, error: geocodeError } = await supabase.functions.invoke("geocode-address", {
           body: {
             address: formData.address,
@@ -171,11 +211,11 @@ const Admin = () => {
 
         if (geocodeError) {
           console.error("Geocode error:", geocodeError);
-          toast.warning("No se pudieron obtener las coordenadas automáticamente");
+          if (!isAutoSave) toast.warning("No se pudieron obtener las coordenadas automáticamente");
         } else if (data?.lat && data?.lng) {
           updatedFormData.coordinates_lat = data.lat;
           updatedFormData.coordinates_lng = data.lng;
-          toast.success("Coordenadas actualizadas automáticamente");
+          if (!isAutoSave) toast.success("Coordenadas actualizadas automáticamente");
         }
       } catch (err) {
         console.error("Geocode fetch error:", err);
@@ -185,15 +225,18 @@ const Admin = () => {
     const { error } = await supabase.from("residences").update(updatedFormData).eq("id", selectedResidence.id);
 
     if (error) {
-      toast.error("Error al guardar: " + error.message);
+      if (!isAutoSave) toast.error("Error al guardar: " + error.message);
     } else {
-      toast.success("Residencia actualizada correctamente");
+      if (!isAutoSave) toast.success("Residencia actualizada correctamente");
+      resetChanges();
       refetch();
       queryClient.invalidateQueries({ queryKey: ["residences"] });
     }
 
     setIsSaving(false);
   };
+
+  const handleSave = () => handleSaveInternal(false);
 
   // Valid residence types according to database constraint
   const RESIDENCE_TYPES = ['publica', 'privada', 'concertada'] as const;
@@ -453,15 +496,24 @@ const Admin = () => {
                     </Button>
                     <CardTitle>{formData.name}</CardTitle>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="destructive" size="sm" onClick={handleDeleteResidence}>
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Eliminar
-                    </Button>
-                    <Button onClick={handleSave} disabled={isSaving}>
-                      <Save className="w-4 h-4 mr-2" />
-                      {isSaving ? "Guardando..." : "Guardar Cambios"}
-                    </Button>
+                  <div className="flex items-center gap-4">
+                    <UnsavedChangesIndicator
+                      hasChanges={hasChanges}
+                      isSaving={isSaving}
+                      autosaveEnabled={autosaveEnabled}
+                      onAutosaveToggle={setAutosaveEnabled}
+                      showAutosaveToggle={true}
+                    />
+                    <div className="flex gap-2">
+                      <Button variant="destructive" size="sm" onClick={handleDeleteResidence}>
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Eliminar
+                      </Button>
+                      <Button onClick={handleSave} disabled={isSaving || !hasChanges}>
+                        <Save className="w-4 h-4 mr-2" />
+                        {isSaving ? "Guardando..." : "Guardar Cambios"}
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
