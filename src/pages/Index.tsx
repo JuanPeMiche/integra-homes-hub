@@ -35,7 +35,7 @@ const Index = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center space-y-6 mb-12">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Encontrá el mejor hogar para tus mayores en Uruguay
+                Integra reúne familias con residenciales habilitados
               </h1>
               <p className="text-lg md:text-xl text-white/95 leading-relaxed">
                 Integra Residenciales es la única asociación de residenciales habilitados en Uruguay. Todos nuestros residenciales cuentan con la mejor atención, cuidados personalizados y trato digno.
