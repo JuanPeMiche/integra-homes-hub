@@ -13,9 +13,8 @@ const About = () => {
       icon: <Mail className="h-4 w-4" />,
       duration: 2000,
     });
-    setTimeout(() => {
-      window.location.href = `mailto:integraresidenciales@cncs.com.uy?subject=${encodeURIComponent(subject)}`;
-    }, 300);
+    const mailtoUrl = `mailto:integraresidenciales@cncs.com.uy?subject=${encodeURIComponent(subject)}`;
+    window.open(mailtoUrl, '_self');
   };
   return (
     <div className="min-h-screen flex flex-col">

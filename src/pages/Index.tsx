@@ -193,7 +193,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="gap-2 text-base h-14 px-8"
-                  onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy'}
+                  onClick={() => window.open('mailto:integraresidenciales@cncs.com.uy', '_self')}
                 >
                   Contactar ahora
                   <ArrowRight className="h-5 w-5" />
