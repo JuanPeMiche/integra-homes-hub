@@ -88,7 +88,7 @@ const FilterPanel = React.memo(({
 
     {/* Departamento */}
     <div>
-      <Label className="text-sm font-medium mb-2 block">Departamento</Label>
+      <Label className="text-sm font-medium mb-2 block">Ubicación</Label>
       <Select value={departamento || "_all"} onValueChange={(val) => onDepartamentoChange(val === "_all" ? "" : val)}>
         <SelectTrigger className="bg-background">
           <SelectValue placeholder="Todos" />
@@ -391,7 +391,7 @@ const SearchResults = () => {
           <div className="container mx-auto px-4 py-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Residencias en Uruguay</h1>
+                <h1 className="text-2xl font-bold text-foreground">Residenciales destacados</h1>
                 <p className="text-muted-foreground text-sm">
                   {isLoading ? "Cargando..." : `${filteredResidences.length} residencias encontradas`}
                 </p>
