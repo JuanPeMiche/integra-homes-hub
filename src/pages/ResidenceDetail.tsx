@@ -548,18 +548,24 @@ const ResidenceDetail = () => {
                 </CardContent>
               </Card>
 
-              {/* Certifications */}
-              {residence.certifications && residence.certifications.length > 0 && (
+              {/* Certifications / Habilitaciones */}
+              {((residence.certifications && residence.certifications.length > 0) || residence.fireCertification) && (
                 <Card>
                   <CardContent className="p-6">
                     <h2 className="text-2xl font-bold mb-4">Habilitaciones</h2>
                     <div className="flex flex-wrap gap-3">
-                      {residence.certifications.map((cert, idx) => (
+                      {residence.certifications?.map((cert, idx) => (
                         <Badge key={idx} variant="outline" className="gap-2 py-2 px-4 text-base">
                           <Shield className="h-4 w-4 text-secondary" />
                           {cert}
                         </Badge>
                       ))}
+                      {residence.fireCertification && (
+                        <Badge variant="outline" className="gap-2 py-2 px-4 text-base">
+                          <Shield className="h-4 w-4 text-orange-500" />
+                          Bomberos: {residence.fireCertification}
+                        </Badge>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
