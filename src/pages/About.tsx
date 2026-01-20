@@ -127,11 +127,11 @@ const About = () => {
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-primary mb-2">+100</div>
+                      <div className="text-4xl font-bold text-primary mb-2">+120</div>
                       <p className="text-sm text-muted-foreground">Residencias en la Red</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-secondary mb-2">+1.000</div>
+                      <div className="text-4xl font-bold text-secondary mb-2">+3.000</div>
                       <p className="text-sm text-muted-foreground">Familias Ayudadas</p>
                     </div>
                     <div className="text-center">
@@ -165,7 +165,7 @@ const About = () => {
                       <p className="text-muted-foreground mb-6">Experta Internacional en Gerontología</p>
                       
                       <p className="text-muted-foreground leading-relaxed mb-6">
-                        Cuenta con más de 25 años de experiencia en diversos ámbitos de formación, 
+                        Cuenta con más de 30 años de experiencia en diversos ámbitos de formación, 
                         acompañamientos y atención en el cuidado de las personas mayores. 
                         Te invitamos a descubrir por qué trabajar con personas mayores es su vocación.
                       </p>
@@ -204,7 +204,7 @@ const About = () => {
                     Si tenés vocación de servicio en el cuidado y atención a las personas mayores, 
                     podés enviarnos tus datos de contacto y dejarnos tu currículum vitae.
                   </p>
-                  <Button variant="outline" size="lg" className="gap-2" onClick={() => window.location.href = '/trabaja-con-nosotros'}>
+                  <Button variant="outline" size="lg" className="gap-2" onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy?subject=Consulta%20sobre%20oportunidades%20laborales'}>
                     Ver Oportunidades
                   </Button>
                 </CardContent>
@@ -220,7 +220,7 @@ const About = () => {
                     Sumate a la Red Integra y accedé a beneficios exclusivos, formación continua, 
                     y la plataforma de gestión IntegraSoft para optimizar tu residencial.
                   </p>
-                  <Button size="lg" onClick={() => window.location.href = '/asociar-residencia'}>
+                  <Button size="lg" onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy?subject=Solicitud%20para%20asociar%20mi%20residencial'}>
                     Asociar mi Residencial
                   </Button>
                 </CardContent>

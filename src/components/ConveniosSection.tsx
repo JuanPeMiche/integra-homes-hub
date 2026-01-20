@@ -117,15 +117,16 @@ export const ConveniosSection = () => {
         {/* CTA */}
         <div className="text-center">
           <Button 
-            asChild 
             variant="secondary" 
             size="lg"
             className="gap-2 bg-white text-primary hover:bg-white/90"
+            onClick={() => {
+              window.scrollTo(0, 0);
+              window.location.href = '/convenios';
+            }}
           >
-            <Link to="/convenios">
-              Ver todos los convenios
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            Ver todos los convenios
+            <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
       </div>

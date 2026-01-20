@@ -106,13 +106,19 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
           </div>
         )}
         
-        {/* Logo placeholder - bottom left corner */}
+        {/* Logo/thumbnail - bottom left corner - use cover image if no logo */}
         <div className="absolute bottom-3 left-3">
           {residence.logoUrl ? (
             <img 
               src={residence.logoUrl} 
               alt={`Logo ${residence.name}`}
               className="h-12 w-12 rounded-lg bg-white object-contain shadow-md p-1"
+            />
+          ) : residence.image ? (
+            <img 
+              src={residence.image} 
+              alt={residence.name}
+              className="h-12 w-12 rounded-lg bg-white object-cover shadow-md"
             />
           ) : (
             <div className="h-12 w-12 rounded-lg bg-white/95 backdrop-blur-sm shadow-md flex items-center justify-center">

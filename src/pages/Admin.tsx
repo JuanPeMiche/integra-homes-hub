@@ -628,6 +628,31 @@ const Admin = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, price_range: e.target.value }))}
                           />
                         </div>
+                        <div className="space-y-2">
+                          <Label>Habilitación de Bomberos (sigla)</Label>
+                          <Input
+                            value={(formData as any).fire_certification || ''}
+                            onChange={(e) => setFormData(prev => ({ ...prev, fire_certification: e.target.value }))}
+                            placeholder="Ej: HB-2024-1234"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Visibility Toggle */}
+                      <div className="flex items-center gap-3 p-4 rounded-lg bg-muted">
+                        <input
+                          type="checkbox"
+                          id="is_hidden"
+                          checked={(formData as any).is_hidden || false}
+                          onChange={(e) => setFormData(prev => ({ ...prev, is_hidden: e.target.checked }))}
+                          className="h-5 w-5 rounded border-border"
+                        />
+                        <div>
+                          <Label htmlFor="is_hidden" className="cursor-pointer font-medium">Ocultar residencia</Label>
+                          <p className="text-sm text-muted-foreground">
+                            Si está marcado, esta residencia no aparecerá en los listados públicos.
+                          </p>
+                        </div>
                       </div>
 
                       {/* Secondary location section */}

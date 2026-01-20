@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut, Heart, ChevronDown, FileText, Shield, Info, Newspaper, Handshake } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, Heart, ChevronDown, FileText, Shield, Info, Handshake, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
@@ -62,7 +62,7 @@ export const Header = () => {
             {[
               { to: "/buscar", label: "Buscar residencias" },
               { to: "/convenios", label: "Convenios" },
-              { to: "/asesoramiento", label: "Buscamos por ti" },
+              { to: "/noticias", label: "Noticias" },
               { to: "/contacto", label: "Contacto" },
             ].map((link) => (
               <NavLink
@@ -87,9 +87,9 @@ export const Header = () => {
                   <Info className="mr-2 h-4 w-4" />
                   Sobre Integra
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/noticias")} className="cursor-pointer">
-                  <Newspaper className="mr-2 h-4 w-4" />
-                  Noticias
+                <DropdownMenuItem onClick={() => navigate("/asesoramiento")} className="cursor-pointer">
+                  <Search className="mr-2 h-4 w-4" />
+                  Buscamos por ti
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate("/trabaja-con-nosotros")} className="cursor-pointer">
                   <Handshake className="mr-2 h-4 w-4" />
@@ -147,9 +147,9 @@ export const Header = () => {
               )
             )}
             <Button variant={showSolidHeader ? "outline" : "secondary"} size="sm" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`} asChild>
-              <a href="tel:+59899923330">
+              <a href="tel:+59897774000">
                 <Phone className="h-4 w-4" />
-                <span className="hidden lg:inline">(+598) 99 923 330</span>
+                <span className="hidden lg:inline">598 97 774 000</span>
                 <span className="lg:hidden">Llamar</span>
               </a>
             </Button>
@@ -213,9 +213,9 @@ export const Header = () => {
             )}
             
             <Button variant="outline" size="sm" className="w-full gap-2 mt-2" asChild>
-              <a href="tel:+59899923330">
+              <a href="tel:+59897774000">
                 <Phone className="h-4 w-4" />
-                (+598) 99 923 330
+                598 97 774 000
               </a>
             </Button>
           </nav>

@@ -521,13 +521,13 @@ const Asesoramiento = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="gap-2" asChild>
-                  <a href="tel:+59899923330">
+                  <a href="tel:+59897774000">
                     <Phone className="h-5 w-5" />
-                    Llamar: (+598) 99 923 330
+                    Llamar: 598 97 774 000
                   </a>
                 </Button>
                 <Button size="lg" variant="outline" className="gap-2 text-green-600 border-green-600 hover:bg-green-50" asChild>
-                  <a href="https://wa.me/59899923330" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/59897774000" target="_blank" rel="noopener noreferrer">
                     <CheckCircle className="h-5 w-5" />
                     WhatsApp
                   </a>

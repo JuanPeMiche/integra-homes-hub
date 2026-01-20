@@ -22,8 +22,8 @@ export function SendMethodDialog({
   open,
   onOpenChange,
   formData,
-  recipientEmail = "hola@integraresidenciales.com.uy",
-  recipientWhatsApp = "59899923330",
+  recipientEmail = "integraresidenciales@cncs.com.uy",
+  recipientWhatsApp = "59897774000",
   subject = "Nueva consulta desde el sitio web",
 }: SendMethodDialogProps) {
   const [sending, setSending] = useState(false);

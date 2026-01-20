@@ -19,8 +19,8 @@ const quickReplies = [
 const botResponses: Record<string, string> = {
   "¿Cómo busco una residencia?": "Puedes usar nuestro buscador en la página principal. Filtra por departamento, barrio, tipo de atención y servicios que necesites. ¡Es muy fácil!",
   "¿Qué servicios ofrecen?": "Nuestras residencias asociadas ofrecen: enfermería 24h, fisioterapia, terapia ocupacional, actividades recreativas, alimentación especializada, atención Alzheimer, y más.",
-  "Necesito asesoramiento": "¡Con gusto te ayudamos! Puedes contactarnos al (+598) 99 923 330 o escribirnos a hola@integraresidenciales.com.uy. El asesoramiento es gratuito.",
-  "Otro": "Por favor escribe tu consulta y te responderemos a la brevedad. También puedes contactarnos directamente al (+598) 99 923 330.",
+  "Necesito asesoramiento": "¡Con gusto te ayudamos! Puedes contactarnos al 598 97 774 000 o escribirnos a integraresidenciales@cncs.com.uy. El asesoramiento es gratuito.",
+  "Otro": "Por favor escribe tu consulta y te responderemos a la brevedad. También puedes contactarnos directamente al 598 97 774 000.",
 };
 
 export const ChatBot = () => {
@@ -46,7 +46,7 @@ export const ChatBot = () => {
     const userMessage: Message = { id: Date.now(), text: inputValue, isBot: false };
     const botMessage: Message = { 
       id: Date.now() + 1, 
-      text: "Gracias por tu mensaje. Un asesor de Integra Residenciales te contactará pronto. También puedes llamarnos al (+598) 99 923 330.", 
+      text: "Gracias por tu mensaje. Un asesor de Integra Residenciales te contactará pronto. También puedes llamarnos al 598 97 774 000.", 
       isBot: true 
     };
     setMessages(prev => [...prev, userMessage, botMessage]);
