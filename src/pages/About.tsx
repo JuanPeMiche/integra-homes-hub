@@ -2,9 +2,21 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, Heart, Users, Target, Lightbulb, Award, ExternalLink, Building2, Briefcase } from "lucide-react";
+import { Shield, Heart, Users, Target, Lightbulb, Award, ExternalLink, Building2, Briefcase, Mail } from "lucide-react";
+import { toast } from "sonner";
 import madrinaImage from "@/assets/madrina-lourdes-bermejo.png";
+
 const About = () => {
+  const handleEmailClick = (subject: string) => {
+    toast("Abriendo correo...", {
+      description: "Se abrirá tu cliente de email",
+      icon: <Mail className="h-4 w-4" />,
+      duration: 2000,
+    });
+    setTimeout(() => {
+      window.location.href = `mailto:integraresidenciales@cncs.com.uy?subject=${encodeURIComponent(subject)}`;
+    }, 300);
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -204,7 +216,7 @@ const About = () => {
                     Si tenés vocación de servicio en el cuidado y atención a las personas mayores, 
                     podés enviarnos tus datos de contacto y dejarnos tu currículum vitae.
                   </p>
-                  <Button variant="outline" size="lg" className="gap-2" onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy?subject=Consulta%20sobre%20oportunidades%20laborales'}>
+                  <Button variant="outline" size="lg" className="gap-2" onClick={() => handleEmailClick('Consulta sobre oportunidades laborales')}>
                     Ver Oportunidades
                   </Button>
                 </CardContent>
@@ -220,7 +232,7 @@ const About = () => {
                     Sumate a la Red Integra y accedé a beneficios exclusivos, formación continua, 
                     y la plataforma de gestión IntegraSoft para optimizar tu residencial.
                   </p>
-                  <Button size="lg" onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy?subject=Solicitud%20para%20asociar%20mi%20residencial'}>
+                  <Button size="lg" onClick={() => handleEmailClick('Solicitud para asociar mi residencial')}>
                     Asociar mi Residencial
                   </Button>
                 </CardContent>
@@ -240,7 +252,7 @@ const About = () => {
                 Si sos un residencial y compartís nuestros valores, o si necesitás ayuda para 
                 encontrar el mejor hogar para tu familiar, contactanos.
               </p>
-              <Button size="lg" onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy?subject=Contacto%20Red%20Integra'}>
+              <Button size="lg" onClick={() => handleEmailClick('Contacto Red Integra')}>
                 Contactar Ahora
               </Button>
             </div>
