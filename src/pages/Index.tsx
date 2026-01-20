@@ -8,7 +8,7 @@ import { ResidenceCard } from "@/components/ResidenceCard";
 import { ConveniosSection } from "@/components/ConveniosSection";
 import { TeamSection } from "@/components/TeamSection";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Target, Heart, CheckCircle } from "lucide-react";
+import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink } from "lucide-react";
 import { useResidences } from "@/hooks/useResidences";
 import heroBg from "@/assets/hero-residence.jpg";
 
@@ -59,6 +59,17 @@ const Index = () => {
                 >
                   Asesoramiento gratuito
                 </Button>
+              </div>
+              <div className="pt-4">
+                <a 
+                  href="https://app.integrasoft.com.uy/IntegraSoft/com.gp.seguridad.login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-secondary/80 hover:bg-secondary text-secondary-foreground rounded-lg font-medium transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  Acceso a Residenciales (Plataforma de Gestión)
+                </a>
               </div>
             </div>
           </div>
@@ -182,7 +193,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="gap-2 text-base h-14 px-8"
-                  onClick={() => window.location.href = 'mailto:integraresidenciales@cns.com.uy'}
+                  onClick={() => window.location.href = 'mailto:integraresidenciales@cncs.com.uy'}
                 >
                   Contactar ahora
                   <ArrowRight className="h-5 w-5" />

@@ -258,10 +258,12 @@ export type Database = {
           email: string | null
           facebook: string | null
           facilities: string[] | null
+          fire_certification: string | null
           id: string
           image: string | null
           images: string[] | null
           instagram: string | null
+          is_hidden: boolean | null
           logo_url: string | null
           maps_url: string | null
           name: string
@@ -300,10 +302,12 @@ export type Database = {
           email?: string | null
           facebook?: string | null
           facilities?: string[] | null
+          fire_certification?: string | null
           id?: string
           image?: string | null
           images?: string[] | null
           instagram?: string | null
+          is_hidden?: boolean | null
           logo_url?: string | null
           maps_url?: string | null
           name: string
@@ -342,10 +346,12 @@ export type Database = {
           email?: string | null
           facebook?: string | null
           facilities?: string[] | null
+          fire_certification?: string | null
           id?: string
           image?: string | null
           images?: string[] | null
           instagram?: string | null
+          is_hidden?: boolean | null
           logo_url?: string | null
           maps_url?: string | null
           name?: string

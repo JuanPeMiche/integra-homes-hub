@@ -50,6 +50,8 @@ export interface Residence {
   additionalWhatsapps?: string[];
   additionalAddresses?: string[];
   additionalCities?: string[];
+  fireCertification?: string;
+  isHidden?: boolean;
 }
 
 // Calculate transparency rating based on criteria:
@@ -140,6 +142,8 @@ const transformResidence = (row: any, directors: any[] = []): Residence => {
     additionalWhatsapps: row.whatsapps || [],
     additionalAddresses: row.addresses || [],
     additionalCities: row.cities || [],
+    fireCertification: row.fire_certification,
+    isHidden: row.is_hidden || false,
   };
 };
 
@@ -172,10 +176,10 @@ export const useResidences = () => {
         directorsByResidence[d.residence_id].push(d);
       });
 
-      // Transform and return
-      return (residences || []).map(r => 
-        transformResidence(r, directorsByResidence[r.id] || [])
-      );
+      // Transform and return, filtering out hidden residences
+      return (residences || [])
+        .filter(r => !r.is_hidden)
+        .map(r => transformResidence(r, directorsByResidence[r.id] || []));
     },
   });
 };

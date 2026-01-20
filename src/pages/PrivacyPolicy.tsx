@@ -283,7 +283,7 @@ const PrivacyPolicy = () => {
                   <div>
                     <h4 className="font-semibold text-foreground">Correo electrónico</h4>
                     <p className="text-muted-foreground text-sm">
-                      Envíenos un mensaje a <a href="mailto:hola@integraresidenciales.com.uy" className="text-primary hover:underline">hola@integraresidenciales.com.uy</a> indicando en el asunto qué derecho desea ejercer.
+                      Envíenos un mensaje a <a href="mailto:integraresidenciales@cncs.com.uy" className="text-primary hover:underline">integraresidenciales@cncs.com.uy</a> indicando en el asunto qué derecho desea ejercer.
                     </p>
                   </div>
                 </div>

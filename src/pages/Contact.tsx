@@ -193,21 +193,21 @@ const Contact = () => {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <a
-                      href="mailto:hola@integraresidenciales.com.uy"
+                      href="mailto:integraresidenciales@cncs.com.uy"
                       className="flex items-center gap-3 p-3 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                     >
                       <Mail className="h-5 w-5" />
-                      <span className="text-sm font-medium">hola@integraresidenciales.com.uy</span>
+                      <span className="text-sm font-medium">integraresidenciales@cncs.com.uy</span>
                     </a>
 
                     <a
-                      href="https://wa.me/59899923330"
+                      href="https://wa.me/59897774000"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 p-3 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors"
                     >
                       <MessageCircle className="h-5 w-5" />
-                      <span className="text-sm font-medium">WhatsApp: (+598) 99 923 330</span>
+                      <span className="text-sm font-medium">WhatsApp: 598 97 774 000</span>
                     </a>
 
                     <div className="flex gap-3 pt-2">

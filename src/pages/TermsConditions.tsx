@@ -167,8 +167,8 @@ const TermsConditions = () => {
                 Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de:
               </p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Correo electrónico: <a href="mailto:hola@integraresidenciales.com.uy" className="text-primary hover:underline">hola@integraresidenciales.com.uy</a></li>
-                <li>Teléfono: <a href="tel:+59899000000" className="text-primary hover:underline">+598 99 000 000</a></li>
+                <li>Correo electrónico: <a href="mailto:integraresidenciales@cncs.com.uy" className="text-primary hover:underline">integraresidenciales@cncs.com.uy</a></li>
+                <li>Teléfono: <a href="tel:+59897774000" className="text-primary hover:underline">598 97 774 000</a></li>
                 <li>Formulario de contacto disponible en nuestro Sitio.</li>
               </ul>
             </section>
