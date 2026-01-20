@@ -548,28 +548,44 @@ const ResidenceDetail = () => {
                 </CardContent>
               </Card>
 
-              {/* Certifications / Habilitaciones */}
-              {((residence.certifications && residence.certifications.length > 0) || residence.fireCertification) && (
-                <Card>
-                  <CardContent className="p-6">
-                    <h2 className="text-2xl font-bold mb-4">Habilitaciones</h2>
-                    <div className="flex flex-wrap gap-3">
-                      {residence.certifications?.map((cert, idx) => (
+              {/* Habilitaciones - Siempre visible */}
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-2xl font-bold mb-4">Habilitaciones</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {/* MSP y otras certificaciones */}
+                    {residence.certifications && residence.certifications.length > 0 ? (
+                      residence.certifications.map((cert, idx) => (
                         <Badge key={idx} variant="outline" className="gap-2 py-2 px-4 text-base">
                           <Shield className="h-4 w-4 text-secondary" />
                           {cert}
                         </Badge>
-                      ))}
-                      {residence.fireCertification && (
-                        <Badge variant="outline" className="gap-2 py-2 px-4 text-base">
-                          <Shield className="h-4 w-4 text-orange-500" />
-                          Bomberos: {residence.fireCertification}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+                      ))
+                    ) : (
+                      <Badge variant="outline" className="gap-2 py-2 px-4 text-base text-muted-foreground">
+                        <Shield className="h-4 w-4" />
+                        MSP: Pendiente
+                      </Badge>
+                    )}
+                    
+                    {/* Habilitación de Bomberos */}
+                    <Badge 
+                      variant="outline" 
+                      className={`gap-2 py-2 px-4 text-base ${
+                        residence.fireCertification 
+                          ? 'border-orange-300 bg-orange-50' 
+                          : 'text-muted-foreground'
+                      }`}
+                    >
+                      <Flame className={`h-4 w-4 ${residence.fireCertification ? 'text-orange-500' : ''}`} />
+                      {residence.fireCertification 
+                        ? `Bomberos: ${residence.fireCertification}` 
+                        : 'Bomberos: Pendiente'
+                      }
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Directors / Team */}
               <Card>
