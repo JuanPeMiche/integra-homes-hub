@@ -54,7 +54,8 @@ export function SendMethodDialog({
     setSending(true);
     const body = encodeURIComponent(formatMessage());
     const subjectEncoded = encodeURIComponent(subject);
-    window.location.href = `mailto:${recipientEmail}?subject=${subjectEncoded}&body=${body}`;
+    const mailtoUrl = `mailto:${recipientEmail}?subject=${subjectEncoded}&body=${body}`;
+    window.open(mailtoUrl, '_self');
     setTimeout(() => {
       setSending(false);
       onOpenChange(false);
