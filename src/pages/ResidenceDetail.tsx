@@ -74,6 +74,8 @@ import {
   Video,
   Play,
   X,
+  Info,
+  UserCheck,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useResidence } from "@/hooks/useResidences";
@@ -693,6 +695,44 @@ const ResidenceDetail = () => {
                           {residence.capacity} plazas
                         </span>
                       </div>
+                      
+                      {/* Staff Ratio - Solo se muestra si existe el dato */}
+                      {residence.staffRatio && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground">Ratio de personal:</span>
+                          <TooltipProvider delayDuration={0}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span className="font-medium flex items-center gap-1.5 cursor-help">
+                                  <UserCheck className="h-4 w-4 text-secondary" />
+                                  {residence.staffRatio.ratio}
+                                  <Info className="h-3.5 w-3.5 text-muted-foreground hover:text-primary transition-colors" />
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent 
+                                side="left" 
+                                className="max-w-xs p-4 bg-popover text-popover-foreground border border-border shadow-lg rounded-lg"
+                                sideOffset={8}
+                              >
+                                <div className="space-y-2">
+                                  <p className="font-medium text-sm">
+                                    En este caso: {residence.staffRatio.description}.
+                                  </p>
+                                  <ul className="text-sm space-y-1">
+                                    {residence.staffRatio.categories.map((category, idx) => (
+                                      <li key={idx} className="flex items-center gap-2">
+                                        <span className="text-muted-foreground">•</span>
+                                        {category}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      )}
+                      
                       {residence.stayTypes && residence.stayTypes.length > 0 && (
                         <div>
                           <span className="text-muted-foreground text-sm">Tipos de estadía:</span>

@@ -53,6 +53,11 @@ export interface Residence {
   additionalCities?: string[];
   fireCertification?: string;
   isHidden?: boolean;
+  staffRatio?: {
+    ratio: string;
+    description: string;
+    categories: string[];
+  };
 }
 
 // Calculate transparency rating based on criteria:
@@ -146,6 +151,11 @@ const transformResidence = (row: any, directors: any[] = []): Residence => {
     additionalCities: row.cities || [],
     fireCertification: row.fire_certification,
     isHidden: row.is_hidden || false,
+    staffRatio: row.staff_ratio ? {
+      ratio: row.staff_ratio.ratio,
+      description: row.staff_ratio.description,
+      categories: row.staff_ratio.categories || [],
+    } : undefined,
   };
 };
 

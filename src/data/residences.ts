@@ -43,6 +43,11 @@ export interface Residence {
   logoUrl?: string;
   directors?: Director[];
   mapsUrl?: string;
+  staffRatio?: {
+    ratio: string;
+    description: string;
+    categories: string[];
+  };
 }
 
 // Helper to get all unique barrios

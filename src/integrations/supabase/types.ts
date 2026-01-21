@@ -316,6 +316,7 @@ export type Database = {
           schedule: string | null
           secondary_name: string | null
           services: string[] | null
+          staff_ratio: Json | null
           stay_types: string[] | null
           transparency: number | null
           type: string
@@ -361,6 +362,7 @@ export type Database = {
           schedule?: string | null
           secondary_name?: string | null
           services?: string[] | null
+          staff_ratio?: Json | null
           stay_types?: string[] | null
           transparency?: number | null
           type: string
@@ -406,6 +408,7 @@ export type Database = {
           schedule?: string | null
           secondary_name?: string | null
           services?: string[] | null
+          staff_ratio?: Json | null
           stay_types?: string[] | null
           transparency?: number | null
           type?: string
