@@ -293,17 +293,23 @@ const ResidenceDetail = () => {
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-4 mb-6">
               <div className="flex gap-4 items-start">
-                {/* Logo */}
+                {/* Logo/Thumbnail */}
                 <div className="flex-shrink-0">
                   {residence.logoUrl ? (
                     <img 
                       src={residence.logoUrl} 
                       alt={`Logo ${residence.name}`}
-                      className="h-20 w-20 rounded-xl bg-white object-contain shadow-md p-2"
+                      className="h-16 w-16 rounded-xl bg-white object-contain shadow-md p-1.5"
+                    />
+                  ) : residence.image ? (
+                    <img 
+                      src={residence.image} 
+                      alt={residence.name}
+                      className="h-16 w-16 rounded-xl bg-white object-cover shadow-md"
                     />
                   ) : (
-                    <div className="h-20 w-20 rounded-xl bg-white shadow-md flex items-center justify-center">
-                      <span className="text-2xl font-bold text-primary">{getInitials(residence.name)}</span>
+                    <div className="h-16 w-16 rounded-xl bg-white shadow-md flex items-center justify-center">
+                      <span className="text-xl font-bold text-primary">{getInitials(residence.name)}</span>
                     </div>
                   )}
                 </div>
