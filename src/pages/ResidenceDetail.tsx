@@ -716,7 +716,7 @@ const ResidenceDetail = () => {
                               >
                                 <div className="space-y-2">
                                   <p className="font-medium text-sm">
-                                    En este caso: {residence.staffRatio.description}.
+                                    Este ratio incluye la cantidad de profesionales disponibles cada 10 residentes. Se incluyen:
                                   </p>
                                   <ul className="text-sm space-y-1">
                                     {residence.staffRatio.categories.map((category, idx) => (
