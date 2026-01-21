@@ -8,11 +8,20 @@ import { ResidenceCard } from "@/components/ResidenceCard";
 import { ConveniosSection } from "@/components/ConveniosSection";
 import { TeamSection } from "@/components/TeamSection";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink } from "lucide-react";
+import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink, Mail } from "lucide-react";
 import { useResidences } from "@/hooks/useResidences";
+import { toast } from "sonner";
 import heroBg from "@/assets/hero-residence.jpg";
 
 const Index = () => {
+  const handleEmailClick = () => {
+    toast("Abriendo correo...", {
+      description: "Se abrirá tu cliente de email",
+      icon: <Mail className="h-4 w-4" />,
+      duration: 2000,
+    });
+    window.open('mailto:integraresidenciales@cncs.com.uy', '_self');
+  };
   const navigate = useNavigate();
   const { data: residences = [], isLoading } = useResidences();
   
@@ -193,7 +202,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="gap-2 text-base h-14 px-8"
-                  onClick={() => window.open('mailto:integraresidenciales@cncs.com.uy', '_self')}
+                  onClick={handleEmailClick}
                 >
                   Contactar ahora
                   <ArrowRight className="h-5 w-5" />
