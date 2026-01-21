@@ -65,6 +65,7 @@ const Admin = () => {
   const whatsappsRef = useRef<string[]>([]);
   const addressesRef = useRef<string[]>([]);
   const citiesRef = useRef<string[]>([]);
+  const emailsRef = useRef<string[]>([]);
 
 
   // Fetch residences directly from DB
@@ -115,11 +116,13 @@ const Admin = () => {
     const whatsapps = Array.isArray(selectedResidence.whatsapps) ? selectedResidence.whatsapps : [];
     const addresses = Array.isArray(selectedResidence.addresses) ? selectedResidence.addresses : [];
     const cities = Array.isArray(selectedResidence.cities) ? selectedResidence.cities : [];
+    const emails = Array.isArray((selectedResidence as any).emails) ? (selectedResidence as any).emails : [];
 
     phonesRef.current = phones;
     whatsappsRef.current = whatsapps;
     addressesRef.current = addresses;
     citiesRef.current = cities;
+    emailsRef.current = emails;
 
     setFormData({
       ...selectedResidence,
@@ -127,6 +130,7 @@ const Admin = () => {
       whatsapps,
       addresses,
       cities,
+      emails,
     });
 
     fetchDirectors(selectedResidence.id);
@@ -197,6 +201,7 @@ const Admin = () => {
     updatedFormData.whatsapps = whatsappsResult.valid;
     updatedFormData.addresses = addressesRef.current;
     updatedFormData.cities = citiesRef.current;
+    (updatedFormData as any).emails = emailsRef.current;
 
     // Auto-geocode if address changed
     if (
@@ -601,11 +606,16 @@ const Admin = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                           />
                         </div>
-                        <div className="space-y-2">
-                          <Label>Email</Label>
-                          <Input
-                            value={formData.email || ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                        <div className="space-y-2 md:col-span-2">
+                          <MultiValueInput
+                            key={`emails-${selectedResidence.id}`}
+                            label="Emails de contacto"
+                            values={Array.isArray((formData as any).emails) ? (formData as any).emails : []}
+                            onChange={(newValues) => {
+                              emailsRef.current = newValues;
+                              setFormData((prev) => ({ ...prev, emails: newValues }));
+                            }}
+                            placeholder="Agregar email"
                           />
                         </div>
                         <div className="space-y-2">

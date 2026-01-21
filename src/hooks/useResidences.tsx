@@ -32,6 +32,7 @@ export interface Residence {
   };
   phone: string;
   email: string;
+  emails: string[];
   schedule: string;
   redIntegra: boolean;
   website?: string;
@@ -119,6 +120,7 @@ const transformResidence = (row: any, directors: any[] = []): Residence => {
   },
   phone: row.phone || '',
   email: row.email || '',
+  emails: row.emails || [],
   schedule: row.schedule || '',
   redIntegra: row.red_integra || false,
   website: row.website,
