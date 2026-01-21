@@ -563,35 +563,31 @@ const ResidenceDetail = () => {
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-bold mb-4">Habilitaciones</h2>
                   <div className="flex flex-wrap gap-3">
-                    {/* MSP y otras certificaciones */}
-                    {residence.certifications && residence.certifications.length > 0 ? (
-                      residence.certifications.map((cert, idx) => (
-                        <Badge key={idx} variant="outline" className="gap-2 py-2 px-4 text-base">
-                          <Shield className="h-4 w-4 text-secondary" />
-                          {cert}
-                        </Badge>
-                      ))
-                    ) : (
-                      <Badge variant="outline" className="gap-2 py-2 px-4 text-base text-muted-foreground">
-                        <Shield className="h-4 w-4" />
-                        MSP: Pendiente
-                      </Badge>
-                    )}
+                    {/* MSP */}
+                    <Badge 
+                      variant="outline" 
+                      className="gap-2 py-2 px-4 text-base border-secondary/50 bg-secondary/5"
+                    >
+                      <CheckCircle className="h-4 w-4 text-secondary" />
+                      MSP
+                    </Badge>
+                    
+                    {/* MIDES */}
+                    <Badge 
+                      variant="outline" 
+                      className="gap-2 py-2 px-4 text-base border-secondary/50 bg-secondary/5"
+                    >
+                      <CheckCircle className="h-4 w-4 text-secondary" />
+                      MIDES
+                    </Badge>
                     
                     {/* Habilitación de Bomberos */}
                     <Badge 
                       variant="outline" 
-                      className={`gap-2 py-2 px-4 text-base ${
-                        residence.fireCertification 
-                          ? 'border-orange-300 bg-orange-50' 
-                          : 'text-muted-foreground'
-                      }`}
+                      className="gap-2 py-2 px-4 text-base border-orange-300 bg-orange-50"
                     >
-                      <Flame className={`h-4 w-4 ${residence.fireCertification ? 'text-orange-500' : ''}`} />
-                      {residence.fireCertification 
-                        ? `Bomberos: ${residence.fireCertification}` 
-                        : 'Bomberos: Pendiente'
-                      }
+                      <Flame className="h-4 w-4 text-orange-500" />
+                      Bomberos: Habilitado
                     </Badge>
                   </div>
                 </CardContent>
