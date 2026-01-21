@@ -241,6 +241,44 @@ export type Database = {
           },
         ]
       }
+      residence_menus: {
+        Row: {
+          created_at: string
+          id: string
+          menu_data: Json
+          nota: string | null
+          residence_id: string
+          season: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          menu_data: Json
+          nota?: string | null
+          residence_id: string
+          season: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          menu_data?: Json
+          nota?: string | null
+          residence_id?: string
+          season?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "residence_menus_residence_id_fkey"
+            columns: ["residence_id"]
+            isOneToOne: false
+            referencedRelation: "residences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       residences: {
         Row: {
           activities: string[] | null

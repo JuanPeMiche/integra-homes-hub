@@ -19,6 +19,7 @@ import { TeamAdmin } from "@/components/admin/TeamAdmin";
 import { CommissionsAdmin } from "@/components/admin/CommissionsAdmin";
 import { NewsAdmin } from "@/components/admin/NewsAdmin";
 import { MultiValueInput } from "@/components/admin/MultiValueInput";
+import { MenusAdmin } from "@/components/admin/MenusAdmin";
 import { UnsavedChangesIndicator } from "@/components/admin/UnsavedChangesIndicator";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { validateAndNormalizePhones } from "@/utils/phoneValidation";
@@ -39,7 +40,8 @@ import {
   Video,
   Newspaper,
   Upload,
-  Youtube
+  Youtube,
+  UtensilsCrossed
 } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -538,6 +540,10 @@ const Admin = () => {
                         <Star className="w-4 h-4 mr-2" />
                         Actividades
                       </TabsTrigger>
+                      <TabsTrigger value="menus">
+                        <UtensilsCrossed className="w-4 h-4 mr-2" />
+                        Menús
+                      </TabsTrigger>
                       <TabsTrigger value="team">
                         <Users className="w-4 h-4 mr-2" />
                         Equipo
@@ -954,6 +960,10 @@ const Admin = () => {
                           )}
                         </div>
                       </div>
+                    </TabsContent>
+
+                    <TabsContent value="menus" className="space-y-6">
+                      <MenusAdmin residenceId={selectedResidence.id} />
                     </TabsContent>
 
                     <TabsContent value="team" className="space-y-6">

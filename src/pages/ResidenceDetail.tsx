@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ResidenceGallery } from "@/components/ResidenceGallery";
 import { SendMethodDialog } from "@/components/SendMethodDialog";
 import { SecondaryLocationMap } from "@/components/SecondaryLocationMap";
+import { ResidenceMenus } from "@/components/ResidenceMenus";
 import { EmailLink } from "@/components/EmailLink";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -630,6 +631,9 @@ const ResidenceDetail = () => {
                   )}
                 </CardContent>
               </Card>
+
+              {/* Menus de Temporada */}
+              <ResidenceMenus residenceId={residence.id} />
 
               {/* Map */}
               <Card>
