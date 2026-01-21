@@ -34,12 +34,47 @@ async function geocodeWithGoogle(fullAddress: string, apiKey: string): Promise<{
   }
 }
 
+// Common Uruguayan street abbreviations
+const streetAbbreviations: Record<string, string> = {
+  'Pte.': 'Presidente ',
+  'Pte ': 'Presidente ',
+  'Gral.': 'General ',
+  'Gral ': 'General ',
+  'Av.': 'Avenida ',
+  'Av ': 'Avenida ',
+  'Bvar.': 'Bulevar ',
+  'Bvar ': 'Bulevar ',
+  'Blvr.': 'Bulevar ',
+  'Blvr ': 'Bulevar ',
+  'Dr.': 'Doctor ',
+  'Dr ': 'Doctor ',
+  'Cno.': 'Camino ',
+  'Cno ': 'Camino ',
+  'Rbla.': 'Rambla ',
+  'Rbla ': 'Rambla ',
+  'esq.': 'esquina ',
+  'esq ': 'esquina ',
+};
+
+// Expand abbreviations in address
+function expandAbbreviations(address: string): string {
+  let expanded = address;
+  for (const [abbr, full] of Object.entries(streetAbbreviations)) {
+    expanded = expanded.replace(new RegExp(abbr.replace('.', '\\.'), 'gi'), full);
+  }
+  return expanded;
+}
+
 // Clean address by removing duplicates and extra info
 function cleanAddress(address: string, city: string, province: string): string[] {
+  // First expand abbreviations
+  const expandedAddress = expandAbbreviations(address);
+  
   // Remove common patterns that cause issues
-  const cleanedAddress = address
+  const cleanedAddress = expandedAddress
     .replace(/,\s*Uruguay/gi, '')
     .replace(/,\s*Montevideo/gi, '')
+    .replace(/esquina\s+\w+/gi, '') // Remove corner references that confuse geocoding
     .trim();
   
   const cleanedCity = city
@@ -51,17 +86,23 @@ function cleanAddress(address: string, city: string, province: string): string[]
     .replace(/,\s*Uruguay/gi, '')
     .trim();
   
+  // Extract just the street number for simpler queries
+  const streetMatch = expandedAddress.match(/^([A-Za-záéíóúñÁÉÍÓÚÑ\s]+)\s*(\d+)/i);
+  const streetOnly = streetMatch ? `${streetMatch[1].trim()} ${streetMatch[2]}` : null;
+  
   // Generate multiple search queries to try
   const queries = [
-    // Most specific: just street address + Uruguay
+    // Most specific: expanded street + number + Uruguay
+    streetOnly ? `${streetOnly}, Uruguay` : null,
+    // With city
+    streetOnly ? `${streetOnly}, ${cleanedCity}, Uruguay` : null,
+    // Cleaned full address
     `${cleanedAddress}, Uruguay`,
     // With city
     `${cleanedAddress}, ${cleanedCity}, Uruguay`,
     // Full but cleaned
     `${cleanedAddress}, ${cleanedCity}, ${cleanedProvince}, Uruguay`,
-    // Try without street number
-    `${cleanedAddress.replace(/\d+/g, '').trim()}, ${cleanedCity}, Uruguay`,
-  ];
+  ].filter(Boolean) as string[];
   
   return [...new Set(queries)]; // Remove duplicates
 }
