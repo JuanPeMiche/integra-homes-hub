@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Phone, User, LogOut, Heart, ChevronDown, FileText, Shield, Info, Handshake, Search } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, ChevronDown, FileText, Shield, Info, Handshake, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/hooks/useAuth";
@@ -123,11 +123,6 @@ export const Header = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={() => navigate("/favoritos")} className="cursor-pointer">
-                      <Heart className="mr-2 h-4 w-4" />
-                      Mis favoritos
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
                       Cerrar sesión
@@ -191,14 +186,6 @@ export const Header = () => {
             {!loading && (
               user ? (
                 <>
-                  <NavLink 
-                    to="/favoritos" 
-                    className="block py-2.5 px-3 text-sm font-medium text-foreground/80 hover:text-primary hover:bg-muted/50 rounded-md transition-colors" 
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Heart className="inline mr-2 h-4 w-4" />
-                    Mis favoritos
-                  </NavLink>
                   <Button variant="outline" size="sm" className="w-full justify-start text-destructive mt-2" onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     Cerrar sesión
