@@ -27,6 +27,7 @@ export interface Residence {
   };
   phone: string;
   email: string;
+  emails?: string[];
   schedule: string;
   redIntegra: boolean;
   website?: string;

@@ -294,6 +294,7 @@ export type Database = {
           created_at: string
           description: string | null
           email: string | null
+          emails: string[] | null
           facebook: string | null
           facilities: string[] | null
           fire_certification: string | null
@@ -338,6 +339,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           email?: string | null
+          emails?: string[] | null
           facebook?: string | null
           facilities?: string[] | null
           fire_certification?: string | null
@@ -382,6 +384,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           email?: string | null
+          emails?: string[] | null
           facebook?: string | null
           facilities?: string[] | null
           fire_certification?: string | null

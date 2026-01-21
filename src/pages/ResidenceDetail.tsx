@@ -737,7 +737,22 @@ const ResidenceDetail = () => {
                           <span className="font-medium">{residence.whatsapp}</span>
                         </a>
                       )}
-                      {residence.email && (
+                      {/* Show multiple emails if available */}
+                      {residence.emails && residence.emails.length > 0 ? (
+                        residence.emails.map((email, idx) => (
+                          <EmailLink 
+                            key={idx}
+                            email={email}
+                            subject={`Consulta sobre ${residence.name}`}
+                            className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group"
+                          >
+                            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                              <Mail className="h-5 w-5 text-primary" />
+                            </div>
+                            <span className="font-medium break-all">{email}</span>
+                          </EmailLink>
+                        ))
+                      ) : residence.email ? (
                         <EmailLink 
                           email={residence.email}
                           subject={`Consulta sobre ${residence.name}`}
@@ -748,7 +763,7 @@ const ResidenceDetail = () => {
                           </div>
                           <span className="font-medium break-all">{residence.email}</span>
                         </EmailLink>
-                      )}
+                      ) : null}
                       {residence.website && (
                         <a href={residence.website.startsWith('http') ? residence.website : `https://${residence.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors group">
                           <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -959,8 +974,8 @@ const ResidenceDetail = () => {
         open={showSendDialog}
         onOpenChange={setShowSendDialog}
         formData={contactForm}
-        recipientEmail={residence.email || "hola@integraresidenciales.com.uy"}
-        recipientWhatsApp={residence.whatsapp ? `598${residence.whatsapp.replace(/\D/g, '')}` : "59899923330"}
+        recipientEmail={(residence.emails && residence.emails.length > 0) ? residence.emails[0] : (residence.email || "integraresidenciales@cncs.com.uy")}
+        recipientWhatsApp={residence.whatsapp ? `598${residence.whatsapp.replace(/\D/g, '')}` : "59897774000"}
         subject={`Consulta sobre ${residence.name}`}
       />
 
