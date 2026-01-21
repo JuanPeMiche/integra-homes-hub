@@ -41,7 +41,8 @@ import {
   Newspaper,
   Upload,
   Youtube,
-  UtensilsCrossed
+  UtensilsCrossed,
+  UserCheck
 } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -66,6 +67,7 @@ const Admin = () => {
   const addressesRef = useRef<string[]>([]);
   const citiesRef = useRef<string[]>([]);
   const emailsRef = useRef<string[]>([]);
+  const staffRatioRef = useRef<{ ratio: string; description: string; categories: string[] } | null>(null);
 
 
   // Fetch residences directly from DB
@@ -117,12 +119,14 @@ const Admin = () => {
     const addresses = Array.isArray(selectedResidence.addresses) ? selectedResidence.addresses : [];
     const cities = Array.isArray(selectedResidence.cities) ? selectedResidence.cities : [];
     const emails = Array.isArray((selectedResidence as any).emails) ? (selectedResidence as any).emails : [];
+    const staffRatio = (selectedResidence as any).staff_ratio || null;
 
     phonesRef.current = phones;
     whatsappsRef.current = whatsapps;
     addressesRef.current = addresses;
     citiesRef.current = cities;
     emailsRef.current = emails;
+    staffRatioRef.current = staffRatio;
 
     setFormData({
       ...selectedResidence,
@@ -131,6 +135,7 @@ const Admin = () => {
       addresses,
       cities,
       emails,
+      staff_ratio: staffRatio,
     });
 
     fetchDirectors(selectedResidence.id);
@@ -202,6 +207,18 @@ const Admin = () => {
     updatedFormData.addresses = addressesRef.current;
     updatedFormData.cities = citiesRef.current;
     (updatedFormData as any).emails = emailsRef.current;
+    
+    // Guardar staff_ratio - limpiar si está vacío
+    const currentStaffRatio = staffRatioRef.current;
+    if (currentStaffRatio && currentStaffRatio.ratio && currentStaffRatio.ratio.trim() !== '') {
+      (updatedFormData as any).staff_ratio = {
+        ratio: currentStaffRatio.ratio.trim(),
+        description: currentStaffRatio.description?.trim() || '',
+        categories: (currentStaffRatio.categories || []).filter(c => c.trim() !== ''),
+      };
+    } else {
+      (updatedFormData as any).staff_ratio = null;
+    }
 
     // Auto-geocode if address changed
     if (
@@ -919,6 +936,99 @@ const Admin = () => {
                           {(!formData.facilities || formData.facilities.length === 0) && (
                             <p className="text-muted-foreground text-sm italic">No hay instalaciones agregadas. Haz clic en "Agregar Instalación" para añadir una.</p>
                           )}
+                        </div>
+                      </div>
+
+                      {/* Ratio de Personal */}
+                      <div className="space-y-4 pt-6 border-t">
+                        <div className="flex items-center gap-2">
+                          <UserCheck className="w-5 h-5 text-secondary" />
+                          <Label className="text-lg font-semibold">Ratio de Personal por Residente</Label>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Indicá la proporción de personal por residente. Dejá vacío si no querés mostrar esta información.
+                        </p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>Ratio (ej: 7/10)</Label>
+                            <Input
+                              value={((formData as any).staff_ratio as any)?.ratio || ''}
+                              onChange={(e) => {
+                                const current = (formData as any).staff_ratio || { ratio: '', description: '', categories: [] };
+                                const updated = { ...current, ratio: e.target.value };
+                                staffRatioRef.current = updated;
+                                setFormData(prev => ({ ...prev, staff_ratio: updated }));
+                              }}
+                              placeholder="Ej: 7/10"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Descripción (ej: 7 profesionales cada 10 residentes)</Label>
+                            <Input
+                              value={((formData as any).staff_ratio as any)?.description || ''}
+                              onChange={(e) => {
+                                const current = (formData as any).staff_ratio || { ratio: '', description: '', categories: [] };
+                                const updated = { ...current, description: e.target.value };
+                                staffRatioRef.current = updated;
+                                setFormData(prev => ({ ...prev, staff_ratio: updated }));
+                              }}
+                              placeholder="Ej: 7 profesionales cada 10 residentes"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <Label>Categorías de Personal</Label>
+                            <Button 
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                const current = (formData as any).staff_ratio || { ratio: '', description: '', categories: [] };
+                                const updated = { ...current, categories: [...(current.categories || []), ''] };
+                                staffRatioRef.current = updated;
+                                setFormData(prev => ({ ...prev, staff_ratio: updated }));
+                              }}
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              Agregar Categoría
+                            </Button>
+                          </div>
+                          <div className="space-y-2">
+                            {(((formData as any).staff_ratio as any)?.categories || []).map((category: string, idx: number) => (
+                              <div key={idx} className="flex gap-2">
+                                <Input
+                                  value={category}
+                                  onChange={(e) => {
+                                    const current = (formData as any).staff_ratio || { ratio: '', description: '', categories: [] };
+                                    const newCategories = [...(current.categories || [])];
+                                    newCategories[idx] = e.target.value;
+                                    const updated = { ...current, categories: newCategories };
+                                    staffRatioRef.current = updated;
+                                    setFormData(prev => ({ ...prev, staff_ratio: updated }));
+                                  }}
+                                  placeholder="Ej: Cuidadores, Enfermeros, etc."
+                                />
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => {
+                                    const current = (formData as any).staff_ratio || { ratio: '', description: '', categories: [] };
+                                    const newCategories = (current.categories || []).filter((_: string, i: number) => i !== idx);
+                                    const updated = { ...current, categories: newCategories };
+                                    staffRatioRef.current = updated;
+                                    setFormData(prev => ({ ...prev, staff_ratio: updated }));
+                                  }}
+                                >
+                                  <Trash2 className="w-4 h-4 text-destructive" />
+                                </Button>
+                              </div>
+                            ))}
+                            {(!((formData as any).staff_ratio as any)?.categories || ((formData as any).staff_ratio as any)?.categories?.length === 0) && (
+                              <p className="text-muted-foreground text-sm italic">No hay categorías agregadas. Agregá las categorías de personal que querés mostrar en el tooltip.</p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </TabsContent>
