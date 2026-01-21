@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ImageUploader } from "@/components/ImageUploader";
 import { GalleryUploader } from "@/components/GalleryUploader";
 import { VideoUploader } from "@/components/VideoUploader";
+import { YouTubeLinkInput } from "@/components/YouTubeLinkInput";
 import { ConveniosAdmin } from "@/components/admin/ConveniosAdmin";
 import { TeamAdmin } from "@/components/admin/TeamAdmin";
 import { CommissionsAdmin } from "@/components/admin/CommissionsAdmin";
@@ -36,7 +37,9 @@ import {
   Star,
   Scale,
   Video,
-  Newspaper
+  Newspaper,
+  Upload,
+  Youtube
 } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -761,20 +764,50 @@ const Admin = () => {
                       </div>
 
                       {/* Videos de Presentación */}
-                      <div className="space-y-4 pt-6 border-t">
+                      <div className="space-y-6 pt-6 border-t">
                         <div className="flex items-center gap-2">
                           <Video className="w-5 h-5 text-primary" />
-                          <Label className="text-lg font-semibold">Videos de Presentación (máx. 3 minutos)</Label>
+                          <Label className="text-lg font-semibold">Videos de Presentación</Label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          Subí videos directamente desde tu computadora. Formatos aceptados: MP4, WebM, MOV. Máximo 3 minutos por video.
-                        </p>
-                        <VideoUploader
-                          folder={selectedResidence.id}
-                          videos={formData.video_urls || []}
-                          onChange={(urls) => setFormData(prev => ({ ...prev, video_urls: urls }))}
-                          maxVideos={5}
-                        />
+                        
+                        {/* Videos subidos */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            <Upload className="w-4 h-4 text-muted-foreground" />
+                            <Label className="font-medium">Videos subidos (máx. 3 minutos)</Label>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Subí videos directamente desde tu computadora. Formatos: MP4, WebM, MOV.
+                          </p>
+                          <VideoUploader
+                            folder={selectedResidence.id}
+                            videos={(formData.video_urls || []).filter(url => !url.includes('youtube.com') && !url.includes('youtu.be'))}
+                            onChange={(urls) => {
+                              const youtubeLinks = (formData.video_urls || []).filter(url => url.includes('youtube.com') || url.includes('youtu.be'));
+                              setFormData(prev => ({ ...prev, video_urls: [...urls, ...youtubeLinks] }));
+                            }}
+                            maxVideos={5}
+                          />
+                        </div>
+
+                        {/* Links de YouTube */}
+                        <div className="space-y-3 pt-4 border-t border-dashed">
+                          <div className="flex items-center gap-2">
+                            <Youtube className="w-4 h-4 text-destructive" />
+                            <Label className="font-medium">Links de YouTube</Label>
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            También podés agregar links a videos de YouTube existentes.
+                          </p>
+                          <YouTubeLinkInput
+                            links={(formData.video_urls || []).filter(url => url.includes('youtube.com') || url.includes('youtu.be'))}
+                            onChange={(links) => {
+                              const uploadedVideos = (formData.video_urls || []).filter(url => !url.includes('youtube.com') && !url.includes('youtu.be'));
+                              setFormData(prev => ({ ...prev, video_urls: [...uploadedVideos, ...links] }));
+                            }}
+                            maxLinks={5}
+                          />
+                        </div>
                       </div>
                     </TabsContent>
 
