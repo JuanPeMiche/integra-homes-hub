@@ -52,6 +52,8 @@ export interface Residence {
   additionalAddresses?: string[];
   additionalCities?: string[];
   fireCertification?: string;
+  mspCertification?: string;
+  midesCertification?: string;
   isHidden?: boolean;
   staffRatio?: {
     ratio: string;
@@ -149,7 +151,9 @@ const transformResidence = (row: any, directors: any[] = []): Residence => {
     additionalWhatsapps: row.whatsapps || [],
     additionalAddresses: row.addresses || [],
     additionalCities: row.cities || [],
-    fireCertification: row.fire_certification,
+    fireCertification: row.fire_certification || 'Habilitado',
+    mspCertification: row.msp_certification || 'Habilitado',
+    midesCertification: row.mides_certification || 'Habilitado',
     isHidden: row.is_hidden || false,
     staffRatio: row.staff_ratio ? {
       ratio: row.staff_ratio.ratio,

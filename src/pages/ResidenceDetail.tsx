@@ -566,28 +566,76 @@ const ResidenceDetail = () => {
                     {/* MSP */}
                     <Badge 
                       variant="outline" 
-                      className="gap-2 py-2 px-4 text-base border-secondary/50 bg-secondary/5"
+                      className={`gap-2 py-2 px-4 text-base ${
+                        residence.mspCertification === 'Habilitado' 
+                          ? 'border-secondary/50 bg-secondary/5' 
+                          : residence.mspCertification === 'Pendiente'
+                            ? 'border-amber-300 bg-amber-50 text-amber-700'
+                            : residence.mspCertification === 'En trámite'
+                              ? 'border-blue-300 bg-blue-50 text-blue-700'
+                              : 'border-muted text-muted-foreground'
+                      }`}
                     >
-                      <CheckCircle className="h-4 w-4 text-secondary" />
-                      MSP
+                      {residence.mspCertification === 'Habilitado' ? (
+                        <CheckCircle className="h-4 w-4 text-secondary" />
+                      ) : residence.mspCertification === 'Pendiente' ? (
+                        <Clock className="h-4 w-4 text-amber-500" />
+                      ) : residence.mspCertification === 'En trámite' ? (
+                        <Clock className="h-4 w-4 text-blue-500" />
+                      ) : (
+                        <Shield className="h-4 w-4" />
+                      )}
+                      MSP{residence.mspCertification !== 'Habilitado' && residence.mspCertification !== 'No aplica' ? `: ${residence.mspCertification}` : ''}
                     </Badge>
                     
                     {/* MIDES */}
                     <Badge 
                       variant="outline" 
-                      className="gap-2 py-2 px-4 text-base border-secondary/50 bg-secondary/5"
+                      className={`gap-2 py-2 px-4 text-base ${
+                        residence.midesCertification === 'Habilitado' 
+                          ? 'border-secondary/50 bg-secondary/5' 
+                          : residence.midesCertification === 'Pendiente'
+                            ? 'border-amber-300 bg-amber-50 text-amber-700'
+                            : residence.midesCertification === 'En trámite'
+                              ? 'border-blue-300 bg-blue-50 text-blue-700'
+                              : 'border-muted text-muted-foreground'
+                      }`}
                     >
-                      <CheckCircle className="h-4 w-4 text-secondary" />
-                      MIDES
+                      {residence.midesCertification === 'Habilitado' ? (
+                        <CheckCircle className="h-4 w-4 text-secondary" />
+                      ) : residence.midesCertification === 'Pendiente' ? (
+                        <Clock className="h-4 w-4 text-amber-500" />
+                      ) : residence.midesCertification === 'En trámite' ? (
+                        <Clock className="h-4 w-4 text-blue-500" />
+                      ) : (
+                        <Shield className="h-4 w-4" />
+                      )}
+                      MIDES{residence.midesCertification !== 'Habilitado' && residence.midesCertification !== 'No aplica' ? `: ${residence.midesCertification}` : ''}
                     </Badge>
                     
                     {/* Habilitación de Bomberos */}
                     <Badge 
                       variant="outline" 
-                      className="gap-2 py-2 px-4 text-base border-orange-300 bg-orange-50"
+                      className={`gap-2 py-2 px-4 text-base ${
+                        residence.fireCertification === 'Habilitado' 
+                          ? 'border-orange-300 bg-orange-50' 
+                          : residence.fireCertification === 'Pendiente'
+                            ? 'border-amber-300 bg-amber-50 text-amber-700'
+                            : residence.fireCertification === 'En trámite'
+                              ? 'border-blue-300 bg-blue-50 text-blue-700'
+                              : 'border-muted text-muted-foreground'
+                      }`}
                     >
-                      <Flame className="h-4 w-4 text-orange-500" />
-                      Bomberos: Habilitado
+                      {residence.fireCertification === 'Habilitado' ? (
+                        <Flame className="h-4 w-4 text-orange-500" />
+                      ) : residence.fireCertification === 'Pendiente' ? (
+                        <Clock className="h-4 w-4 text-amber-500" />
+                      ) : residence.fireCertification === 'En trámite' ? (
+                        <Clock className="h-4 w-4 text-blue-500" />
+                      ) : (
+                        <Flame className="h-4 w-4" />
+                      )}
+                      Bomberos{residence.fireCertification !== 'No aplica' ? `: ${residence.fireCertification}` : ''}
                     </Badge>
                   </div>
                 </CardContent>

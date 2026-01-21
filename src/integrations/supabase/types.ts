@@ -305,6 +305,8 @@ export type Database = {
           is_hidden: boolean | null
           logo_url: string | null
           maps_url: string | null
+          mides_certification: string | null
+          msp_certification: string | null
           name: string
           phone: string | null
           phones: string[] | null
@@ -351,6 +353,8 @@ export type Database = {
           is_hidden?: boolean | null
           logo_url?: string | null
           maps_url?: string | null
+          mides_certification?: string | null
+          msp_certification?: string | null
           name: string
           phone?: string | null
           phones?: string[] | null
@@ -397,6 +401,8 @@ export type Database = {
           is_hidden?: boolean | null
           logo_url?: string | null
           maps_url?: string | null
+          mides_certification?: string | null
+          msp_certification?: string | null
           name?: string
           phone?: string | null
           phones?: string[] | null
