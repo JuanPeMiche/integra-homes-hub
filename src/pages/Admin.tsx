@@ -664,13 +664,53 @@ const Admin = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, price_range: e.target.value }))}
                           />
                         </div>
-                        <div className="space-y-2">
-                          <Label>Habilitación de Bomberos (sigla)</Label>
-                          <Input
-                            value={(formData as any).fire_certification || ''}
-                            onChange={(e) => setFormData(prev => ({ ...prev, fire_certification: e.target.value }))}
-                            placeholder="Ej: HB-2024-1234"
-                          />
+                        {/* Habilitaciones */}
+                        <div className="space-y-4 pt-4 border-t">
+                          <Label className="text-lg font-semibold flex items-center gap-2">
+                            <Scale className="w-5 h-5 text-primary" />
+                            Habilitaciones
+                          </Label>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="space-y-2">
+                              <Label>MSP</Label>
+                              <select
+                                value={(formData as any).msp_certification || 'Habilitado'}
+                                onChange={(e) => setFormData(prev => ({ ...prev, msp_certification: e.target.value }))}
+                                className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
+                              >
+                                <option value="Habilitado">Habilitado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En trámite">En trámite</option>
+                                <option value="No aplica">No aplica</option>
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label>MIDES</Label>
+                              <select
+                                value={(formData as any).mides_certification || 'Habilitado'}
+                                onChange={(e) => setFormData(prev => ({ ...prev, mides_certification: e.target.value }))}
+                                className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
+                              >
+                                <option value="Habilitado">Habilitado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En trámite">En trámite</option>
+                                <option value="No aplica">No aplica</option>
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label>Bomberos</Label>
+                              <select
+                                value={(formData as any).fire_certification || 'Habilitado'}
+                                onChange={(e) => setFormData(prev => ({ ...prev, fire_certification: e.target.value }))}
+                                className="w-full h-10 px-3 py-2 rounded-md border border-input bg-background text-sm"
+                              >
+                                <option value="Habilitado">Habilitado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En trámite">En trámite</option>
+                                <option value="No aplica">No aplica</option>
+                              </select>
+                            </div>
+                          </div>
                         </div>
                       </div>
 

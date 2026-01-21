@@ -48,6 +48,9 @@ export interface Residence {
     description: string;
     categories: string[];
   };
+  mspCertification?: string;
+  midesCertification?: string;
+  fireCertification?: string;
 }
 
 // Helper to get all unique barrios
