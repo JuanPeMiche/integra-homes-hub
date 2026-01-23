@@ -664,6 +664,48 @@ const Admin = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, price_range: e.target.value }))}
                           />
                         </div>
+                        {/* Índice de Transparencia */}
+                        <div className="space-y-4 pt-4 border-t">
+                          <Label className="text-lg font-semibold flex items-center gap-2">
+                            <Star className="w-5 h-5 text-primary" />
+                            Índice de Transparencia
+                          </Label>
+                          <p className="text-sm text-muted-foreground">
+                            Selecciona la cantidad de estrellas según el nivel de transparencia de la residencia.
+                          </p>
+                          <div className="flex items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <button
+                                key={star}
+                                type="button"
+                                onClick={() => setFormData(prev => ({ ...prev, transparency: star }))}
+                                className="p-1 transition-transform hover:scale-110 focus:outline-none"
+                              >
+                                <Star 
+                                  className={`w-8 h-8 transition-colors ${
+                                    star <= (formData.transparency || 0)
+                                      ? 'fill-amber-400 text-amber-400'
+                                      : 'text-muted-foreground/30'
+                                  }`}
+                                />
+                              </button>
+                            ))}
+                            <span className="ml-3 text-sm text-muted-foreground">
+                              {formData.transparency || 0} de 5 estrellas
+                            </span>
+                            {(formData.transparency || 0) > 0 && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="ml-2 text-xs"
+                                onClick={() => setFormData(prev => ({ ...prev, transparency: 0 }))}
+                              >
+                                Quitar
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+
                         {/* Habilitaciones */}
                         <div className="space-y-4 pt-4 border-t">
                           <Label className="text-lg font-semibold flex items-center gap-2">
