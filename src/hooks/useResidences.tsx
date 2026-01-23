@@ -101,7 +101,8 @@ const calculateTransparency = (row: any, directors: any[] = []): number => {
 
 // Transform database row to frontend format
 const transformResidence = (row: any, directors: any[] = []): Residence => {
-  const transparency = calculateTransparency(row, directors);
+  // Use manual transparency value from database if set, otherwise calculate automatically
+  const transparency = row.transparency > 0 ? row.transparency : calculateTransparency(row, directors);
   
   return {
     id: row.id,
