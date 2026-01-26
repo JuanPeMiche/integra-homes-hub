@@ -11,41 +11,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent } from "@/components/ui/card";
+
+// Static list of common services for the search form (simpler than database services with emojis)
+const searchServices = [
+  "Enfermería 24h",
+  "Fisioterapia",
+  "Terapia Ocupacional",
+  "Médico Geriatra",
+  "Actividades Recreativas",
+  "Alimentación Especializada",
+  "Atención Alzheimer",
+  "Centro de Día",
+];
 
 export const SearchForm = () => {
   const navigate = useNavigate();
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedService, setSelectedService] = useState<string>("");
   const [departamento, setDepartamento] = useState("");
   const [barrio, setBarrio] = useState("");
   const [tipo, setTipo] = useState("");
-
-  const services = [
-    "Enfermería 24h",
-    "Fisioterapia",
-    "Terapia Ocupacional",
-    "Médico Geriatra",
-    "Actividades Recreativas",
-    "Alimentación Especializada",
-    "Atención Alzheimer",
-    "Centro de Día",
-  ];
-
-  const handleServiceToggle = (service: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(service)
-        ? prev.filter((s) => s !== service)
-        : [...prev, service]
-    );
-  };
 
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (departamento) params.set('departamento', departamento);
     if (barrio) params.set('barrio', barrio);
     if (tipo) params.set('tipo', tipo);
-    if (selectedServices.length > 0) params.set('services', selectedServices.join(','));
+    if (selectedService) params.set('service', selectedService);
     
     navigate(`/buscar?${params.toString()}`);
   };
@@ -102,37 +95,35 @@ export const SearchForm = () => {
             </Select>
           </div>
 
-          {/* Price Range */}
-          <div className="space-y-2">
-            <Label className="text-base font-medium flex items-center gap-2">
-              Rango de precio mensual ($UY)
-            </Label>
-            <div className="grid grid-cols-2 gap-4">
-              <Input type="number" placeholder="Mínimo $UY" className="h-12" />
-              <Input type="number" placeholder="Máximo $UY" className="h-12" />
-            </div>
-          </div>
-
-          {/* Services */}
+          {/* Services - Radio Group like in the image */}
           <div className="space-y-3">
             <Label className="text-base font-medium">Servicios disponibles</Label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {services.map((service) => (
+            <RadioGroup 
+              value={selectedService} 
+              onValueChange={setSelectedService}
+              className="grid grid-cols-1 md:grid-cols-2 gap-3"
+            >
+              {searchServices.map((service) => (
                 <div key={service} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={service}
-                    checked={selectedServices.includes(service)}
-                    onCheckedChange={() => handleServiceToggle(service)}
-                  />
+                  <RadioGroupItem value={service} id={`service-${service}`} />
                   <label
-                    htmlFor={service}
+                    htmlFor={`service-${service}`}
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                   >
                     {service}
                   </label>
                 </div>
               ))}
-            </div>
+            </RadioGroup>
+            {selectedService && (
+              <button
+                type="button"
+                onClick={() => setSelectedService("")}
+                className="text-xs text-muted-foreground hover:text-foreground underline"
+              >
+                Quitar selección
+              </button>
+            )}
           </div>
 
           {/* Submit Button */}
