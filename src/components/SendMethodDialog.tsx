@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Mail, MessageCircle } from "lucide-react";
+import { openEmail, openWhatsApp, CONTACT_INFO } from "@/utils/contactHelpers";
 
 interface SendMethodDialogProps {
   open: boolean;
@@ -22,8 +23,8 @@ export function SendMethodDialog({
   open,
   onOpenChange,
   formData,
-  recipientEmail = "integraresidenciales@cncs.com.uy",
-  recipientWhatsApp = "59897774000",
+  recipientEmail = CONTACT_INFO.email,
+  recipientWhatsApp = CONTACT_INFO.whatsapp,
   subject = "Nueva consulta desde el sitio web",
 }: SendMethodDialogProps) {
   const [sending, setSending] = useState(false);
@@ -52,10 +53,11 @@ export function SendMethodDialog({
 
   const handleEmail = () => {
     setSending(true);
-    const body = encodeURIComponent(formatMessage());
-    const subjectEncoded = encodeURIComponent(subject);
-    const mailtoUrl = `mailto:${recipientEmail}?subject=${subjectEncoded}&body=${body}`;
-    window.open(mailtoUrl, '_self');
+    const body = formatMessage();
+    
+    // Open email FIRST using the centralized helper
+    openEmail(recipientEmail, subject, body);
+    
     setTimeout(() => {
       setSending(false);
       onOpenChange(false);
@@ -64,8 +66,11 @@ export function SendMethodDialog({
 
   const handleWhatsApp = () => {
     setSending(true);
-    const message = encodeURIComponent(`*${subject}*\n\n${formatMessage()}`);
-    window.open(`https://wa.me/${recipientWhatsApp}?text=${message}`, "_blank");
+    const message = `*${subject}*\n\n${formatMessage()}`;
+    
+    // Open WhatsApp using the centralized helper
+    openWhatsApp(recipientWhatsApp, message);
+    
     setTimeout(() => {
       setSending(false);
       onOpenChange(false);

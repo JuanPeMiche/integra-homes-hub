@@ -169,7 +169,7 @@ const TermsConditions = () => {
               </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Correo electrónico: <EmailLink email="integraresidenciales@cncs.com.uy" className="text-primary hover:underline" /></li>
-                <li>Teléfono: <a href="tel:+59897774000" className="text-primary hover:underline">598 97 774 000</a></li>
+                <li>Teléfono: <a href="tel:+59897774000" className="text-primary hover:underline" style={{ pointerEvents: 'auto', position: 'relative', zIndex: 10 }}>598 97 774 000</a></li>
                 <li>Formulario de contacto disponible en nuestro Sitio.</li>
               </ul>
             </section>

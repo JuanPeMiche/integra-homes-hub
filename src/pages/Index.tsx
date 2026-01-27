@@ -13,16 +13,19 @@ import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink, Mail } fr
 import { useResidences } from "@/hooks/useResidences";
 import { toast } from "sonner";
 import { Reveal, StaggerReveal, StaggerItem, ParallaxBlobs, PageTransition } from "@/components/animations";
+import { openEmail, CONTACT_INFO } from "@/utils/contactHelpers";
 import heroBg from "@/assets/hero-residence.jpg";
 
 const Index = () => {
   const handleEmailClick = () => {
+    // Open email FIRST, then show toast
+    openEmail(CONTACT_INFO.email, CONTACT_INFO.defaultSubject, CONTACT_INFO.defaultBody);
+    
     toast("Abriendo correo...", {
       description: "Se abrirá tu cliente de email",
       icon: <Mail className="h-4 w-4" />,
       duration: 2000,
     });
-    window.open('mailto:integraresidenciales@cncs.com.uy', '_self');
   };
   const navigate = useNavigate();
   const { data: residences = [], isLoading } = useResidences();
