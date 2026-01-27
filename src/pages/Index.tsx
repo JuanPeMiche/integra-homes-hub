@@ -6,6 +6,7 @@ import { StatsSection } from "@/components/StatsSection";
 import { ChatBot } from "@/components/ChatBot";
 import { ResidenceCard } from "@/components/ResidenceCard";
 import { ConveniosSection } from "@/components/ConveniosSection";
+import { GremialSection } from "@/components/GremialSection";
 import { TeamSection } from "@/components/TeamSection";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink, Mail } from "lucide-react";
@@ -183,6 +184,9 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* Gremial Section */}
+        <GremialSection />
 
         {/* Convenios Section */}
         <ConveniosSection />
