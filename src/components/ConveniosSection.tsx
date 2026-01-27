@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useConvenios, Convenio } from "@/hooks/useConvenios";
 import { Link } from "react-router-dom";
+import { Reveal, StaggerReveal, StaggerItem } from "@/components/animations";
 
 // Fallback logos for initial data
 import tiendaInglesaLogo from "@/assets/convenios/tienda-inglesa.png";
@@ -73,53 +74,54 @@ export const ConveniosSection = () => {
     <section id="convenios" className="py-16 md:py-20 bg-primary">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
+        <Reveal className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Convenios Red Integra
           </h2>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
             Beneficios exclusivos para residenciales y familias de la red
           </p>
-        </div>
+        </Reveal>
 
         {/* Convenios Grid - 4 columns on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-10">
+        <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-10">
           {convenioData.map((convenio, index) => (
-            <div 
-              key={index}
-              className="group bg-white rounded-2xl p-6 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-white/20 flex flex-col items-center text-center"
-            >
-              <div className="flex items-center justify-center gap-3 mb-4">
-                {convenio.primaryLogo && (
-                  <img 
-                    src={convenio.primaryLogo} 
-                    alt={convenio.name}
-                    className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
-                  />
-                )}
-                {convenio.secondaryLogo && (
-                  <img 
-                    src={convenio.secondaryLogo} 
-                    alt={`${convenio.name} secundario`}
-                    className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
-                  />
+            <StaggerItem key={index}>
+              <div 
+                className="group bg-white rounded-2xl p-6 shadow-lg card-hover border-2 border-white/20 flex flex-col items-center text-center h-full"
+              >
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  {convenio.primaryLogo && (
+                    <img 
+                      src={convenio.primaryLogo} 
+                      alt={convenio.name}
+                      className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
+                    />
+                  )}
+                  {convenio.secondaryLogo && (
+                    <img 
+                      src={convenio.secondaryLogo} 
+                      alt={`${convenio.name} secundario`}
+                      className="h-20 md:h-24 w-auto object-contain transition-transform group-hover:scale-105"
+                    />
+                  )}
+                </div>
+                {convenio.benefit && (
+                  <p className="text-sm text-muted-foreground font-medium mt-2">
+                    {convenio.benefit}
+                  </p>
                 )}
               </div>
-              {convenio.benefit && (
-                <p className="text-sm text-muted-foreground font-medium mt-2">
-                  {convenio.benefit}
-                </p>
-              )}
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerReveal>
 
         {/* CTA */}
-        <div className="text-center">
+        <Reveal className="text-center" delay={0.2}>
           <Button 
             variant="secondary" 
             size="lg"
-            className="gap-2 bg-white text-primary hover:bg-white/90"
+            className="gap-2 bg-white text-primary hover:bg-white/90 btn-press"
             onClick={() => {
               window.scrollTo(0, 0);
               window.location.href = '/convenios';
@@ -128,7 +130,7 @@ export const ConveniosSection = () => {
             Ver todos los convenios
             <ArrowRight className="h-4 w-4" />
           </Button>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

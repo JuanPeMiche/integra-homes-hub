@@ -92,7 +92,7 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all duration-300 group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
+    <Card className="overflow-hidden card-hover group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
       <div className="relative h-48 overflow-hidden">
         <img
           src={residence.image}
@@ -290,7 +290,7 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
 
       <CardFooter className="p-5 pt-0 flex gap-2">
         <Button
-          className="flex-1"
+          className="flex-1 btn-press"
           onClick={() => navigate(`/residencia/${residence.id}`)}
         >
           Ver ficha

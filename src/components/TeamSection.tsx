@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Scale, Users } from "lucide-react";
 import { useCommissions } from "@/hooks/useCommissions";
+import { Reveal, StaggerReveal, StaggerItem } from "@/components/animations";
 
 interface TeamMember {
   id: string;
@@ -47,39 +48,38 @@ export const TeamSection = () => {
   return (
     <section className="py-16 md:py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <Reveal className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Nuestra directiva
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             El equipo que lidera Integra Residenciales
           </p>
-        </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-6xl mx-auto">
+        <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-6xl mx-auto">
           {teamMembers.map((member) => (
-            <div 
-              key={member.id} 
-              className="group text-center"
-            >
-              <div className="relative mb-4 mx-auto w-52 h-52 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
-                {member.photo_url ? (
-                  <img 
-                    src={member.photo_url} 
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <User className="h-24 w-24 text-primary/40" />
-                  </div>
-                )}
+            <StaggerItem key={member.id}>
+              <div className="group text-center">
+                <div className="relative mb-4 mx-auto w-52 h-52 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                  {member.photo_url ? (
+                    <img 
+                      src={member.photo_url} 
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <User className="h-24 w-24 text-primary/40" />
+                    </div>
+                  )}
+                </div>
+                <h3 className="text-lg font-semibold mb-1 text-foreground">{member.name}</h3>
+                <p className="text-primary text-sm font-medium">{member.role}</p>
               </div>
-              <h3 className="text-lg font-semibold mb-1 text-foreground">{member.name}</h3>
-              <p className="text-primary text-sm font-medium">{member.role}</p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerReveal>
 
         {/* Commission Sections - as rows like Directiva */}
         {fiscalMembers.length > 0 && (
