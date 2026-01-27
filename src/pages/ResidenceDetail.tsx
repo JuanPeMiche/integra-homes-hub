@@ -452,19 +452,46 @@ const ResidenceDetail = () => {
                     </div>
                     <h2 className="text-2xl font-bold">Descripción</h2>
                   </div>
-                  <div className="max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent hover:scrollbar-thumb-primary/40">
-                    <div className="space-y-4 text-muted-foreground leading-relaxed">
-                      {residence.description?.split(/(?<=[.!?])\s+/).reduce<string[][]>((acc, sentence) => {
-                        const lastGroup = acc[acc.length - 1];
-                        if (!lastGroup || lastGroup.length >= 3) {
-                          acc.push([sentence]);
-                        } else {
-                          lastGroup.push(sentence);
+                  <div className="max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent hover:scrollbar-thumb-primary/40">
+                    <div className="prose prose-sm max-w-none text-muted-foreground">
+                      {residence.description?.split(/\n\n+/).map((block, blockIdx) => {
+                        // Check if this block looks like a list (starts with - or •)
+                        const lines = block.split(/\n/).filter(l => l.trim());
+                        const isList = lines.every(l => /^[-•●◦▪]\s/.test(l.trim()));
+                        
+                        if (isList) {
+                          return (
+                            <ul key={blockIdx} className="list-disc list-inside space-y-1 my-4">
+                              {lines.map((line, lineIdx) => (
+                                <li key={lineIdx} className="text-base leading-relaxed">
+                                  {line.replace(/^[-•●◦▪]\s*/, '')}
+                                </li>
+                              ))}
+                            </ul>
+                          );
                         }
-                        return acc;
-                      }, []).map((paragraph, idx) => (
-                        <p key={idx} className="text-base">{paragraph.join(' ')}</p>
-                      ))}
+                        
+                        // Check if it's a title/heading (short text, possibly ending with : or all caps)
+                        const isHeading = block.trim().length < 60 && 
+                          (block.trim().endsWith(':') || 
+                           block.trim() === block.trim().toUpperCase() ||
+                           /^(Nuestra|Nuestro|Misión|Visión|Equipo|Servicios|Instalaciones|Valores)/.test(block.trim()));
+                        
+                        if (isHeading) {
+                          return (
+                            <h3 key={blockIdx} className="text-lg font-semibold text-foreground mt-6 mb-2 first:mt-0">
+                              {block.trim().replace(/:$/, '')}
+                            </h3>
+                          );
+                        }
+                        
+                        // Regular paragraph - split by newlines for better readability
+                        return lines.map((line, lineIdx) => (
+                          <p key={`${blockIdx}-${lineIdx}`} className="text-base leading-relaxed mb-3 last:mb-0">
+                            {line}
+                          </p>
+                        ));
+                      })}
                     </div>
                   </div>
                 </CardContent>

@@ -42,8 +42,10 @@ import {
   Upload,
   Youtube,
   UtensilsCrossed,
-  UserCheck
+  UserCheck,
+  Copy
 } from "lucide-react";
+import { CopyDataDialog } from "@/components/admin/CopyDataDialog";
 import { Tables } from "@/integrations/supabase/types";
 
 type Residence = Tables<"residences">;
@@ -928,21 +930,33 @@ const Admin = () => {
 
                     <TabsContent value="services" className="space-y-6">
                       <div className="space-y-4">
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center flex-wrap gap-2">
                           <Label className="text-lg font-semibold">Servicios Disponibles</Label>
-                          <Button 
-                            variant="outline" 
-                            onClick={() => {
-                              const currentServices = formData.services || [];
-                              setFormData(prev => ({ 
-                                ...prev, 
-                                services: [...currentServices, 'Nuevo servicio'] 
-                              }));
-                            }}
-                          >
-                            <Plus className="w-4 h-4 mr-2" />
-                            Agregar Servicio
-                          </Button>
+                          <div className="flex gap-2">
+                            {residences && selectedResidence && (
+                              <CopyDataDialog 
+                                sourceResidence={selectedResidence}
+                                allResidences={residences}
+                                onSuccess={() => {
+                                  refetch();
+                                  queryClient.invalidateQueries({ queryKey: ['residences'] });
+                                }}
+                              />
+                            )}
+                            <Button 
+                              variant="outline" 
+                              onClick={() => {
+                                const currentServices = formData.services || [];
+                                setFormData(prev => ({ 
+                                  ...prev, 
+                                  services: [...currentServices, 'Nuevo servicio'] 
+                                }));
+                              }}
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              Agregar Servicio
+                            </Button>
+                          </div>
                         </div>
                         <div className="space-y-2">
                           {(formData.services || []).map((service, idx) => (
