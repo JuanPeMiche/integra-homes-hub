@@ -10,12 +10,27 @@ import madrinaImage from "@/assets/madrina-lourdes-bermejo.png";
 const About = () => {
   const handleEmailClick = (subject: string) => {
     // Open email FIRST, then show toast
-    openEmail(CONTACT_INFO.email, subject, CONTACT_INFO.defaultBody);
+    const { gmailUrl } = openEmail(CONTACT_INFO.email, subject, CONTACT_INFO.defaultBody);
     
     toast("Abriendo correo...", {
       description: "Se abrirá tu cliente de email",
       icon: <Mail className="h-4 w-4" />,
       duration: 2000,
+      action: {
+        label: "Abrir Gmail",
+        onClick: () => {
+          try {
+            const isInIframe = window.self !== window.top;
+            if (isInIframe) {
+              window.open(gmailUrl, "_blank", "noopener,noreferrer");
+            } else {
+              window.location.href = gmailUrl;
+            }
+          } catch {
+            window.open(gmailUrl, "_blank", "noopener,noreferrer");
+          }
+        },
+      },
     });
   };
   return (
