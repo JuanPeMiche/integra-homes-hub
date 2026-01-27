@@ -154,6 +154,34 @@ All colors MUST be HSL.
     }
   }
   
+  /* Card hover effect - premium feel */
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: hsl(var(--primary) / 0.2);
+  }
+  
+  .card-hover:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+  
+  /* Button press effect */
+  .btn-press {
+    @apply transition-all duration-150;
+  }
+  
+  .btn-press:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-press:focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+  
   /* Enhanced hover/focus states for cards and buttons */
   .hover-lift {
     @apply transition-all duration-200;
@@ -189,5 +217,25 @@ All colors MUST be HSL.
   
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--primary) / 0.5);
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .card-hover:hover,
+  .hover-lift:hover {
+    transform: none;
+  }
+  
+  .btn-press:active {
+    transform: none;
   }
 }
