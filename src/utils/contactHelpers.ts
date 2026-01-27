@@ -29,7 +29,8 @@ export function openPhoneCall(phone: string = CONTACT_INFO.phone): void {
 
 /**
  * Opens the default email client with pre-filled recipient, subject, and body
- * Uses window.location.href for maximum compatibility
+ * Uses encodeURIComponent for proper %20 encoding (not + signs)
+ * Uses anchor click method for better desktop browser compatibility
  * @param to - Recipient email address
  * @param subject - Optional email subject
  * @param body - Optional email body
@@ -39,21 +40,27 @@ export function openEmail(
   subject?: string,
   body?: string
 ): void {
-  const params = new URLSearchParams();
+  // Build query string manually with encodeURIComponent (uses %20 for spaces, not +)
+  const params: string[] = [];
   
   if (subject) {
-    params.set("subject", subject);
+    params.push(`subject=${encodeURIComponent(subject)}`);
   }
   
   if (body) {
-    params.set("body", body);
+    params.push(`body=${encodeURIComponent(body)}`);
   }
   
-  const queryString = params.toString();
+  const queryString = params.join("&");
   const mailtoUrl = queryString ? `mailto:${to}?${queryString}` : `mailto:${to}`;
   
-  // Use location.href for better compatibility across browsers and production
-  window.location.href = mailtoUrl;
+  // Use anchor click method for better desktop browser compatibility
+  const anchor = document.createElement("a");
+  anchor.href = mailtoUrl;
+  anchor.style.display = "none";
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
 }
 
 /**
