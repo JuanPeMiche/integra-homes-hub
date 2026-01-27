@@ -4,17 +4,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Shield, Heart, Users, Target, Lightbulb, Award, ExternalLink, Building2, Briefcase, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { openEmail, CONTACT_INFO } from "@/utils/contactHelpers";
 import madrinaImage from "@/assets/madrina-lourdes-bermejo.png";
 
 const About = () => {
   const handleEmailClick = (subject: string) => {
+    // Open email FIRST, then show toast
+    openEmail(CONTACT_INFO.email, subject, CONTACT_INFO.defaultBody);
+    
     toast("Abriendo correo...", {
       description: "Se abrirá tu cliente de email",
       icon: <Mail className="h-4 w-4" />,
       duration: 2000,
     });
-    const mailtoUrl = `mailto:integraresidenciales@cncs.com.uy?subject=${encodeURIComponent(subject)}`;
-    window.open(mailtoUrl, '_self');
   };
   return (
     <div className="min-h-screen flex flex-col">

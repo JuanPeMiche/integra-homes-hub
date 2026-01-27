@@ -142,7 +142,10 @@ export const Header = () => {
               )
             )}
             <Button variant={showSolidHeader ? "outline" : "secondary"} size="sm" className={`gap-2 ${!showSolidHeader ? "bg-white/20 hover:bg-white/30 text-white border-white/30" : ""}`} asChild>
-              <a href="tel:+59897774000">
+              <a 
+                href="tel:+59897774000" 
+                style={{ pointerEvents: 'auto', position: 'relative', zIndex: 10 }}
+              >
                 <Phone className="h-4 w-4" />
                 <span className="hidden lg:inline">598 97 774 000</span>
                 <span className="lg:hidden">Llamar</span>
@@ -200,7 +203,10 @@ export const Header = () => {
             )}
             
             <Button variant="outline" size="sm" className="w-full gap-2 mt-2" asChild>
-              <a href="tel:+59897774000">
+              <a 
+                href="tel:+59897774000" 
+                style={{ pointerEvents: 'auto', position: 'relative', zIndex: 10 }}
+              >
                 <Phone className="h-4 w-4" />
                 598 97 774 000
               </a>

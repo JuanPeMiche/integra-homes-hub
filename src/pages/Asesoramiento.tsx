@@ -521,7 +521,10 @@ const Asesoramiento = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="gap-2" asChild>
-                  <a href="tel:+59897774000">
+                  <a 
+                    href="tel:+59897774000"
+                    style={{ pointerEvents: 'auto', position: 'relative', zIndex: 10 }}
+                  >
                     <Phone className="h-5 w-5" />
                     Llamar: 598 97 774 000
                   </a>

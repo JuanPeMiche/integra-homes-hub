@@ -43,7 +43,11 @@ export const Footer = () => {
               </div>
               <div className="flex items-center justify-center md:justify-start gap-2">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <a href="tel:+59897774000" className="hover:text-secondary transition-colors">
+                <a 
+                  href="tel:+59897774000" 
+                  className="hover:text-secondary transition-colors"
+                  style={{ pointerEvents: 'auto', position: 'relative', zIndex: 10 }}
+                >
                   598 97 774 000
                 </a>
               </div>
