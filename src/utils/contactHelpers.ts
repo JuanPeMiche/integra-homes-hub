@@ -39,7 +39,20 @@ export function openEmail(
   to: string = CONTACT_INFO.email,
   subject?: string,
   body?: string
-): void {
+): { mailtoUrl: string; gmailUrl: string } {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
+
+  // In the Lovable preview the app runs inside an iframe; Gmail can't be embedded (X-Frame-Options).
+  // In that case, use mailto even on desktop.
+  let isInIframe = false;
+  try {
+    isInIframe = window.self !== window.top;
+  } catch {
+    isInIframe = true;
+  }
+
   // Build query string manually with encodeURIComponent (uses %20 for spaces, not +)
   const params: string[] = [];
   
@@ -53,14 +66,20 @@ export function openEmail(
   
   const queryString = params.join("&");
   const mailtoUrl = queryString ? `mailto:${to}?${queryString}` : `mailto:${to}`;
-  
-  // Use anchor click method for better desktop browser compatibility
-  const anchor = document.createElement("a");
-  anchor.href = mailtoUrl;
-  anchor.style.display = "none";
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
+
+  // Gmail web compose (reliable on desktop when no OS mail handler is configured)
+  const gmailParams: string[] = [
+    `to=${encodeURIComponent(to)}`,
+    ...(subject ? [`su=${encodeURIComponent(subject)}`] : []),
+    ...(body ? [`body=${encodeURIComponent(body)}`] : []),
+  ];
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&${gmailParams.join("&")}`;
+
+  // On mobile, mailto reliably opens the mail app.
+  // On desktop, Gmail web is more reliable across browsers/OS setups.
+  window.location.href = isMobile || isInIframe ? mailtoUrl : gmailUrl;
+
+  return { mailtoUrl, gmailUrl };
 }
 
 /**

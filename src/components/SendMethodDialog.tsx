@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Mail, MessageCircle } from "lucide-react";
 import { openEmail, openWhatsApp, CONTACT_INFO } from "@/utils/contactHelpers";
+import { toast } from "sonner";
 
 interface SendMethodDialogProps {
   open: boolean;
@@ -56,7 +57,28 @@ export function SendMethodDialog({
     const body = formatMessage();
     
     // Open email FIRST using the centralized helper
-    openEmail(recipientEmail, subject, body);
+    const { gmailUrl } = openEmail(recipientEmail, subject, body);
+
+    toast("Abriendo correo...", {
+      description: "Se abrirá tu cliente de email",
+      icon: <Mail className="h-4 w-4" />,
+      duration: 2000,
+      action: {
+        label: "Abrir Gmail",
+        onClick: () => {
+          try {
+            const isInIframe = window.self !== window.top;
+            if (isInIframe) {
+              window.open(gmailUrl, "_blank", "noopener,noreferrer");
+            } else {
+              window.location.href = gmailUrl;
+            }
+          } catch {
+            window.open(gmailUrl, "_blank", "noopener,noreferrer");
+          }
+        },
+      },
+    });
     
     setTimeout(() => {
       setSending(false);
