@@ -8,6 +8,7 @@ import { ResidenceCard } from "@/components/ResidenceCard";
 import { ConveniosSection } from "@/components/ConveniosSection";
 import { GremialSection } from "@/components/GremialSection";
 import { TeamSection } from "@/components/TeamSection";
+import { AnnouncementBanner } from "@/components/AnnouncementBanner";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink, Mail } from "lucide-react";
 import { useResidences } from "@/hooks/useResidences";
@@ -52,6 +53,7 @@ const Index = () => {
   return (
     <PageTransition>
       <div className="min-h-screen flex flex-col">
+        <AnnouncementBanner />
         <Header />
         
         <main className="flex-1">

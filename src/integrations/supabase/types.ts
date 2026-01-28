@@ -123,10 +123,13 @@ export type Database = {
           category: string | null
           content: string
           created_at: string
+          event_end_date: string | null
+          event_start_date: string | null
           excerpt: string | null
           external_link: string | null
           id: string
           image_url: string | null
+          is_featured: boolean | null
           is_published: boolean | null
           published_at: string | null
           slug: string
@@ -141,10 +144,13 @@ export type Database = {
           category?: string | null
           content: string
           created_at?: string
+          event_end_date?: string | null
+          event_start_date?: string | null
           excerpt?: string | null
           external_link?: string | null
           id?: string
           image_url?: string | null
+          is_featured?: boolean | null
           is_published?: boolean | null
           published_at?: string | null
           slug: string
@@ -159,10 +165,13 @@ export type Database = {
           category?: string | null
           content?: string
           created_at?: string
+          event_end_date?: string | null
+          event_start_date?: string | null
           excerpt?: string | null
           external_link?: string | null
           id?: string
           image_url?: string | null
+          is_featured?: boolean | null
           is_published?: boolean | null
           published_at?: string | null
           slug?: string

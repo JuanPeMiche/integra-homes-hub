@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, ArrowRight, ExternalLink, Play, X, Loader2 } from "lucide-react";
+import { Calendar, User, ArrowRight, ExternalLink, Play, X, Loader2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -33,8 +33,16 @@ const News = () => {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [selectedInterview, setSelectedInterview] = useState<NewsArticle | null>(null);
 
-  // Filter published articles and interviews
-  const newsArticles = articles.filter(a => a.article_type === 'article' && a.is_published);
+  // Filter published articles and interviews, sort featured first
+  const newsArticles = articles
+    .filter(a => a.article_type === 'article' && a.is_published)
+    .sort((a, b) => {
+      // Featured articles first
+      if (a.is_featured && !b.is_featured) return -1;
+      if (!a.is_featured && b.is_featured) return 1;
+      // Then by published date
+      return new Date(b.published_at || 0).getTime() - new Date(a.published_at || 0).getTime();
+    });
   const interviews = articles.filter(a => a.article_type === 'interview' && a.is_published);
 
   const categoryColors: Record<string, string> = {
@@ -44,6 +52,7 @@ const News = () => {
     "Salud": "bg-trust/10 text-trust border-trust/20",
     "Formación": "bg-muted text-muted-foreground border-muted",
     "Institucional": "bg-primary/10 text-primary border-primary/20",
+    "Capacitación": "bg-secondary text-secondary-foreground border-secondary",
   };
 
   const handleLoadMore = () => {
@@ -175,7 +184,7 @@ const News = () => {
                     {visibleArticles.map((article, index) => (
                       <Card 
                         key={article.id} 
-                        className="overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all duration-300 group cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 animate-fade-in-up"
+                        className={`overflow-hidden hover:shadow-hover hover:-translate-y-1 transition-all duration-300 group cursor-pointer focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 animate-fade-in-up ${article.is_featured ? 'ring-2 ring-secondary' : ''}`}
                         style={{ animationDelay: `${Math.min(index * 50, 200)}ms` }}
                         onClick={() => handleArticleClick(article)}
                         tabIndex={0}
@@ -183,6 +192,10 @@ const News = () => {
                         role="article"
                       >
                         <div className="relative h-48 overflow-hidden bg-muted">
+                          {/* Featured gradient overlay */}
+                          {article.is_featured && (
+                            <div className="absolute inset-0 bg-gradient-to-t from-secondary/30 to-transparent z-10 pointer-events-none" />
+                          )}
                           <img
                             src={article.image_url || "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80"}
                             alt={article.title}
@@ -190,15 +203,25 @@ const News = () => {
                             onError={handleImageError}
                             loading="lazy"
                           />
+                          {/* Featured badge */}
+                          {article.is_featured && (
+                            <Badge 
+                              className="absolute top-4 right-4 bg-secondary text-secondary-foreground border-secondary rounded-full px-3 py-1 text-xs font-semibold flex items-center gap-1 z-20"
+                            >
+                              <Star className="h-3 w-3 fill-current" />
+                              Destacado
+                            </Badge>
+                          )}
+                          {/* Category badge */}
                           {article.category && (
                             <Badge 
-                              className={`absolute top-4 left-4 ${categoryColors[article.category] || categoryColors["Formación"]} border rounded-full px-3 py-1 text-xs font-medium`}
+                              className={`absolute top-4 left-4 ${categoryColors[article.category] || categoryColors["Formación"]} border rounded-full px-3 py-1 text-xs font-medium z-20`}
                             >
                               {article.category}
                             </Badge>
                           )}
-                          {article.external_link && (
-                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-1.5">
+                          {article.external_link && !article.is_featured && (
+                            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-1.5 z-20">
                               <ExternalLink className="h-4 w-4 text-muted-foreground" />
                             </div>
                           )}

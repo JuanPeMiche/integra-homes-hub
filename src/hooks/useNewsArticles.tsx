@@ -11,6 +11,7 @@ export interface NewsArticle {
   image_url: string | null;
   author: string | null;
   is_published: boolean;
+  is_featured: boolean | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -19,6 +20,8 @@ export interface NewsArticle {
   external_link: string | null;
   video_url: string | null;
   video_source: string | null;
+  event_start_date: string | null;
+  event_end_date: string | null;
 }
 
 export type NewsArticleInsert = Omit<NewsArticle, "id" | "created_at" | "updated_at">;
