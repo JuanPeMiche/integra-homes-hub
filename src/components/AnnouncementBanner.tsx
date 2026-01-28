@@ -63,25 +63,27 @@ export function AnnouncementBanner() {
 
   return (
     <>
-      {/* Desktop Banner */}
-      <div className="bg-gradient-to-r from-primary to-secondary text-white relative z-50">
-        <div className="container mx-auto px-4">
+      {/* Inline Hero Banner - styled for dark background */}
+      <div className="mt-6 pt-6 border-t border-white/20">
+        <div className="bg-white/15 backdrop-blur-sm rounded-xl p-4 md:p-5 border border-white/20">
           {/* Desktop Layout */}
-          <div className="hidden md:flex items-center justify-between py-3 gap-4">
+          <div className="hidden md:flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                <GraduationCap className="h-5 w-5" />
+              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
+                <GraduationCap className="h-6 w-6 text-secondary-foreground" />
               </div>
-              <div className="flex items-center gap-2 text-sm font-medium truncate">
-                <span className="font-bold">Capacitación para Directores:</span>
-                <span className="flex items-center gap-1">
+              <div className="text-left">
+                <div className="flex items-center gap-2 text-base font-bold">
+                  Capacitación para Directores
+                </div>
+                <div className="flex items-center gap-2 text-sm text-white/90">
                   <CalendarDays className="h-4 w-4" />
-                  10, 11 y 12 de febrero (10:00 AM)
-                </span>
-                <span className="hidden lg:inline">• Cupos limitados</span>
+                  <span>10, 11 y 12 de febrero (10:00 AM)</span>
+                  <span className="hidden lg:inline">• Cupos limitados</span>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-3 flex-shrink-0">
               <Button
                 variant="ghost"
                 size="sm"
@@ -93,17 +95,17 @@ export function AnnouncementBanner() {
                 <ChevronDown className="h-4 w-4" />
               </Button>
               <Button
-                size="sm"
-                className="bg-white text-primary hover:bg-white/90 gap-1 font-semibold"
+                size="default"
+                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground gap-2 font-semibold"
                 onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")}
                 aria-label="Inscribirse a la capacitación para directores"
               >
                 Inscribirme
-                <ExternalLink className="h-3 w-3" />
+                <ExternalLink className="h-4 w-4" />
               </Button>
               <button
                 onClick={handleDismiss}
-                className="ml-2 p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
                 aria-label="Cerrar anuncio"
               >
                 <X className="h-4 w-4" />
@@ -112,13 +114,18 @@ export function AnnouncementBanner() {
           </div>
 
           {/* Mobile Layout */}
-          <div className="md:hidden py-3 space-y-2">
+          <div className="md:hidden space-y-3">
             <div className="flex items-start justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 flex-shrink-0" />
-                <div className="text-sm">
-                  <span className="font-bold block">Capacitación para Directores</span>
-                  <span className="text-white/90 text-xs">10, 11 y 12 de febrero • 10:00 AM</span>
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                  <GraduationCap className="h-5 w-5 text-secondary-foreground" />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold block text-sm">Capacitación para Directores</span>
+                  <span className="text-white/90 text-xs flex items-center gap-1">
+                    <CalendarDays className="h-3 w-3" />
+                    10, 11 y 12 de febrero • 10:00 AM
+                  </span>
                 </div>
               </div>
               <button
@@ -133,17 +140,18 @@ export function AnnouncementBanner() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex-1 text-white hover:bg-white/20 text-xs h-8"
+                className="flex-1 text-white hover:bg-white/20 text-xs h-9 border border-white/20"
                 onClick={() => setShowSyllabus(true)}
               >
                 Ver temario
               </Button>
               <Button
                 size="sm"
-                className="flex-1 bg-white text-primary hover:bg-white/90 text-xs h-8 font-semibold"
+                className="flex-1 bg-secondary hover:bg-secondary/90 text-secondary-foreground text-xs h-9 font-semibold gap-1"
                 onClick={() => window.open(GOOGLE_FORM_URL, "_blank", "noopener,noreferrer")}
               >
                 Inscribirme
+                <ExternalLink className="h-3 w-3" />
               </Button>
             </div>
           </div>
