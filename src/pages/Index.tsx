@@ -53,7 +53,6 @@ const Index = () => {
   return (
     <PageTransition>
       <div className="min-h-screen flex flex-col">
-        <AnnouncementBanner />
         <Header />
         
         <main className="flex-1">
@@ -104,6 +103,9 @@ const Index = () => {
                     Acceso a Residenciales (Plataforma de Gestión)
                   </a>
                 </div>
+                
+                {/* Announcement Banner - inside hero */}
+                <AnnouncementBanner />
               </Reveal>
             </div>
           </section>
