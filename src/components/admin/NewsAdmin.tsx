@@ -23,11 +23,14 @@ interface ArticleFormData {
   image_url: string;
   author: string;
   is_published: boolean;
+  is_featured: boolean;
   article_type: string;
   category: string;
   external_link: string;
   video_url: string;
   video_source: string;
+  event_start_date: string;
+  event_end_date: string;
 }
 
 const emptyFormData: ArticleFormData = {
@@ -37,11 +40,14 @@ const emptyFormData: ArticleFormData = {
   image_url: "",
   author: "",
   is_published: false,
+  is_featured: false,
   article_type: "article",
   category: "",
   external_link: "",
   video_url: "",
   video_source: "YouTube",
+  event_start_date: "",
+  event_end_date: "",
 };
 
 const categories = ["Entrevistas", "Eventos", "Convenios", "Salud", "Formación", "Institucional"];
@@ -73,11 +79,14 @@ export const NewsAdmin = () => {
       image_url: article.image_url || "",
       author: article.author || "",
       is_published: article.is_published,
+      is_featured: article.is_featured || false,
       article_type: article.article_type,
       category: article.category || "",
       external_link: article.external_link || "",
       video_url: article.video_url || "",
       video_source: article.video_source || "YouTube",
+      event_start_date: article.event_start_date || "",
+      event_end_date: article.event_end_date || "",
     });
     setIsDialogOpen(true);
   };
@@ -95,6 +104,7 @@ export const NewsAdmin = () => {
           image_url: formData.image_url || null,
           author: formData.author || null,
           is_published: formData.is_published,
+          is_featured: formData.is_featured,
           published_at: formData.is_published && !editingArticle.is_published
             ? new Date().toISOString()
             : editingArticle.published_at,
@@ -103,6 +113,8 @@ export const NewsAdmin = () => {
           external_link: formData.external_link || null,
           video_url: formData.video_url || null,
           video_source: formData.video_source || null,
+          event_start_date: formData.event_start_date || null,
+          event_end_date: formData.event_end_date || null,
         },
       });
     } else {
@@ -113,12 +125,15 @@ export const NewsAdmin = () => {
         image_url: formData.image_url || null,
         author: formData.author || null,
         is_published: formData.is_published,
+        is_featured: formData.is_featured,
         published_at: formData.is_published ? new Date().toISOString() : null,
         article_type: formData.article_type,
         category: formData.category || null,
         external_link: formData.external_link || null,
         video_url: formData.video_url || null,
         video_source: formData.video_source || null,
+        event_start_date: formData.event_start_date || null,
+        event_end_date: formData.event_end_date || null,
       });
     }
 
