@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { X, GraduationCap, CalendarDays, ExternalLink, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { GraduationCap, CalendarDays, ExternalLink, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,9 +13,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-const STORAGE_KEY = "announcement_dismissed";
-const DISMISS_DURATION_HOURS = 24;
 
 const GOOGLE_FORM_URL = "https://forms.gle/QJ37viRArQM22F5SA";
 
@@ -38,28 +35,7 @@ const SYLLABUS = {
 };
 
 export function AnnouncementBanner() {
-  const [isVisible, setIsVisible] = useState(false);
   const [showSyllabus, setShowSyllabus] = useState(false);
-
-  useEffect(() => {
-    const dismissedAt = localStorage.getItem(STORAGE_KEY);
-    if (dismissedAt) {
-      const dismissedTime = new Date(dismissedAt).getTime();
-      const now = new Date().getTime();
-      const hoursPassed = (now - dismissedTime) / (1000 * 60 * 60);
-      if (hoursPassed < DISMISS_DURATION_HOURS) {
-        return; // Keep hidden
-      }
-    }
-    setIsVisible(true);
-  }, []);
-
-  const handleDismiss = () => {
-    localStorage.setItem(STORAGE_KEY, new Date().toISOString());
-    setIsVisible(false);
-  };
-
-  if (!isVisible) return null;
 
   return (
     <>
@@ -103,38 +79,22 @@ export function AnnouncementBanner() {
                 Inscribirme
                 <ExternalLink className="h-4 w-4" />
               </Button>
-              <button
-                onClick={handleDismiss}
-                className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
-                aria-label="Cerrar anuncio"
-              >
-                <X className="h-4 w-4" />
-              </button>
             </div>
           </div>
 
           {/* Mobile Layout */}
           <div className="md:hidden space-y-3">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                  <GraduationCap className="h-5 w-5 text-secondary-foreground" />
-                </div>
-                <div className="text-left">
-                  <span className="font-bold block text-sm">Capacitación para Directores</span>
-                  <span className="text-white/90 text-xs flex items-center gap-1">
-                    <CalendarDays className="h-3 w-3" />
-                    10, 11 y 12 de febrero • 10:00 AM
-                  </span>
-                </div>
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                <GraduationCap className="h-5 w-5 text-secondary-foreground" />
               </div>
-              <button
-                onClick={handleDismiss}
-                className="p-1 rounded-full hover:bg-white/20 transition-colors flex-shrink-0"
-                aria-label="Cerrar anuncio"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <div className="text-left">
+                <span className="font-bold block text-sm">Capacitación para Directores</span>
+                <span className="text-white/90 text-xs flex items-center gap-1">
+                  <CalendarDays className="h-3 w-3" />
+                  10, 11 y 12 de febrero • 10:00 AM
+                </span>
+              </div>
             </div>
             <div className="flex gap-2">
               <Button
