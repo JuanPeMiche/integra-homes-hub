@@ -12,7 +12,7 @@ export const StatsSection = () => {
     },
     {
       icon: Users,
-      value: 200,
+      value: 3000,
       prefix: "+",
       suffix: "",
       label: "Hogares encontrados",
