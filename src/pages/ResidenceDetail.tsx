@@ -220,7 +220,7 @@ const ResidenceDetail = () => {
 
   // Helper to extract YouTube video ID
   const getYouTubeVideoId = (url: string): string | null => {
-    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    const match = url.match(/(?:youtube\.com\/(?:shorts\/|[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
     return match ? match[1] : null;
   };
 
