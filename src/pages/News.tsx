@@ -32,6 +32,7 @@ const News = () => {
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [selectedInterview, setSelectedInterview] = useState<NewsArticle | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
 
   // Filter published articles and interviews, sort featured first
   const newsArticles = articles
@@ -63,10 +64,7 @@ const News = () => {
     if (article.external_link) {
       window.open(article.external_link, "_blank", "noopener,noreferrer");
     } else {
-      // For now, show a toast - in future can navigate to /noticias/[slug]
-      toast.info("Próximamente: Detalle de artículo", {
-        description: article.title,
-      });
+      setSelectedArticle(article);
     }
   };
 
@@ -412,6 +410,55 @@ const News = () => {
           </div>
         </section>
       </main>
+
+      {/* Article Detail Modal */}
+      <Dialog open={!!selectedArticle} onOpenChange={() => setSelectedArticle(null)}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <div className="space-y-4">
+              {selectedArticle?.image_url && (
+                <div className="relative h-64 -mx-6 -mt-6 mb-4 overflow-hidden rounded-t-lg">
+                  <img
+                    src={selectedArticle.image_url}
+                    alt={selectedArticle.title}
+                    className="w-full h-full object-cover"
+                    onError={handleImageError}
+                  />
+                  {selectedArticle.category && (
+                    <Badge 
+                      className={`absolute top-4 left-4 ${categoryColors[selectedArticle.category] || categoryColors["Formación"]} border rounded-full px-3 py-1 text-xs font-medium`}
+                    >
+                      {selectedArticle.category}
+                    </Badge>
+                  )}
+                </div>
+              )}
+              <DialogTitle className="text-2xl md:text-3xl font-bold leading-tight">
+                {selectedArticle?.title}
+              </DialogTitle>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                {selectedArticle?.published_at && (
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>{formatDate(selectedArticle.published_at)}</span>
+                  </div>
+                )}
+                {selectedArticle?.author && (
+                  <div className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    <span>{selectedArticle.author}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </DialogHeader>
+          <div className="prose prose-sm md:prose-base max-w-none mt-4 text-foreground">
+            {selectedArticle?.content.split('\n').map((paragraph, i) => (
+              paragraph.trim() ? <p key={i} className="mb-4 leading-relaxed">{paragraph}</p> : null
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Video Modal for YouTube */}
       <Dialog open={!!selectedInterview} onOpenChange={() => setSelectedInterview(null)}>
