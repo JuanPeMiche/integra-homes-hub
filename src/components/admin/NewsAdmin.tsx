@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUploader } from "@/components/ImageUploader";
+import { GalleryUploader } from "@/components/GalleryUploader";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Calendar, Loader2, Newspaper, Video, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -31,6 +32,7 @@ interface ArticleFormData {
   video_source: string;
   event_start_date: string;
   event_end_date: string;
+  images: string[];
 }
 
 const emptyFormData: ArticleFormData = {
@@ -48,6 +50,7 @@ const emptyFormData: ArticleFormData = {
   video_source: "YouTube",
   event_start_date: "",
   event_end_date: "",
+  images: [],
 };
 
 const categories = ["Entrevistas", "Eventos", "Convenios", "Salud", "Formación", "Institucional"];
@@ -87,6 +90,7 @@ export const NewsAdmin = () => {
       video_source: article.video_source || "YouTube",
       event_start_date: article.event_start_date || "",
       event_end_date: article.event_end_date || "",
+      images: article.images || [],
     });
     setIsDialogOpen(true);
   };
@@ -115,6 +119,7 @@ export const NewsAdmin = () => {
           video_source: formData.video_source || null,
           event_start_date: formData.event_start_date || null,
           event_end_date: formData.event_end_date || null,
+          images: formData.images.length > 0 ? formData.images : null,
         },
       });
     } else {
@@ -134,6 +139,7 @@ export const NewsAdmin = () => {
         video_source: formData.video_source || null,
         event_start_date: formData.event_start_date || null,
         event_end_date: formData.event_end_date || null,
+        images: formData.images.length > 0 ? formData.images : null,
       });
     }
 
@@ -462,6 +468,19 @@ export const NewsAdmin = () => {
                 </p>
               )}
             </div>
+
+            {formData.article_type === 'article' && (
+              <div className="space-y-2">
+                <Label>Galería de imágenes</Label>
+                <GalleryUploader
+                  folder={`articles/${editingArticle?.id || 'new'}`}
+                  images={formData.images}
+                  onChange={(images) => setFormData({ ...formData, images })}
+                  maxImages={20}
+                  bucket="article-images"
+                />
+              </div>
+            )}
 
             <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
