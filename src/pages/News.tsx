@@ -457,6 +457,26 @@ const News = () => {
               paragraph.trim() ? <p key={i} className="mb-4 leading-relaxed">{paragraph}</p> : null
             ))}
           </div>
+
+          {/* Article Gallery */}
+          {selectedArticle?.images && selectedArticle.images.length > 0 && (
+            <div className="mt-6 space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">Galería</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {selectedArticle.images.map((img, i) => (
+                  <div key={i} className="relative aspect-video rounded-lg overflow-hidden bg-muted">
+                    <img
+                      src={img}
+                      alt={`${selectedArticle.title} - Imagen ${i + 1}`}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      loading="lazy"
+                      onClick={() => window.open(img, '_blank')}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 

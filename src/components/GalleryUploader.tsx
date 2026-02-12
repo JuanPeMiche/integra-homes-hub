@@ -26,13 +26,15 @@ interface GalleryUploaderProps {
   images: string[];
   onChange: (images: string[]) => void;
   maxImages?: number;
+  bucket?: 'residence-images' | 'article-images';
 }
 
 export function GalleryUploader({
   folder,
   images,
   onChange,
-  maxImages = 50
+  maxImages = 50,
+  bucket = 'residence-images'
 }: GalleryUploaderProps) {
   const { uploadFile, uploading } = useStorageUpload();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,7 +74,7 @@ export function GalleryUploader({
     
     for (let i = 0; i < filesToUpload.length; i++) {
       setUploadProgress({ current: i + 1, total: filesToUpload.length });
-      const url = await uploadFile(filesToUpload[i], 'residence-images', folder);
+      const url = await uploadFile(filesToUpload[i], bucket, folder);
       if (url) {
         newImages.push(url);
       }

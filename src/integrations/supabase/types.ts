@@ -129,6 +129,7 @@ export type Database = {
           external_link: string | null
           id: string
           image_url: string | null
+          images: string[] | null
           is_featured: boolean | null
           is_published: boolean | null
           published_at: string | null
@@ -150,6 +151,7 @@ export type Database = {
           external_link?: string | null
           id?: string
           image_url?: string | null
+          images?: string[] | null
           is_featured?: boolean | null
           is_published?: boolean | null
           published_at?: string | null
@@ -171,6 +173,7 @@ export type Database = {
           external_link?: string | null
           id?: string
           image_url?: string | null
+          images?: string[] | null
           is_featured?: boolean | null
           is_published?: boolean | null
           published_at?: string | null

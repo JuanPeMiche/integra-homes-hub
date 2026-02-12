@@ -22,6 +22,7 @@ export interface NewsArticle {
   video_source: string | null;
   event_start_date: string | null;
   event_end_date: string | null;
+  images: string[] | null;
 }
 
 export type NewsArticleInsert = Omit<NewsArticle, "id" | "created_at" | "updated_at">;
