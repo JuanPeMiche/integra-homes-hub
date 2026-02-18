@@ -87,9 +87,9 @@ export const TeamSection = () => {
             <h3 className="text-2xl md:text-3xl font-bold mb-8 text-foreground text-center">
               Comisión fiscal
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-10 max-w-7xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-10 max-w-7xl mx-auto">
               {fiscalMembers.map((member) => (
-                <div key={member.id} className="group text-center">
+                <div key={member.id} className="group text-center w-[calc(50%-12px)] sm:w-[calc(33.33%-16px)] lg:w-[calc(20%-32px)]">
                   <div className="relative mb-4 mx-auto w-full aspect-[4/5] overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-transform transition-shadow duration-300 transform-gpu scale-100 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
                     {member.photo_url ? (
                       <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover object-[center_20%]" />
@@ -114,9 +114,9 @@ export const TeamSection = () => {
             <h3 className="text-2xl md:text-3xl font-bold mb-8 text-foreground text-center">
               Comisión de ética
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-10 max-w-7xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-6 lg:gap-10 max-w-7xl mx-auto">
               {eticaMembers.map((member) => (
-                <div key={member.id} className="group text-center">
+                <div key={member.id} className="group text-center w-[calc(50%-12px)] sm:w-[calc(33.33%-16px)] lg:w-[calc(20%-32px)]">
                   <div className="relative mb-4 mx-auto w-full aspect-[4/5] overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-transform transition-shadow duration-300 transform-gpu scale-100 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
                     {member.photo_url ? (
                       <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover object-[center_20%]" />
