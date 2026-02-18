@@ -61,7 +61,7 @@ export const TeamSection = () => {
           {teamMembers.map((member) => (
             <StaggerItem key={member.id}>
               <div className="group text-center">
-                <div className="relative mb-4 mx-auto w-full aspect-[4/5] overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                <div className="relative mb-4 mx-auto w-full aspect-[4/5] overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-transform transition-shadow duration-300 transform-gpu scale-100 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
                   {member.photo_url ? (
                     <img 
                       src={member.photo_url} 
