@@ -7,7 +7,7 @@ export const GremialSection = () => {
       <div className="container mx-auto px-4">
         <Reveal className="flex flex-col items-center justify-center text-center space-y-4">
           <p className="text-lg md:text-xl text-muted-foreground font-medium">
-            Gremial asociada a la Red Integra
+            Gremial asociada a:
           </p>
           <a 
             href="https://www.ccsu.com.uy" 
