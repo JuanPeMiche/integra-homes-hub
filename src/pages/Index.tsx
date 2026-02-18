@@ -8,7 +8,7 @@ import { ResidenceCard } from "@/components/ResidenceCard";
 import { ConveniosSection } from "@/components/ConveniosSection";
 import { GremialSection } from "@/components/GremialSection";
 import { TeamSection } from "@/components/TeamSection";
-import { AnnouncementBanner } from "@/components/AnnouncementBanner";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Target, Heart, CheckCircle, ExternalLink, Mail } from "lucide-react";
 import { useResidences } from "@/hooks/useResidences";
@@ -103,9 +103,6 @@ const Index = () => {
                     Acceso a Residenciales (Plataforma de Gestión)
                   </a>
                 </div>
-                
-                {/* Announcement Banner - inside hero */}
-                <AnnouncementBanner />
               </Reveal>
             </div>
           </section>
