@@ -57,16 +57,16 @@ export const TeamSection = () => {
           </p>
         </Reveal>
 
-        <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-6xl mx-auto">
+        <StaggerReveal className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-10 max-w-7xl mx-auto">
           {teamMembers.map((member) => (
             <StaggerItem key={member.id}>
               <div className="group text-center">
-                <div className="relative mb-4 mx-auto w-52 h-52 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                <div className="relative mb-4 mx-auto w-full aspect-[4/5] overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
                   {member.photo_url ? (
                     <img 
                       src={member.photo_url} 
                       alt={member.name}
-                      className="w-full h-full object-cover object-[center_20%]"
+                      className="w-full h-full object-cover object-[center_15%]"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
