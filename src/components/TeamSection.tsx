@@ -66,7 +66,7 @@ export const TeamSection = () => {
                     <img 
                       src={member.photo_url} 
                       alt={member.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-[center_20%]"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
