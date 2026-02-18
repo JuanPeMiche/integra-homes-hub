@@ -7,12 +7,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trash2, Save, User, Scale, Users } from "lucide-react";
 import { useAdminCommissions, CommissionMember } from "@/hooks/useCommissions";
+import { ImageUploader } from "@/components/ImageUploader";
 
 export const CommissionsAdmin = () => {
   const { commissionMembers, isLoading, createMember, updateMember, deleteMember } = useAdminCommissions();
   const [activeCommission, setActiveCommission] = useState<'fiscal' | 'etica'>('fiscal');
   const [editingMember, setEditingMember] = useState<CommissionMember | null>(null);
-  const [formData, setFormData] = useState({ name: '', role: '' });
+  const [formData, setFormData] = useState({ name: '', role: '', photo_url: '' as string | null });
 
   const filteredMembers = commissionMembers?.filter(m => m.commission_type === activeCommission) || [];
 
@@ -27,7 +28,7 @@ export const CommissionsAdmin = () => {
 
   const handleSelectMember = (member: CommissionMember) => {
     setEditingMember(member);
-    setFormData({ name: member.name, role: member.role || '' });
+    setFormData({ name: member.name, role: member.role || '', photo_url: member.photo_url || null });
   };
 
   const handleSave = async () => {
@@ -36,6 +37,7 @@ export const CommissionsAdmin = () => {
       id: editingMember.id,
       name: formData.name,
       role: formData.role || null,
+      photo_url: formData.photo_url,
     });
   };
 
@@ -92,9 +94,13 @@ export const CommissionsAdmin = () => {
                       : 'hover:bg-accent'
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                    <User className="h-4 w-4" />
-                  </div>
+                  {member.photo_url ? (
+                    <img src={member.photo_url} alt={member.name} className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                      <User className="h-4 w-4" />
+                    </div>
+                  )}
                   <div className="overflow-hidden">
                     <div className="font-medium truncate">{member.name}</div>
                     {member.role && (
@@ -131,6 +137,19 @@ export const CommissionsAdmin = () => {
         <CardContent>
           {editingMember ? (
             <div className="space-y-6">
+              <div className="flex justify-center">
+                <div className="w-40">
+                  <Label className="text-center block mb-2">Foto</Label>
+                  <ImageUploader
+                    bucket="team-photos"
+                    folder="comisiones"
+                    currentImage={formData.photo_url}
+                    onUpload={(url) => setFormData(prev => ({ ...prev, photo_url: url }))}
+                    onRemove={() => setFormData(prev => ({ ...prev, photo_url: null }))}
+                    aspectRatio="square"
+                  />
+                </div>
+              </div>
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label>Nombre</Label>

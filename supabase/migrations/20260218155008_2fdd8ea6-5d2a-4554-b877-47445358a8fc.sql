@@ -1,0 +1,1 @@
+ALTER TABLE public.commission_members ADD COLUMN photo_url text;

@@ -7,6 +7,7 @@ export interface CommissionMember {
   commission_type: string;
   name: string;
   role: string | null;
+  photo_url: string | null;
   display_order: number;
   is_active: boolean;
   created_at: string;

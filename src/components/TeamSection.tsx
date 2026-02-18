@@ -90,10 +90,14 @@ export const TeamSection = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {fiscalMembers.map((member) => (
                 <div key={member.id} className="group text-center">
-                  <div className="relative mb-4 mx-auto w-32 h-32 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Scale className="h-12 w-12 text-primary/40" />
-                    </div>
+                  <div className="relative mb-4 mx-auto w-32 h-32 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-transform transition-shadow duration-300 transform-gpu scale-100 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                    {member.photo_url ? (
+                      <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover object-[center_20%]" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Scale className="h-12 w-12 text-primary/40" />
+                      </div>
+                    )}
                   </div>
                   <h4 className="text-lg font-semibold mb-1 text-foreground">{member.name}</h4>
                   {member.role && (
@@ -113,10 +117,14 @@ export const TeamSection = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
               {eticaMembers.map((member) => (
                 <div key={member.id} className="group text-center">
-                  <div className="relative mb-4 mx-auto w-32 h-32 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Users className="h-12 w-12 text-primary/40" />
-                    </div>
+                  <div className="relative mb-4 mx-auto w-32 h-32 overflow-hidden rounded-2xl bg-primary/10 backdrop-blur-sm border-2 border-primary/20 shadow-lg transition-transform transition-shadow duration-300 transform-gpu scale-100 group-hover:scale-105 group-hover:shadow-xl group-hover:border-primary/40">
+                    {member.photo_url ? (
+                      <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover object-[center_20%]" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Users className="h-12 w-12 text-primary/40" />
+                      </div>
+                    )}
                   </div>
                   <h4 className="text-lg font-semibold mb-1 text-foreground">{member.name}</h4>
                   {member.role && (
