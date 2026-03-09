@@ -202,6 +202,14 @@ const News = () => {
                             onError={handleImageError}
                             loading="lazy"
                           />
+                          {/* Video play icon overlay */}
+                          {article.video_url && (
+                            <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                              <div className="w-14 h-14 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+                                <Play className="h-7 w-7 text-white fill-white ml-0.5" />
+                              </div>
+                            </div>
+                          )}
                           {/* Featured badge */}
                           {article.is_featured && (
                             <Badge 
