@@ -62,7 +62,10 @@ const News = () => {
   };
 
   const handleArticleClick = (article: NewsArticle) => {
-    if (article.external_link) {
+    if (article.video_url) {
+      // Articles with video always open in modal to show the player
+      setSelectedArticle(article);
+    } else if (article.external_link) {
       window.open(article.external_link, "_blank", "noopener,noreferrer");
     } else {
       setSelectedArticle(article);
