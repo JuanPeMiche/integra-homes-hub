@@ -54,6 +54,7 @@ const News = () => {
     "Formación": "bg-muted text-muted-foreground border-muted",
     "Institucional": "bg-primary/10 text-primary border-primary/20",
     "Capacitación": "bg-secondary text-secondary-foreground border-secondary",
+    "En los medios": "bg-secondary/10 text-secondary border-secondary/20",
   };
 
   const handleLoadMore = () => {
