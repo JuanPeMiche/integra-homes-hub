@@ -452,6 +452,32 @@ const News = () => {
               </div>
             </div>
           </DialogHeader>
+          {/* Embedded video player */}
+          {selectedArticle?.video_url && (
+            <div className="mt-4 mb-2">
+              {selectedArticle.video_source === 'upload' ? (
+                <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
+                  <video
+                    src={selectedArticle.video_url}
+                    controls
+                    className="w-full h-full"
+                    preload="metadata"
+                  />
+                </div>
+              ) : selectedArticle.video_source === 'YouTube' || getYouTubeVideoId(selectedArticle.video_url) ? (
+                <div className="aspect-video w-full rounded-lg overflow-hidden">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${getYouTubeVideoId(selectedArticle.video_url)}`}
+                    title={selectedArticle.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+              ) : null}
+            </div>
+          )}
+
           <div className="prose prose-sm md:prose-base max-w-none mt-4 text-foreground">
             {selectedArticle?.content.split('\n').map((paragraph, i) => (
               paragraph.trim() ? <p key={i} className="mb-4 leading-relaxed">{paragraph}</p> : null
