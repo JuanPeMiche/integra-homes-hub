@@ -241,9 +241,40 @@ const ArticleDetail = () => {
 
             {/* Content */}
             <div className="prose prose-lg max-w-none text-foreground">
-              {article.content.split('\n').map((paragraph, i) => (
-                paragraph.trim() ? <p key={i} className="mb-4 leading-relaxed">{paragraph}</p> : null
-              ))}
+              {article.content.split('\n').map((paragraph, i) => {
+                const trimmed = paragraph.trim();
+                if (!trimmed) return null;
+                
+                // Quote blocks (lines starting with « or ")
+                if (trimmed.startsWith('«') || trimmed.startsWith('"')) {
+                  return (
+                    <blockquote key={i} className="border-l-4 border-primary pl-6 py-3 my-6 italic text-muted-foreground bg-primary/5 rounded-r-lg">
+                      <p className="mb-0 leading-relaxed">{trimmed}</p>
+                    </blockquote>
+                  );
+                }
+                
+                // Attribution lines (starting with —)
+                if (trimmed.startsWith('—') || trimmed.startsWith('–')) {
+                  return (
+                    <p key={i} className="text-sm font-semibold text-primary mb-6 -mt-4 pl-6">{trimmed}</p>
+                  );
+                }
+                
+                // Section headers (lines starting with ¿ or short lines without period that look like titles)
+                if (trimmed.startsWith('¿') && trimmed.endsWith('?')) {
+                  return <h2 key={i} className="text-xl font-bold text-foreground mt-8 mb-4">{trimmed}</h2>;
+                }
+                
+                // Bullet points
+                if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
+                  return (
+                    <li key={i} className="ml-6 mb-2 leading-relaxed list-disc">{trimmed.replace(/^[•\-]\s*/, '')}</li>
+                  );
+                }
+                
+                return <p key={i} className="mb-4 leading-relaxed">{trimmed}</p>;
+              })}
             </div>
 
             {/* External link */}
