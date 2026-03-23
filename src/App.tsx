@@ -13,6 +13,7 @@ import Compare from "./pages/Compare";
 import Services from "./pages/Services";
 import About from "./pages/About";
 import News from "./pages/News";
+import ArticleDetail from "./pages/ArticleDetail";
 import Contact from "./pages/Contact";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
@@ -46,7 +47,7 @@ const App = () => {
             <Route path="/servicios" element={<Services />} />
             <Route path="/sobre-integra" element={<About />} />
             <Route path="/noticias" element={<News />} />
-            <Route path="/noticias/:id" element={<News />} />
+            <Route path="/noticias/:slug" element={<ArticleDetail />} />
             <Route path="/contacto" element={<Contact />} />
             <Route path="/asesoramiento" element={<Asesoramiento />} />
             <Route path="/admin-login" element={<AdminLogin />} />
