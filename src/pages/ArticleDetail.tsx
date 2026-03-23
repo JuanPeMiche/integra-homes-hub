@@ -10,6 +10,7 @@ import { NewsArticle } from "@/hooks/useNewsArticles";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
+import { siteConfig } from "@/config/site";
 
 const getYouTubeVideoId = (url: string): string | null => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([^&?\s]+)/);
@@ -77,8 +78,8 @@ const ArticleDetail = () => {
       el.setAttribute("content", content);
     };
 
-    const articleUrl = `${window.location.origin}/noticias/${article.slug}`;
-    const image = article.image_url || `${window.location.origin}/og-image.png`;
+    const articleUrl = `${siteConfig.baseUrl}/noticias/${article.slug}`;
+    const image = article.image_url || `${siteConfig.baseUrl}/og-image.png`;
     const description = article.excerpt || article.content.substring(0, 160);
 
     setMeta("og:title", article.title);
@@ -102,7 +103,7 @@ const ArticleDetail = () => {
     }
   };
 
-  const articleUrl = article ? `${window.location.origin}/noticias/${article.slug}` : "";
+  const articleUrl = article ? `${siteConfig.baseUrl}/noticias/${article.slug}` : "";
 
 
   const handleCopyLink = async () => {

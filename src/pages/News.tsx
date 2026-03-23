@@ -8,6 +8,7 @@ import { Calendar, User, ArrowRight, ExternalLink, Play, X, Loader2, Star, Link2
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { siteConfig } from "@/config/site";
 import {
   Dialog,
   DialogContent,
@@ -68,7 +69,7 @@ const News = () => {
     navigate(`/noticias/${article.slug}`);
   };
 
-  const getArticleUrl = (article: NewsArticle) => `${window.location.origin}/noticias/${article.slug}`;
+  const getArticleUrl = (article: NewsArticle) => `${siteConfig.baseUrl}/noticias/${article.slug}`;
 
 
   const handleCopyLink = async (e: React.MouseEvent, article: NewsArticle) => {
