@@ -13,6 +13,7 @@ import Compare from "./pages/Compare";
 import Services from "./pages/Services";
 import About from "./pages/About";
 import News from "./pages/News";
+import ArticleDetail from "./pages/ArticleDetail";
 import Contact from "./pages/Contact";
 import AdminLogin from "./pages/AdminLogin";
 import Admin from "./pages/Admin";
