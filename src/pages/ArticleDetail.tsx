@@ -102,7 +102,7 @@ const ArticleDetail = () => {
     }
   };
 
-  const articleUrl = article ? `${window.location.origin}/noticias/${article.slug}` : "";
+  const articleUrl = article ? `${siteConfig.baseUrl}/noticias/${article.slug}` : "";
 
 
   const handleCopyLink = async () => {
