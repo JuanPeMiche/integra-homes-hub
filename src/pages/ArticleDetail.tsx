@@ -294,26 +294,15 @@ const ArticleDetail = () => {
             {/* Share section */}
             <div className="mt-12 pt-8 border-t border-border">
               <h3 className="text-lg font-semibold text-foreground mb-4">¿Te pareció útil? Compartilo</h3>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button
-                  onClick={handleShareWhatsApp}
-                  className="gap-2 text-white hover:opacity-90"
-                  style={{ backgroundColor: "#25D366" }}
-                  aria-label="Compartir en WhatsApp"
-                >
-                  <WhatsAppIcon className="h-5 w-5" />
-                  Compartir en WhatsApp
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleCopyLink}
-                  className="gap-2"
-                  aria-label="Copiar enlace del artículo"
-                >
-                  <Link2 className="h-5 w-5" />
-                  Copiar enlace
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                onClick={handleCopyLink}
+                className="gap-2"
+                aria-label="Copiar enlace del artículo"
+              >
+                <Link2 className="h-5 w-5" />
+                Copiar enlace
+              </Button>
             </div>
           </div>
         </article>

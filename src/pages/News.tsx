@@ -299,24 +299,14 @@ const News = () => {
                               Leer más
                               <ArrowRight className="h-4 w-4" />
                             </Button>
-                            <div className="flex items-center gap-1">
-                              <button
-                                onClick={(e) => handleShareWhatsApp(e, article)}
-                                className="p-1.5 rounded-full hover:bg-muted transition-colors"
-                                aria-label="Compartir en WhatsApp"
-                                title="Compartir en WhatsApp"
-                              >
-                                <WhatsAppIcon className="h-5 w-5 text-[#25D366]" />
-                              </button>
-                              <button
-                                onClick={(e) => handleCopyLink(e, article)}
-                                className="p-1.5 rounded-full hover:bg-muted transition-colors"
-                                aria-label="Copiar enlace"
-                                title="Copiar enlace"
-                              >
-                                <Link2 className="h-4 w-4 text-muted-foreground" />
-                              </button>
-                            </div>
+                            <button
+                              onClick={(e) => handleCopyLink(e, article)}
+                              className="p-1.5 rounded-full hover:bg-muted transition-colors"
+                              aria-label="Copiar enlace"
+                              title="Copiar enlace"
+                            >
+                              <Link2 className="h-4 w-4 text-muted-foreground" />
+                            </button>
                           </div>
                         </CardContent>
                       </Card>
