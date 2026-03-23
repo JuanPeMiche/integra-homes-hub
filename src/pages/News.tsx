@@ -40,7 +40,6 @@ const News = () => {
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [selectedInterview, setSelectedInterview] = useState<NewsArticle | null>(null);
-  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
 
   // Filter published articles and interviews, sort featured first
   const newsArticles = articles
