@@ -288,18 +288,37 @@ const News = () => {
                             {article.excerpt || article.content}
                           </p>
                           
-                          <Button 
-                            variant="ghost" 
-                            className="gap-2 group-hover:gap-3 transition-all p-0 h-auto text-primary hover:text-primary hover:bg-transparent"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleArticleClick(article);
-                            }}
-                          >
-                            Leer más
-                            <ArrowRight className="h-4 w-4" />
-                          </Button>
-                        </CardContent>
+                          <div className="flex items-center justify-between">
+                            <Button 
+                              variant="ghost" 
+                              className="gap-2 group-hover:gap-3 transition-all p-0 h-auto text-primary hover:text-primary hover:bg-transparent"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleArticleClick(article);
+                              }}
+                            >
+                              Leer más
+                              <ArrowRight className="h-4 w-4" />
+                            </Button>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={(e) => handleShareWhatsApp(e, article)}
+                                className="p-1.5 rounded-full hover:bg-muted transition-colors"
+                                aria-label="Compartir en WhatsApp"
+                                title="Compartir en WhatsApp"
+                              >
+                                <WhatsAppIcon className="h-5 w-5 text-[#25D366]" />
+                              </button>
+                              <button
+                                onClick={(e) => handleCopyLink(e, article)}
+                                className="p-1.5 rounded-full hover:bg-muted transition-colors"
+                                aria-label="Copiar enlace"
+                                title="Copiar enlace"
+                              >
+                                <Link2 className="h-4 w-4 text-muted-foreground" />
+                              </button>
+                            </div>
+                          </div>
                       </Card>
                     ))}
                   </div>
