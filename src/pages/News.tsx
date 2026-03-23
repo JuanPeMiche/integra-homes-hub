@@ -70,13 +70,33 @@ const News = () => {
   };
 
   const handleArticleClick = (article: NewsArticle) => {
-    if (article.video_url) {
-      // Articles with video always open in modal to show the player
-      setSelectedArticle(article);
-    } else if (article.external_link) {
-      window.open(article.external_link, "_blank", "noopener,noreferrer");
-    } else {
-      setSelectedArticle(article);
+    // Navigate to the dedicated article page
+    navigate(`/noticias/${article.slug}`);
+  };
+
+  const getArticleUrl = (article: NewsArticle) => `${window.location.origin}/noticias/${article.slug}`;
+
+  const handleShareWhatsApp = (e: React.MouseEvent, article: NewsArticle) => {
+    e.stopPropagation();
+    const url = getArticleUrl(article);
+    const text = encodeURIComponent(`Mirá esta nota de Integra Residenciales: ${article.title} ${url}`);
+    window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
+  };
+
+  const handleCopyLink = async (e: React.MouseEvent, article: NewsArticle) => {
+    e.stopPropagation();
+    const url = getArticleUrl(article);
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("¡Link copiado!");
+    } catch {
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      toast.success("¡Link copiado!");
     }
   };
 
