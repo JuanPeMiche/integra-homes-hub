@@ -104,11 +104,6 @@ const ArticleDetail = () => {
 
   const articleUrl = article ? `${window.location.origin}/noticias/${article.slug}` : "";
 
-  const handleShareWhatsApp = () => {
-    if (!article) return;
-    const text = encodeURIComponent(`Mirá esta nota de Integra Residenciales: ${article.title} ${articleUrl}`);
-    window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
-  };
 
   const handleCopyLink = async () => {
     try {

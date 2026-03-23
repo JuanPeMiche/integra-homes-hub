@@ -70,12 +70,6 @@ const News = () => {
 
   const getArticleUrl = (article: NewsArticle) => `${window.location.origin}/noticias/${article.slug}`;
 
-  const handleShareWhatsApp = (e: React.MouseEvent, article: NewsArticle) => {
-    e.stopPropagation();
-    const url = getArticleUrl(article);
-    const text = encodeURIComponent(`Mirá esta nota de Integra Residenciales: ${article.title} ${url}`);
-    window.open(`https://wa.me/?text=${text}`, "_blank", "noopener,noreferrer");
-  };
 
   const handleCopyLink = async (e: React.MouseEvent, article: NewsArticle) => {
     e.stopPropagation();
