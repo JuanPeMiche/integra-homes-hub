@@ -68,7 +68,7 @@ const News = () => {
     navigate(`/noticias/${article.slug}`);
   };
 
-  const getArticleUrl = (article: NewsArticle) => `${window.location.origin}/noticias/${article.slug}`;
+  const getArticleUrl = (article: NewsArticle) => `${siteConfig.baseUrl}/noticias/${article.slug}`;
 
 
   const handleCopyLink = async (e: React.MouseEvent, article: NewsArticle) => {
