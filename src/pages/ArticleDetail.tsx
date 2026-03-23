@@ -77,8 +77,8 @@ const ArticleDetail = () => {
       el.setAttribute("content", content);
     };
 
-    const articleUrl = `${window.location.origin}/noticias/${article.slug}`;
-    const image = article.image_url || `${window.location.origin}/og-image.png`;
+    const articleUrl = `${siteConfig.baseUrl}/noticias/${article.slug}`;
+    const image = article.image_url || `${siteConfig.baseUrl}/og-image.png`;
     const description = article.excerpt || article.content.substring(0, 160);
 
     setMeta("og:title", article.title);
