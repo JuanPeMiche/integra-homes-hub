@@ -319,6 +319,7 @@ const News = () => {
                               </button>
                             </div>
                           </div>
+                        </CardContent>
                       </Card>
                     ))}
                   </div>
