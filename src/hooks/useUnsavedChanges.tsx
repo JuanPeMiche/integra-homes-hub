@@ -16,7 +16,7 @@ export function useUnsavedChanges<T extends Record<string, unknown>>({
   onAutoSave,
 }: UseUnsavedChangesOptions<T>) {
   const [hasChanges, setHasChanges] = useState(false);
-  const autosaveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastSavedRef = useRef<string>("");
 
   // Deep compare function for objects and arrays

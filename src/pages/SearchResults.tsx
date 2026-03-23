@@ -204,7 +204,7 @@ const SearchResults = () => {
   const [redIntegraOnly, setRedIntegraOnly] = useState(false);
   const [sortBy, setSortBy] = useState("name-asc");
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
-  const searchTimeoutRef = React.useRef<NodeJS.Timeout>();
+  const searchTimeoutRef = React.useRef<ReturnType<typeof setTimeout>>();
   
   // Advanced filters state
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
