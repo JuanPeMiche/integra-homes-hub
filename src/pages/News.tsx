@@ -210,18 +210,24 @@ const News = () => {
                         onKeyDown={(e) => e.key === 'Enter' && handleArticleClick(article)}
                         role="article"
                       >
-                        <div className="relative h-48 overflow-hidden bg-muted">
+                        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 via-secondary/10 to-primary/5">
                           {/* Featured gradient overlay */}
                           {article.is_featured && (
                             <div className="absolute inset-0 bg-gradient-to-t from-secondary/30 to-transparent z-10 pointer-events-none" />
                           )}
-                          <img
-                            src={article.image_url || "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80"}
-                            alt={article.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            onError={handleImageError}
-                            loading="lazy"
-                          />
+                          {article.image_url ? (
+                            <img
+                              src={article.image_url}
+                              alt={article.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              onError={handleImageError}
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <span className="text-4xl opacity-30">📰</span>
+                            </div>
+                          )}
                           {/* Video play icon overlay */}
                           {article.video_url && (
                             <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
