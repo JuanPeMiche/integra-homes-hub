@@ -114,6 +114,7 @@ export function VideoUploader({
         ref={inputRef}
         type="file"
         accept="video/mp4,video/webm,video/mov,video/quicktime"
+        multiple
         onChange={handleFileChange}
         className="hidden"
         disabled={uploading || videos.length >= maxVideos}
