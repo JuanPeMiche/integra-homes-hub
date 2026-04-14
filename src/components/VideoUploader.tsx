@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, X, Loader2, Play, Video } from 'lucide-react';
+import { Upload, X, Loader2, Play, Video, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useStorageUpload } from '@/hooks/useStorageUpload';
 import { toast } from 'sonner';
@@ -11,8 +11,9 @@ interface VideoUploaderProps {
   maxVideos?: number;
 }
 
-const MAX_VIDEO_SIZE_MB = 180; // ~3 minutes at decent quality
-const MAX_VIDEO_DURATION_SECONDS = 180; // 3 minutes
+const MAX_VIDEO_SIZE_MB = 180;
+const MAX_VIDEO_DURATION_SECONDS = 180;
+const COLLAPSED_COUNT = 4;
 
 export function VideoUploader({
   folder,
@@ -23,10 +24,16 @@ export function VideoUploader({
   const { uploadFile, uploading } = useStorageUpload();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState(false);
+
+  const shouldCollapse = videos.length > COLLAPSED_COUNT;
+  const visibleVideos = shouldCollapse && !expanded
+    ? videos.slice(0, COLLAPSED_COUNT)
+    : videos;
+  const hiddenCount = videos.length - COLLAPSED_COUNT;
 
   const validateVideo = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {
-      // Check file size
       const sizeMB = file.size / (1024 * 1024);
       if (sizeMB > MAX_VIDEO_SIZE_MB) {
         toast.error(`El video es muy grande (${sizeMB.toFixed(1)}MB). Máximo permitido: ${MAX_VIDEO_SIZE_MB}MB`);
@@ -34,7 +41,6 @@ export function VideoUploader({
         return;
       }
 
-      // Check duration using video element
       const video = document.createElement('video');
       video.preload = 'metadata';
       video.onloadedmetadata = () => {
@@ -69,7 +75,6 @@ export function VideoUploader({
       toast.warning(`Solo se subirán ${remainingSlots} videos (límite: ${maxVideos})`);
     }
 
-    // Validate all videos first
     const validFiles: File[] = [];
     for (const file of filesToUpload) {
       const isValid = await validateVideo(file);
@@ -97,6 +102,7 @@ export function VideoUploader({
     if (newVideos.length > 0) {
       onChange([...videos, ...newVideos]);
       toast.success(`${newVideos.length} video${newVideos.length > 1 ? 's subidos' : ' subido'} correctamente`);
+      setExpanded(true);
     }
 
     setUploadingIndex(null);
@@ -120,38 +126,84 @@ export function VideoUploader({
         disabled={uploading || videos.length >= maxVideos}
       />
 
-      {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {videos.map((videoUrl, idx) => (
-          <div 
-            key={idx} 
-            className="relative aspect-video rounded-lg overflow-hidden border border-border bg-muted group"
-          >
-            <video
-              src={videoUrl}
-              className="w-full h-full object-cover"
-              preload="metadata"
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-              <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">
-                <Play className="w-5 h-5 text-white ml-0.5" />
-              </div>
-            </div>
-            <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-              <Video className="w-3 h-3" />
-              Video {idx + 1}
-            </div>
+      {/* Video count badge */}
+      {videos.length > 0 && (
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">
+            {videos.length} video{videos.length !== 1 ? 's' : ''} cargado{videos.length !== 1 ? 's' : ''}
+          </span>
+          {shouldCollapse && (
             <Button
               type="button"
-              variant="destructive"
-              size="icon"
-              className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => handleRemove(idx)}
+              variant="ghost"
+              size="sm"
+              className="text-xs gap-1"
+              onClick={() => setExpanded(!expanded)}
             >
-              <X className="h-4 w-4" />
+              {expanded ? (
+                <>
+                  <ChevronUp className="w-3.5 h-3.5" />
+                  Colapsar
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                  Ver {hiddenCount} más
+                </>
+              )}
             </Button>
-          </div>
-        ))}
+          )}
+        </div>
+      )}
+
+      {/* Video Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {visibleVideos.map((videoUrl, idx) => {
+          const realIndex = shouldCollapse && !expanded ? idx : idx;
+          return (
+            <div
+              key={idx}
+              className="relative aspect-video rounded-lg overflow-hidden border border-border bg-muted group"
+            >
+              <video
+                src={videoUrl}
+                className="w-full h-full object-cover"
+                preload="metadata"
+              />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center">
+                  <Play className="w-5 h-5 text-white ml-0.5" />
+                </div>
+              </div>
+              <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+                <Video className="w-3 h-3" />
+                Video {(shouldCollapse && !expanded ? idx : idx) + 1}
+              </div>
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleRemove(shouldCollapse && !expanded ? idx : idx)}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          );
+        })}
+
+        {/* Collapsed indicator card */}
+        {shouldCollapse && !expanded && (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="aspect-video w-full rounded-lg border-2 border-dashed border-border bg-muted/50 hover:bg-muted transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
+          >
+            <Video className="h-8 w-8" />
+            <span className="text-sm font-medium">+{hiddenCount} videos más</span>
+            <span className="text-xs">Click para ver todos</span>
+          </button>
+        )}
 
         {/* Upload Button */}
         {videos.length < maxVideos && (
@@ -176,12 +228,6 @@ export function VideoUploader({
           </button>
         )}
       </div>
-
-      {videos.length >= maxVideos && (
-        <p className="text-sm text-muted-foreground text-center">
-          Has alcanzado el límite de {maxVideos} videos
-        </p>
-      )}
     </div>
   );
 }
