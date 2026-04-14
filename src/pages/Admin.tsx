@@ -903,7 +903,7 @@ const Admin = () => {
                               const youtubeLinks = (formData.video_urls || []).filter(url => url.includes('youtube.com') || url.includes('youtu.be'));
                               setFormData(prev => ({ ...prev, video_urls: [...urls, ...youtubeLinks] }));
                             }}
-                            maxVideos={5}
+                            maxVideos={50}
                           />
                         </div>
 
