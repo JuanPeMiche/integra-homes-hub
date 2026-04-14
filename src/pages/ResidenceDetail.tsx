@@ -72,6 +72,7 @@ import {
   WashingMachine,
   DoorOpen,
   Video,
+  ChevronDown,
   Play,
   X,
   Info,
@@ -212,6 +213,7 @@ const ResidenceDetail = () => {
   });
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [showAllVideos, setShowAllVideos] = useState(false);
 
   // Check if URL is a YouTube link
   const isYouTubeUrl = (url: string): boolean => {
@@ -383,62 +385,82 @@ const ResidenceDetail = () => {
                         <Video className="h-5 w-5 text-primary" />
                       </div>
                       <h2 className="text-2xl font-bold">Videos de Presentación</h2>
+                      <span className="text-sm text-muted-foreground ml-auto">{residence.videoUrls.length} video{residence.videoUrls.length !== 1 ? 's' : ''}</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {residence.videoUrls.map((videoUrl, idx) => {
-                        // Check if it's a YouTube URL or direct video file
-                        if (isYouTubeUrl(videoUrl)) {
-                          const videoId = getYouTubeVideoId(videoUrl);
-                          if (!videoId) return null;
-                          
-                          return (
+                    {(() => {
+                      const VISIBLE_COUNT = 4;
+                      const allVideos = residence.videoUrls;
+                      const visibleVideos = showAllVideos ? allVideos : allVideos.slice(0, VISIBLE_COUNT);
+                      const hiddenCount = allVideos.length - VISIBLE_COUNT;
+
+                      return (
+                        <>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {visibleVideos.map((videoUrl, idx) => {
+                              if (isYouTubeUrl(videoUrl)) {
+                                const videoId = getYouTubeVideoId(videoUrl);
+                                if (!videoId) return null;
+
+                                return (
+                                  <button
+                                    key={idx}
+                                    onClick={() => setSelectedVideo(videoUrl)}
+                                    className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
+                                  >
+                                    <img
+                                      src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+                                      alt={`Video de presentación ${idx + 1}`}
+                                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                                      <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                                        <Play className="w-6 h-6 text-white ml-1" />
+                                      </div>
+                                    </div>
+                                    <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                                      Video {idx + 1}
+                                    </div>
+                                  </button>
+                                );
+                              }
+
+                              return (
+                                <button
+                                  key={idx}
+                                  onClick={() => setSelectedVideo(videoUrl)}
+                                  className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
+                                >
+                                  <video
+                                    src={videoUrl}
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    preload="metadata"
+                                  />
+                                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                                    <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                                      <Play className="w-6 h-6 text-white ml-1" />
+                                    </div>
+                                  </div>
+                                  <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+                                    <Video className="w-3 h-3" />
+                                    Video {idx + 1}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+
+                          {!showAllVideos && hiddenCount > 0 && (
                             <button
-                              key={idx}
-                              onClick={() => setSelectedVideo(videoUrl)}
-                              className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
+                              onClick={() => setShowAllVideos(true)}
+                              className="w-full mt-4 py-3 rounded-lg border border-border bg-muted/50 hover:bg-muted transition-colors flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
                             >
-                              <img
-                                src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
-                                alt={`Video de presentación ${idx + 1}`}
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              />
-                              <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
-                                <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                                  <Play className="w-6 h-6 text-white ml-1" />
-                                </div>
-                              </div>
-                              <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                                Video {idx + 1}
-                              </div>
+                              <ChevronDown className="w-4 h-4" />
+                              Ver {hiddenCount} video{hiddenCount !== 1 ? 's' : ''} más
                             </button>
-                          );
-                        }
-                        
-                        // Direct video file
-                        return (
-                          <button
-                            key={idx}
-                            onClick={() => setSelectedVideo(videoUrl)}
-                            className="relative aspect-video rounded-lg overflow-hidden bg-black/10 group hover-lift focus:outline-none focus:ring-2 focus:ring-primary"
-                          >
-                            <video
-                              src={videoUrl}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              preload="metadata"
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
-                              <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                                <Play className="w-6 h-6 text-white ml-1" />
-                              </div>
-                            </div>
-                            <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-                              <Video className="w-3 h-3" />
-                              Video {idx + 1}
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
               )}
