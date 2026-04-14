@@ -55,30 +55,50 @@ export function VideoUploader({
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
-    if (videos.length >= maxVideos) {
+    const remainingSlots = maxVideos - videos.length;
+    if (remainingSlots === 0) {
       toast.warning(`Máximo ${maxVideos} videos permitidos`);
       return;
     }
 
-    // Validate video
-    const isValid = await validateVideo(file);
-    if (!isValid) {
+    const filesToUpload = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      toast.warning(`Solo se subirán ${remainingSlots} videos (límite: ${maxVideos})`);
+    }
+
+    // Validate all videos first
+    const validFiles: File[] = [];
+    for (const file of filesToUpload) {
+      const isValid = await validateVideo(file);
+      if (isValid) {
+        validFiles.push(file);
+      }
+    }
+
+    if (validFiles.length === 0) {
       if (inputRef.current) inputRef.current.value = '';
       return;
     }
 
     setUploadingIndex(videos.length);
-    
-    const url = await uploadFile(file, 'residence-videos', folder);
-    
-    if (url) {
-      onChange([...videos, url]);
-      toast.success('Video subido correctamente');
+    const newVideos: string[] = [];
+
+    for (let i = 0; i < validFiles.length; i++) {
+      setUploadingIndex(videos.length + i);
+      const url = await uploadFile(validFiles[i], 'residence-videos', folder);
+      if (url) {
+        newVideos.push(url);
+      }
     }
-    
+
+    if (newVideos.length > 0) {
+      onChange([...videos, ...newVideos]);
+      toast.success(`${newVideos.length} video${newVideos.length > 1 ? 's subidos' : ' subido'} correctamente`);
+    }
+
     setUploadingIndex(null);
     if (inputRef.current) inputRef.current.value = '';
   };
@@ -94,6 +114,7 @@ export function VideoUploader({
         ref={inputRef}
         type="file"
         accept="video/mp4,video/webm,video/mov,video/quicktime"
+        multiple
         onChange={handleFileChange}
         className="hidden"
         disabled={uploading || videos.length >= maxVideos}
