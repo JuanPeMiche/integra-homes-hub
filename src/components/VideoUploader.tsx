@@ -18,7 +18,7 @@ export function VideoUploader({
   folder,
   videos,
   onChange,
-  maxVideos = 5
+  maxVideos = 50
 }: VideoUploaderProps) {
   const { uploadFile, uploading } = useStorageUpload();
   const inputRef = useRef<HTMLInputElement>(null);
