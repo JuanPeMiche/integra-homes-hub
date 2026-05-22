@@ -162,13 +162,12 @@ const ArticleDetail = () => {
       <main className="flex-1 pt-20">
         {/* Hero image */}
         {article.image_url && (
-          <div className="relative h-64 md:h-96 overflow-hidden bg-muted">
+          <div className="relative w-full bg-muted flex items-center justify-center">
             <img
               src={article.image_url}
               alt={article.title}
-              className="w-full h-full object-cover"
+              className="w-full max-h-[80vh] object-contain"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           </div>
         )}
 
