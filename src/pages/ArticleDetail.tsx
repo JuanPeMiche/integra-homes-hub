@@ -241,40 +241,90 @@ const ArticleDetail = () => {
 
             {/* Content */}
             <div className="prose prose-lg max-w-none text-foreground">
-              {article.content.split('\n').map((paragraph, i) => {
-                const trimmed = paragraph.trim();
-                if (!trimmed) return null;
-                
-                // Quote blocks (lines starting with « or ")
-                if (trimmed.startsWith('«') || trimmed.startsWith('"')) {
-                  return (
-                    <blockquote key={i} className="border-l-4 border-primary pl-6 py-3 my-6 italic text-muted-foreground bg-primary/5 rounded-r-lg">
-                      <p className="mb-0 leading-relaxed">{trimmed}</p>
-                    </blockquote>
-                  );
+              {(() => {
+                const lines = article.content.split('\n');
+                const nodes: JSX.Element[] = [];
+                let i = 0;
+                while (i < lines.length) {
+                  const trimmed = lines[i].trim();
+                  // Markdown-style table
+                  if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+                    const tableLines: string[] = [];
+                    while (i < lines.length && lines[i].trim().startsWith('|')) {
+                      tableLines.push(lines[i].trim());
+                      i++;
+                    }
+                    const rows = tableLines
+                      .filter((l) => !/^\|\s*-+/.test(l.replace(/\|/g, '|').replace(/\s/g, '')) && !/^\|[\s\-|:]+\|$/.test(l))
+                      .map((l) => l.slice(1, -1).split('|').map((c) => c.trim()));
+                    if (rows.length > 0) {
+                      const [header, ...body] = rows;
+                      nodes.push(
+                        <div key={`t-${i}`} className="my-6 overflow-x-auto rounded-lg border border-border">
+                          <table className="w-full text-sm">
+                            <thead className="bg-muted">
+                              <tr>
+                                {header.map((c, k) => (
+                                  <th key={k} className="px-4 py-2 text-left font-semibold text-foreground">{c}</th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {body.map((row, r) => (
+                                <tr key={r} className="border-t border-border">
+                                  {row.map((c, k) => (
+                                    <td key={k} className="px-4 py-2 text-foreground">{c}</td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      );
+                    }
+                    continue;
+                  }
+                  const line = lines[i];
+                  const t = line.trim();
+                  i++;
+                  if (!t) continue;
+                  if (t.startsWith('«') || t.startsWith('"')) {
+                    nodes.push(
+                      <blockquote key={`q-${i}`} className="border-l-4 border-primary pl-6 py-3 my-6 italic text-muted-foreground bg-primary/5 rounded-r-lg">
+                        <p className="mb-0 leading-relaxed">{t}</p>
+                      </blockquote>
+                    );
+                    continue;
+                  }
+                  if (t.startsWith('—') || t.startsWith('–')) {
+                    nodes.push(<p key={`a-${i}`} className="text-sm font-semibold text-primary mb-6 -mt-4 pl-6">{t}</p>);
+                    continue;
+                  }
+                  if (t.startsWith('## ')) {
+                    nodes.push(<h2 key={`h-${i}`} className="text-xl font-bold text-foreground mt-8 mb-4">{t.slice(3)}</h2>);
+                    continue;
+                  }
+                  if (t.startsWith('> ')) {
+                    nodes.push(
+                      <div key={`n-${i}`} className="my-6 rounded-lg border-l-4 border-secondary bg-secondary/10 p-4 flex gap-3">
+                        <span className="text-2xl leading-none">⚠️</span>
+                        <p className="mb-0 leading-relaxed text-foreground">{t.slice(2)}</p>
+                      </div>
+                    );
+                    continue;
+                  }
+                  if (t.startsWith('¿') && t.endsWith('?')) {
+                    nodes.push(<h2 key={`h-${i}`} className="text-xl font-bold text-foreground mt-8 mb-4">{t}</h2>);
+                    continue;
+                  }
+                  if (t.startsWith('•') || t.startsWith('- ')) {
+                    nodes.push(<li key={`li-${i}`} className="ml-6 mb-2 leading-relaxed list-disc">{t.replace(/^[•\-]\s*/, '')}</li>);
+                    continue;
+                  }
+                  nodes.push(<p key={`p-${i}`} className="mb-4 leading-relaxed">{t}</p>);
                 }
-                
-                // Attribution lines (starting with —)
-                if (trimmed.startsWith('—') || trimmed.startsWith('–')) {
-                  return (
-                    <p key={i} className="text-sm font-semibold text-primary mb-6 -mt-4 pl-6">{trimmed}</p>
-                  );
-                }
-                
-                // Section headers (lines starting with ¿ or short lines without period that look like titles)
-                if (trimmed.startsWith('¿') && trimmed.endsWith('?')) {
-                  return <h2 key={i} className="text-xl font-bold text-foreground mt-8 mb-4">{trimmed}</h2>;
-                }
-                
-                // Bullet points
-                if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
-                  return (
-                    <li key={i} className="ml-6 mb-2 leading-relaxed list-disc">{trimmed.replace(/^[•\-]\s*/, '')}</li>
-                  );
-                }
-                
-                return <p key={i} className="mb-4 leading-relaxed">{trimmed}</p>;
-              })}
+                return nodes;
+              })()}
             </div>
 
             {/* External link */}
@@ -284,10 +334,12 @@ const ArticleDetail = () => {
                   href={article.external_link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-primary-foreground font-medium hover:opacity-90 transition"
                 >
                   <ExternalLink className="h-4 w-4" />
-                  Ver fuente original
+                  {article.external_link.toLowerCase().endsWith('.pdf')
+                    ? '📄 Descargar acta completa (PDF)'
+                    : 'Ver fuente original'}
                 </a>
               </div>
             )}
