@@ -344,15 +344,6 @@ const ArticleDetail = () => {
               </div>
             )}
 
-            {/* removed old renderer wrapper */}
-            <div className="hidden">
-              {article.content.split('\n').map((paragraph, i) => {
-                const trimmed = paragraph.trim();
-                if (!trimmed) return null;
-                return <p key={i} className="mb-4 leading-relaxed">{trimmed}</p>;
-              })}
-            </div>
-
             {/* Gallery */}
             {article.images && article.images.length > 0 && (
               <div className="mt-8 space-y-3">
