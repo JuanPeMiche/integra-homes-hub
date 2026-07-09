@@ -284,8 +284,44 @@ const ArticleDetail = () => {
                     }
                     continue;
                   }
-                  nodes.push(...renderParagraph(lines[i], i));
+                  const line = lines[i];
+                  const t = line.trim();
                   i++;
+                  if (!t) continue;
+                  if (t.startsWith('«') || t.startsWith('"')) {
+                    nodes.push(
+                      <blockquote key={`q-${i}`} className="border-l-4 border-primary pl-6 py-3 my-6 italic text-muted-foreground bg-primary/5 rounded-r-lg">
+                        <p className="mb-0 leading-relaxed">{t}</p>
+                      </blockquote>
+                    );
+                    continue;
+                  }
+                  if (t.startsWith('—') || t.startsWith('–')) {
+                    nodes.push(<p key={`a-${i}`} className="text-sm font-semibold text-primary mb-6 -mt-4 pl-6">{t}</p>);
+                    continue;
+                  }
+                  if (t.startsWith('## ')) {
+                    nodes.push(<h2 key={`h-${i}`} className="text-xl font-bold text-foreground mt-8 mb-4">{t.slice(3)}</h2>);
+                    continue;
+                  }
+                  if (t.startsWith('> ')) {
+                    nodes.push(
+                      <div key={`n-${i}`} className="my-6 rounded-lg border-l-4 border-secondary bg-secondary/10 p-4 flex gap-3">
+                        <span className="text-2xl leading-none">⚠️</span>
+                        <p className="mb-0 leading-relaxed text-foreground">{t.slice(2)}</p>
+                      </div>
+                    );
+                    continue;
+                  }
+                  if (t.startsWith('¿') && t.endsWith('?')) {
+                    nodes.push(<h2 key={`h-${i}`} className="text-xl font-bold text-foreground mt-8 mb-4">{t}</h2>);
+                    continue;
+                  }
+                  if (t.startsWith('•') || t.startsWith('- ')) {
+                    nodes.push(<li key={`li-${i}`} className="ml-6 mb-2 leading-relaxed list-disc">{t.replace(/^[•\-]\s*/, '')}</li>);
+                    continue;
+                  }
+                  nodes.push(<p key={`p-${i}`} className="mb-4 leading-relaxed">{t}</p>);
                 }
                 return nodes;
               })()}
