@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, User, ArrowLeft, Play, Link2, ExternalLink, Loader2 } from "lucide-react";
+import { Calendar, User, ArrowLeft, Play, Link2, ExternalLink, Loader2, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { NewsArticle } from "@/hooks/useNewsArticles";
 import { format } from "date-fns";
@@ -182,6 +182,31 @@ const ArticleDetail = () => {
               <ArrowLeft className="h-4 w-4" />
               Volver a noticias
             </Button>
+
+            {/* Share bar — visible */}
+            <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-muted/50 p-3">
+              <span className="text-sm font-medium text-foreground pl-1">Compartir esta noticia:</span>
+              <Button onClick={handleCopyLink} className="gap-2" size="sm" aria-label="Copiar link de la noticia">
+                <Link2 className="h-4 w-4" />
+                Copiar link
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="gap-2"
+                onClick={() =>
+                  window.open(
+                    `https://wa.me/?text=${encodeURIComponent(`${article.title} ${articleUrl}`)}`,
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+                aria-label="Compartir por WhatsApp"
+              >
+                <Share2 className="h-4 w-4" />
+                WhatsApp
+              </Button>
+            </div>
 
             {/* Category + date */}
             <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -367,15 +392,31 @@ const ArticleDetail = () => {
             {/* Share section */}
             <div className="mt-12 pt-8 border-t border-border">
               <h3 className="text-lg font-semibold text-foreground mb-4">¿Te pareció útil? Compartilo</h3>
-              <Button
-                variant="outline"
-                onClick={handleCopyLink}
-                className="gap-2"
-                aria-label="Copiar enlace del artículo"
-              >
-                <Link2 className="h-5 w-5" />
-                Copiar enlace
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  variant="outline"
+                  onClick={handleCopyLink}
+                  className="gap-2"
+                  aria-label="Copiar enlace del artículo"
+                >
+                  <Link2 className="h-5 w-5" />
+                  Copiar link
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="gap-2"
+                  onClick={() =>
+                    window.open(
+                      `https://wa.me/?text=${encodeURIComponent(`${article.title} ${articleUrl}`)}`,
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
+                  }
+                >
+                  <Share2 className="h-5 w-5" />
+                  WhatsApp
+                </Button>
+              </div>
             </div>
           </div>
         </article>
