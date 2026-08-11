@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Handshake, ExternalLink } from "lucide-react";
+import { Handshake, ExternalLink, ArrowRight } from "lucide-react";
 import { useConvenios, Convenio } from "@/hooks/useConvenios";
 import { Link } from "react-router-dom";
 
@@ -13,12 +13,16 @@ import sumumLogo from "@/assets/convenios/sumum.png";
 import hospitalBritanicoLogo from "@/assets/convenios/hospital-britanico.png";
 import indaslipLogo from "@/assets/convenios/indaslip.png";
 
+// El logo de ADM se sirve desde public/ (ver public/convenios/adm.svg)
+const admLogo = "/convenios/adm.svg";
+
 // Map of fallback logos by name for existing convenios without uploaded logos
 const fallbackLogos: Record<string, { primary: string; secondary?: string }> = {
   "Tienda Inglesa": { primary: tiendaInglesaLogo },
   "Macro Mercado": { primary: macroMercadoLogo },
   "SUMMUM + Hospital Británico": { primary: sumumLogo, secondary: hospitalBritanicoLogo },
   "Pañales IndaSlip": { primary: indaslipLogo },
+  "ADM (Asociación de Dirigentes de Marketing del Uruguay)": { primary: admLogo },
 };
 
 const Convenios = () => {
@@ -110,9 +114,12 @@ interface ConvenioCardProps {
 }
 
 const ConvenioCard = ({ convenio }: ConvenioCardProps) => {
+  // Los links internos navegan por el router; los externos abren en pestaña nueva
+  const isInternal = convenio.cta_link?.startsWith("/");
+
   const handleClick = () => {
-    if (convenio.cta_link) {
-      window.location.href = convenio.cta_link;
+    if (convenio.cta_link && !isInternal) {
+      window.open(convenio.cta_link, "_blank", "noopener,noreferrer");
     }
   };
 
@@ -182,15 +189,24 @@ const ConvenioCard = ({ convenio }: ConvenioCardProps) => {
 
       {/* CTA Button */}
       {convenio.cta_label && (
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="mt-4 w-full gap-2"
-          onClick={handleClick}
-        >
-          {convenio.cta_label}
-          <ExternalLink className="h-4 w-4" />
-        </Button>
+        isInternal ? (
+          <Button variant="outline" size="sm" className="mt-4 w-full gap-2" asChild>
+            <Link to={convenio.cta_link!}>
+              {convenio.cta_label}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-4 w-full gap-2"
+            onClick={handleClick}
+          >
+            {convenio.cta_label}
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+        )
       )}
     </div>
   );

@@ -11,6 +11,9 @@ import sumumLogo from "@/assets/convenios/sumum.png";
 import hospitalBritanicoLogo from "@/assets/convenios/hospital-britanico.png";
 import indaslipLogo from "@/assets/convenios/indaslip.png";
 
+// El logo de ADM se sirve desde public/ (ver public/convenios/adm.svg)
+const admLogo = "/convenios/adm.svg";
+
 // Map of fallback logos and benefits by name for existing convenios
 const fallbackData: Record<string, { primary: string; secondary?: string; benefit: string }> = {
   "Tienda Inglesa": { 
@@ -26,9 +29,13 @@ const fallbackData: Record<string, { primary: string; secondary?: string; benefi
     secondary: hospitalBritanicoLogo,
     benefit: "40% de descuento en la cuota mensual del plan"
   },
-  "Pañales IndaSlip": { 
+  "Pañales IndaSlip": {
     primary: indaslipLogo,
     benefit: "Pañales premium a mitad de precio vs farmacia"
+  },
+  "ADM (Asociación de Dirigentes de Marketing del Uruguay)": {
+    primary: admLogo,
+    benefit: "20% de descuento en formación empresarial"
   },
 };
 
@@ -58,12 +65,16 @@ export const ConveniosSection = () => {
       const primaryLogo = convenio.logo_url || fallback?.primary;
       const secondaryLogo = convenio.secondary_logo_url || fallback?.secondary;
       const benefit = convenio.main_benefit || fallback?.benefit || "";
-      
+
+      // Solo enlazamos convenios que apuntan a una noticia interna
+      const link = convenio.cta_link?.startsWith("/noticias/") ? convenio.cta_link : null;
+
       return {
         name: convenio.name,
         primaryLogo,
         secondaryLogo,
-        benefit
+        benefit,
+        link
       };
     });
   };
@@ -85,9 +96,15 @@ export const ConveniosSection = () => {
 
         {/* Convenios Grid - 4 columns on desktop */}
         <StaggerReveal className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-10">
-          {convenioData.map((convenio, index) => (
+          {convenioData.map((convenio, index) => {
+            const Card = convenio.link ? Link : "div";
+            const cardProps = convenio.link ? { to: convenio.link } : {};
+
+            return (
             <StaggerItem key={index}>
-              <div 
+              <Card
+                {...(cardProps as any)}
+                title={convenio.benefit || undefined}
                 className="group bg-white rounded-2xl p-6 shadow-lg card-hover border-2 border-white/20 flex flex-col items-center text-center h-full"
               >
                 <div className="flex items-center justify-center gap-3 mb-4">
@@ -111,9 +128,10 @@ export const ConveniosSection = () => {
                     {convenio.benefit}
                   </p>
                 )}
-              </div>
+              </Card>
             </StaggerItem>
-          ))}
+            );
+          })}
         </StaggerReveal>
 
         {/* CTA */}

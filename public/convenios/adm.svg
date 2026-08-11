@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="ADM - Asociación de Dirigentes de Marketing del Uruguay">
+  <title>ADM - Asociación de Dirigentes de Marketing del Uruguay</title>
+
+  <!-- A: trapecio partido en dos tonos -->
+  <path d="M 20 190 L 100 20 L 145 20 L 90 190 Z" fill="#0b5077"/>
+  <path d="M 100 20 L 190 20 L 190 190 L 90 190 Z" fill="#128fbd"/>
+
+  <!-- D: lado derecho redondeado, partido en diagonal -->
+  <path d="M 275 20 L 340 20 L 250 190 L 275 190 Z" fill="#0b5077"/>
+  <path d="M 340 20 L 385 20 a 85 85 0 0 1 0 170 L 250 190 Z" fill="#4db8e0"/>
+
+  <!-- M: dos paralelogramos en tres tonos -->
+  <path d="M 500 20 L 565 20 L 500 190 L 500 190 Z" fill="#0b5077"/>
+  <path d="M 565 20 L 610 20 L 610 190 L 500 190 Z" fill="#128fbd"/>
+  <path d="M 610 20 L 700 20 L 700 190 L 610 190 Z" fill="#1c9dc7"/>
+  <path d="M 700 20 L 780 20 L 780 190 L 700 190 Z" fill="#4db8e0"/>
+
+  <text x="400" y="255"
+        text-anchor="middle"
+        font-family="Helvetica, Arial, sans-serif"
+        font-size="30"
+        letter-spacing="1.5"
+        fill="#231f20">ASOCIACION DE DIRIGENTES DE MARKETING DEL URUGUAY</text>
+</svg>
