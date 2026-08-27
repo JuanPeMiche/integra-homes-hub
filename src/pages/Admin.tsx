@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ImageUploader } from "@/components/ImageUploader";
 import { GalleryUploader } from "@/components/GalleryUploader";
 import { VideoUploader } from "@/components/VideoUploader";
@@ -658,6 +659,35 @@ const Admin = () => {
                             value={formData.capacity || 0}
                             onChange={(e) => setFormData(prev => ({ ...prev, capacity: parseInt(e.target.value) }))}
                           />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Tipos de estadía</Label>
+                          <div className="flex flex-wrap gap-4 pt-1">
+                            {[
+                              { value: 'permanente', label: 'Permanente' },
+                              { value: 'temporal', label: 'Temporal' },
+                              { value: 'diurna', label: 'Diurna' },
+                            ].map((option) => (
+                              <label
+                                key={option.value}
+                                className="flex items-center gap-2 text-sm cursor-pointer"
+                              >
+                                <Checkbox
+                                  checked={(formData.stay_types || []).includes(option.value)}
+                                  onCheckedChange={(checked) => {
+                                    const current = formData.stay_types || [];
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      stay_types: checked
+                                        ? [...current, option.value]
+                                        : current.filter((t) => t !== option.value),
+                                    }));
+                                  }}
+                                />
+                                {option.label}
+                              </label>
+                            ))}
+                          </div>
                         </div>
                         <div className="space-y-2">
                           <Label>Rango de Precios</Label>
