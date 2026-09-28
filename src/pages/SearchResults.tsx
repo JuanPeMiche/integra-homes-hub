@@ -187,7 +187,7 @@ FilterPanel.displayName = 'FilterPanel';
 const SearchResults = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { data: residences = [], isLoading } = useResidences();
+  const { data: residences = [], isLoading, isError, refetch, isFetching } = useResidences();
   const { data: departamentos = [] } = useProvinces();
   const { data: barrios = [] } = useCities();
   
@@ -393,7 +393,7 @@ const SearchResults = () => {
               <div>
                 <h1 className="text-2xl font-bold text-foreground">Residenciales destacados</h1>
                 <p className="text-muted-foreground text-sm">
-                  {isLoading ? "Cargando..." : `${filteredResidences.length} residencias encontradas`}
+                  {isLoading ? "Cargando..." : isError ? "No pudimos cargar las residencias" : `${filteredResidences.length} residencias encontradas`}
                 </p>
               </div>
               
@@ -461,6 +461,25 @@ const SearchResults = () => {
             {isLoading ? (
               <div className="flex justify-center items-center py-20">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              </div>
+            ) : isError ? (
+              <div className="text-center py-20 px-6">
+                <p className="text-foreground text-lg font-medium mb-2">
+                  No pudimos cargar las residencias
+                </p>
+                <p className="text-muted-foreground mb-6">
+                  Hubo un problema de conexión. Probá de nuevo en unos minutos o escribinos por WhatsApp.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button onClick={() => refetch()} disabled={isFetching} variant="outline">
+                    {isFetching ? "Reintentando..." : "Reintentar"}
+                  </Button>
+                  <Button asChild>
+                    <a href="https://wa.me/59897774000" target="_blank" rel="noopener noreferrer">
+                      Escribinos por WhatsApp
+                    </a>
+                  </Button>
+                </div>
               </div>
             ) : viewMode === "list" ? (
               <div className="p-6 pb-24 animate-fade-in">
