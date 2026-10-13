@@ -1,4 +1,5 @@
 import { MapPin, Users, Star, CheckCircle, Phone, MessageCircle, Globe, Facebook, Instagram, Heart } from "lucide-react";
+import { optimizedImageUrl, responsiveImageProps } from "@/lib/imageUrl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -95,9 +96,12 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
     <Card className="overflow-hidden card-hover group focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
       <div className="relative h-48 overflow-hidden">
         <img
-          src={residence.image}
+          {...responsiveImageProps(residence.image, [400, 640, 960])}
+          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           alt={residence.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover bg-muted group-hover:scale-105 transition-transform duration-300"
         />
         {residence.redIntegra && (
           <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-soft">
@@ -110,14 +114,18 @@ export const ResidenceCard = ({ residence, onCompare, isComparing, showFavorite 
         <div className="absolute bottom-3 left-3">
           {residence.logoUrl ? (
             <img 
-              src={residence.logoUrl} 
+              src={optimizedImageUrl(residence.logoUrl, { width: 128, quality: 80 })} 
               alt={`Logo ${residence.name}`}
+              loading="lazy"
+              decoding="async"
               className="h-12 w-12 rounded-lg bg-white object-contain shadow-md p-1"
             />
           ) : residence.image ? (
             <img 
-              src={residence.image} 
+              src={optimizedImageUrl(residence.image, { width: 128 })} 
               alt={residence.name}
+              loading="lazy"
+              decoding="async"
               className="h-12 w-12 rounded-lg bg-white object-cover shadow-md"
             />
           ) : (

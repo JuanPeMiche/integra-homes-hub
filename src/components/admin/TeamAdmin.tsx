@@ -5,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ImageUploader } from "@/components/ImageUploader";
-import { Plus, Trash2, Save, User } from "lucide-react";
+import { Plus, Trash2, Save, User, Sparkles, Loader2 } from "lucide-react";
+import { useOptimizeTeamPhotos } from "@/hooks/useOptimizeTeamPhotos";
 
 export const TeamAdmin = () => {
   const { teamMembers, isLoading, createMember, updateMember, deleteMember } = useAdminTeamMembers();
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
   const [formData, setFormData] = useState<Partial<TeamMember>>({});
+  const { optimize, optimizing } = useOptimizeTeamPhotos();
 
   const handleAddMember = async () => {
     await createMember.mutateAsync({
@@ -65,10 +67,22 @@ export const TeamAdmin = () => {
       <Card className="lg:col-span-1">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">Directiva</CardTitle>
-          <Button size="sm" onClick={handleAddMember} disabled={createMember.isPending}>
-            <Plus className="w-4 h-4 mr-1" />
-            Agregar
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={optimize}
+              disabled={optimizing}
+              title="Comprime las fotos pesadas de la directiva y las comisiones"
+            >
+              {optimizing ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1" />}
+              Optimizar fotos
+            </Button>
+            <Button size="sm" onClick={handleAddMember} disabled={createMember.isPending}>
+              <Plus className="w-4 h-4 mr-1" />
+              Agregar
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="space-y-2">
           {teamMembers?.map((member) => (

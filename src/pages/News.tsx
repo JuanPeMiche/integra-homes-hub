@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { responsiveImageProps } from "@/lib/imageUrl";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -122,6 +123,8 @@ const News = () => {
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // srcset takes precedence over src, so clear it before falling back
+    e.currentTarget.removeAttribute("srcset");
     e.currentTarget.src = "https://images.unsplash.com/photo-1559209172-8b9c41679187?w=800&q=80";
   };
 
@@ -217,8 +220,10 @@ const News = () => {
                           )}
                           {article.image_url ? (
                             <img
-                              src={article.image_url}
+                              {...responsiveImageProps(article.image_url, [400, 640, 960])}
+                              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                               alt={article.title}
+                              decoding="async"
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               onError={handleImageError}
                               loading="lazy"

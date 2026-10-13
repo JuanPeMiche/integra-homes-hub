@@ -63,12 +63,12 @@ const CookieConsent = () => {
   return (
     <>
       {/* Cookie Banner */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6 animate-in slide-in-from-bottom duration-500">
+      <div className="fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4 md:p-6 animate-in slide-in-from-bottom duration-500">
         <div className="container mx-auto max-w-4xl">
-          <div className="bg-card border border-border rounded-xl shadow-2xl p-6 relative">
+          <div className="bg-card border border-border rounded-xl shadow-2xl p-4 sm:p-6 relative">
             <button
               onClick={acceptNecessaryOnly}
-              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Cerrar"
             >
               <X className="h-5 w-5" />
@@ -80,18 +80,20 @@ const CookieConsent = () => {
               </div>
               
               <div className="flex-grow pr-6">
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+                <h3 className="text-base sm:text-lg font-semibold text-foreground mb-1 sm:mb-2">
                   🍪 Utilizamos cookies
                 </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Usamos cookies para mejorar tu experiencia de navegación, analizar el tráfico del sitio y personalizar el contenido. 
-                  Puedes aceptar todas las cookies, solo las necesarias, o configurar tus preferencias.{" "}
+                <p className="text-sm text-muted-foreground mb-3 sm:mb-4">
+                  Usamos cookies para mejorar tu experiencia de navegación, analizar el tráfico del sitio y personalizar el contenido.{" "}
+                  <span className="hidden sm:inline">
+                    Podés aceptar todas las cookies, solo las necesarias, o configurar tus preferencias.{" "}
+                  </span>
                   <Link to="/politica-privacidad" className="text-primary hover:underline">
                     Más información
                   </Link>
                 </p>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
                   <Button onClick={acceptAll} className="bg-primary hover:bg-primary/90">
                     Aceptar todas
                   </Button>
@@ -101,7 +103,7 @@ const CookieConsent = () => {
                   <Button 
                     variant="ghost" 
                     onClick={() => setShowSettings(true)}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="col-span-2 h-8 sm:h-10 text-muted-foreground hover:text-foreground"
                   >
                     <Settings className="h-4 w-4 mr-2" />
                     Configurar

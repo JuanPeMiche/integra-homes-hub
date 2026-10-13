@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { compressImage } from '@/lib/imageCompression';
 
 type BucketType = 'residence-logos' | 'residence-images' | 'director-photos' | 'convenio-logos' | 'team-photos' | 'residence-videos' | 'article-images';
 
@@ -14,13 +15,19 @@ export function useStorageUpload() {
   ): Promise<string | null> => {
     try {
       setUploading(true);
-      
+
+      // Videos and logos (SVG/GIF) pass through untouched
+      if (bucket !== 'residence-videos') {
+        file = await compressImage(file);
+      }
+
       const fileExt = file.name.split('.').pop();
       const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      
+
+      // File names are unique, so they can be cached aggressively
       const { error: uploadError } = await supabase.storage
         .from(bucket)
-        .upload(fileName, file);
+        .upload(fileName, file, { cacheControl: '31536000', contentType: file.type || undefined });
 
       if (uploadError) {
         throw uploadError;

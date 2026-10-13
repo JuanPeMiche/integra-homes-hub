@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { optimizedImageUrl, responsiveImageProps } from "@/lib/imageUrl";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, Expand } from "lucide-react";
@@ -38,7 +39,8 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
           aria-label="Abrir galería en pantalla completa"
         >
           <img
-            src={current}
+            {...responsiveImageProps(current, [640, 1024, 1600], 75)}
+            sizes="(min-width: 1024px) 66vw, 100vw"
             alt={`${residenceName} - Foto ${index + 1} de ${safeImages.length}`}
             className="w-full h-full object-cover"
             loading="eager"
@@ -108,7 +110,7 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
               aria-label={`Seleccionar miniatura ${i + 1}`}
             >
               <img
-                src={img}
+                src={optimizedImageUrl(img, { width: 200 })}
                 alt={`${residenceName} - Miniatura ${i + 1}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -131,7 +133,7 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
             {/* Contenedor de imagen */}
             <div className="relative flex items-center justify-center min-h-[300px] max-h-[calc(95vh-100px)] p-4">
               <img
-                src={current}
+                src={optimizedImageUrl(current, { width: 1920, quality: 80 })}
                 alt={`${residenceName} - Foto ampliada ${index + 1} de ${safeImages.length}`}
                 className="max-w-full max-h-[calc(95vh-120px)] w-auto h-auto object-contain rounded-lg shadow-lg"
                 loading="eager"
@@ -176,7 +178,7 @@ export function ResidenceGallery({ residenceName, images }: ResidenceGalleryProp
                       aria-label={`Seleccionar foto ${i + 1}`}
                     >
                       <img
-                        src={img}
+                        src={optimizedImageUrl(img, { width: 200 })}
                         alt={`${residenceName} - Miniatura ampliada ${i + 1}`}
                         className="w-full h-full object-cover"
                         loading="lazy"
