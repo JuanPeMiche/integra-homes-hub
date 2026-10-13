@@ -18,6 +18,9 @@ interface SendMethodDialogProps {
   recipientEmail?: string;
   recipientWhatsApp?: string;
   subject?: string;
+  emailOnly?: boolean;
+  title?: string;
+  description?: string;
 }
 
 export function SendMethodDialog({
@@ -27,6 +30,9 @@ export function SendMethodDialog({
   recipientEmail = CONTACT_INFO.email,
   recipientWhatsApp = CONTACT_INFO.whatsapp,
   subject = "Nueva consulta desde el sitio web",
+  emailOnly = false,
+  title = "¿Cómo preferís enviarnos tu consulta?",
+  description = "Elegí el medio que te resulte más cómodo",
 }: SendMethodDialogProps) {
   const [sending, setSending] = useState(false);
 
@@ -103,12 +109,10 @@ export function SendMethodDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>¿Cómo preferís enviarnos tu consulta?</DialogTitle>
-          <DialogDescription>
-            Elegí el medio que te resulte más cómodo
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
+        <div className={`grid grid-cols-1 gap-4 py-4 ${emailOnly ? "" : "sm:grid-cols-2"}`}>
           <Button
             variant="outline"
             size="lg"
@@ -122,19 +126,21 @@ export function SendMethodDialog({
               <p className="text-xs text-muted-foreground">Se abrirá tu app de correo</p>
             </div>
           </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="h-auto flex-col gap-3 py-6 hover:border-green-600 hover:bg-green-50"
-            onClick={handleWhatsApp}
-            disabled={sending}
-          >
-            <MessageCircle className="h-8 w-8 text-green-600" />
-            <div className="text-center">
-              <p className="font-semibold">WhatsApp</p>
-              <p className="text-xs text-muted-foreground">Respuesta más rápida</p>
-            </div>
-          </Button>
+          {!emailOnly && (
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-auto flex-col gap-3 py-6 hover:border-green-600 hover:bg-green-50"
+              onClick={handleWhatsApp}
+              disabled={sending}
+            >
+              <MessageCircle className="h-8 w-8 text-green-600" />
+              <div className="text-center">
+                <p className="font-semibold">WhatsApp</p>
+                <p className="text-xs text-muted-foreground">Respuesta más rápida</p>
+              </div>
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

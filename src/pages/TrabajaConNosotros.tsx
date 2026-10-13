@@ -207,7 +207,7 @@ const TrabajaConNosotros = () => {
                     Enviar mi Postulación
                   </CardTitle>
                   <CardDescription>
-                    Completá el formulario y nos pondremos en contacto contigo
+                    Completá el formulario y envianos tu postulación por correo electrónico, adjuntando tu currículum
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -367,6 +367,9 @@ const TrabajaConNosotros = () => {
         onOpenChange={setShowSendDialog}
         formData={formData}
         subject="Postulación laboral - Trabaja con Nosotros"
+        emailOnly
+        title="Enviá tu postulación por correo"
+        description="Se abrirá tu app de correo con tus datos. Recordá adjuntar tu currículum antes de enviarlo."
       />
     </div>
   );
